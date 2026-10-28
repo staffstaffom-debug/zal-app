@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Rubik+Doodle+Shadow&family=Rubik+Scribble&family=Pangolin&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Rubik+Doodle+Shadow&family=Rubik+Scribble&family=Pangolin&family=Rubik+Wet+Paint&display=swap">
 <style>
 /* VolodyaFit — тёмное приложение-тренер. Нижние вкладки: Тренировка / Прогресс / Питание / Профиль.
    Поверх — экран дня и лист упражнения, плавающий таймер отдыха над таб-баром. */
@@ -546,6 +546,10 @@ body.slawn .doodles svg{stroke:#e9e9e9}
   </div>
   <section class="card" style="display:grid;gap:10px">
     <h3>Оформление</h3>
+    <p class="small muted">Свою картинку можно поставить фоном и на иконку. Она хранится только на этом телефоне и никуда не выкладывается.</p>
+    <label class="yt dark" style="justify-content:center;cursor:pointer">Выбрать картинку из фото<input type="file" id="artIn" accept="image/*" hidden></label>
+    <div id="artPrev" style="display:flex;gap:10px;align-items:center"></div>
+    <button type="button" class="small muted" id="artDel" hidden style="padding:6px">Убрать свою картинку</button>
     <div class="seg" id="themeSeg"><button type="button" data-th="slawn">Уголь + кислота</button><button type="button" data-th="dark">Тёмная</button></div>
   </section>
   <section class="card" style="display:grid;gap:6px">
@@ -592,7 +596,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITONYASHKA v15 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITONYASHKA v16 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1173,7 +1177,7 @@ $("toGpt").onclick=()=>copyFor("gpt");$("toClaude").onclick=()=>copyFor("claude"
 const PF=["bw","pu","bench","squat","dead","kcal"];
 function renderProf(){PF.forEach(id=>{if(document.activeElement!==$(id))$(id).value=S[id]})}
 PF.forEach(id=>$(id).addEventListener("change",e=>{const v=parseFloat(e.target.value);if(v>=0){S[id]=v;if(id==="bw"){S.kcal=autoKcal(v);$("kcal").value=S.kcal}saveS();toast("Сохранено — веса пересчитаны")}}));
-$("exportBtn").onclick=async()=>{const data={};try{Object.keys(localStorage).filter(k=>k.startsWith("vf_")&&k!=="vf_key").forEach(k=>data[k]=localStorage.getItem(k))}catch(e){}
+$("exportBtn").onclick=async()=>{const data={};try{Object.keys(localStorage).filter(k=>k.startsWith("vf_")&&k!=="vf_key"&&k!=="vf_art"&&k!=="vf_icon").forEach(k=>data[k]=localStorage.getItem(k))}catch(e){}
   const txt=btoa(unescape(encodeURIComponent(JSON.stringify(data))));const box=$("ioBox");box.hidden=false;box.value=txt;
   try{await navigator.clipboard.writeText(txt);toast("Копия в буфере. Сохрани в Заметки")}catch(e){box.select();toast("Выдели текст в поле и скопируй")}};
 $("importBtn").onclick=()=>{const box=$("ioBox");box.hidden=false;box.value="";box.placeholder="Вставь сюда скопированную копию";$("ioApply").hidden=false;box.focus()};
@@ -1208,14 +1212,37 @@ $("tplus").onclick=()=>{tEnd=Math.max(tEnd,Date.now())+15000;tLen=Math.max(tLen,
 $("tskip").onclick=stopTimer;
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick()});
 
+/* свой фон и иконка: картинка с телефона + кислотная граффити-надпись FN */
+function applyArt(){const bg=LS.get("vf_art",""),ic=LS.get("vf_icon","");
+  let st=document.getElementById("artStyle");if(!st){st=document.createElement("style");st.id="artStyle";document.head.appendChild(st)}
+  st.textContent=bg?`body.slawn,body.slawn .layer{background-image:linear-gradient(rgba(10,10,11,.72),rgba(10,10,11,.8)),url(${bg})!important;background-size:cover!important;background-attachment:fixed;background-position:center}`:"";
+  if(ic){document.querySelectorAll('link[rel="apple-touch-icon"],link[rel="icon"]').forEach(l=>l.href=ic)}
+  $("artPrev").innerHTML=ic?`<img src="${ic}" alt="Иконка" style="width:72px;height:72px;border-radius:16px;border:2px solid var(--line)"><span class="small muted">Иконка готова. Чтобы она появилась на экране, удали старую и снова «На экран Домой».</span>`:"";
+  $("artDel").hidden=!bg}
+function loadImg(file){return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=r.result};r.onerror=no;r.readAsDataURL(file)})}
+function cover(ctx,im,w,h){const k=Math.max(w/im.width,h/im.height),dw=im.width*k,dh=im.height*k;ctx.drawImage(im,(w-dw)/2,(h-dh)/2,dw,dh)}
+async function makeIcon(im){const z=512,c=document.createElement("canvas");c.width=c.height=z;const g=c.getContext("2d");cover(g,im,z,z);
+  g.fillStyle="rgba(0,0,0,.25)";g.fillRect(0,0,z,z);
+  try{await document.fonts.load("400 260px 'Rubik Wet Paint'")}catch(e){}
+  g.save();g.translate(z/2,z*.56);g.rotate(-.12);g.font="400 270px 'Rubik Wet Paint', Impact, sans-serif";g.textAlign="center";g.textBaseline="middle";g.lineJoin="round";
+  g.lineWidth=36;g.strokeStyle="#0f0f10";g.strokeText("FN",0,0);g.lineWidth=18;g.strokeStyle="#ff3df2";g.strokeText("FN",0,0);
+  g.fillStyle="#c6ff1a";g.fillText("FN",0,0);g.lineWidth=3;g.strokeStyle="#0f0f10";g.strokeText("FN",0,0);
+  g.fillStyle="#fff";[[-90,-80,11],[30,-90,8],[105,-62,6]].forEach(([x,y,r])=>{g.beginPath();g.arc(x,y,r,0,7);g.fill()});g.restore();
+  return c.toDataURL("image/png")}
+$("artIn").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;toast("Обрабатываю картинку…");
+  try{const im=await loadImg(f);const c=document.createElement("canvas"),w=Math.min(1170,im.width),h=Math.round(im.height*w/im.width);c.width=w;c.height=h;c.getContext("2d").drawImage(im,0,0,w,h);
+    LS.set("vf_art",c.toDataURL("image/jpeg",.78));LS.set("vf_icon",await makeIcon(im));
+    if(!localStorage.getItem("vf_art"))return toast("Картинка слишком большая, выбери поменьше");
+    applyArt();toast("Фон и иконка обновлены")}catch(err){toast("Не получилось открыть картинку")}e.target.value=""});
+$("artDel").onclick=()=>{LS.set("vf_art","");LS.set("vf_icon","");applyArt();toast("Своя картинка убрана")};
 function applyTheme(){const t=S.theme||"slawn";document.body.classList.toggle("slawn",t==="slawn");
   document.querySelectorAll("#themeSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.th===t));
   document.querySelector('meta[name="theme-color"]').content=t==="slawn"?"#0f0f10":"#0b0d12"}
 $("themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!b)return;S.theme=b.dataset.th;saveS();applyTheme()});
-applyTheme();
+applyTheme();applyArt();
 S.w=autoWeek();
 go("train");
-const APP_V="15";
+const APP_V="16";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
