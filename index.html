@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Rubik+Doodle+Shadow&family=Rubik+Scribble&family=Pangolin&family=Rubik+Wet+Paint&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Rubik+Spray+Paint&family=Rubik+Wet+Paint&family=Oswald:wght@400;500;600;700&family=Rubik:wght@500;700;900&display=swap">
 <style>
 /* VolodyaFit — тёмное приложение-тренер. Нижние вкладки: Тренировка / Прогресс / Питание / Профиль.
    Поверх — экран дня и лист упражнения, плавающий таймер отдыха над таб-баром. */
@@ -275,17 +275,17 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 body.slawn{
   --bg:#e7e7ea; --bg2:#fff; --card:#fbfbfc; --card2:#cfd1d6; --line:#141414;
   --fg:#141414; --muted:#55575d; --accent:#141414; --accent-ink:#fff; --cool:#7c818c; --ok:#d95fbf; --bad:#141414; --pink:#ff8fd8; --yel:#c6c9cf;
-  --display:"Rubik Doodle Shadow","Rubik Scribble",system-ui,sans-serif; --body:"Pangolin","Onest",system-ui,sans-serif; --mono:"Pangolin","Onest",system-ui,sans-serif;
+  --display:"Rubik Spray Paint","Rubik",system-ui,sans-serif; --body:"Rubik","Onest",system-ui,sans-serif; --mono:"Oswald","Rubik",system-ui,sans-serif;
   color-scheme:light;
   background-color:var(--bg);
   background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22220%22%20height%3D%22220%22%20viewBox%3D%220%200%20220%20220%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23141414%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.13%22%3E%0A%3Cpath%20d%3D%22M20%2070c-4-40%2050-50%2060-14%208%2030-6%2060-30%2058-20-2-28-20-30-44z%22/%3E%3Cellipse%20cx%3D%2238%22%20cy%3D%2266%22%20rx%3D%225%22%20ry%3D%2212%22%20fill%3D%22%23141414%22/%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2264%22%20rx%3D%225%22%20ry%3D%2212%22%20fill%3D%22%23141414%22/%3E%3Cpath%20d%3D%22M30%2096c10%208%2028%208%2038-2M38%2096v6M48%2098v6M58%2096v6%22/%3E%0A%3Cpath%20d%3D%22M120%2020c40-6%2070%2020%2062%2060-6%2030-60%2034-70%204-6-20-6-50%208-64z%22/%3E%3Cellipse%20cx%3D%22140%22%20cy%3D%2248%22%20rx%3D%226%22%20ry%3D%2214%22%20fill%3D%22%23141414%22/%3E%3Cellipse%20cx%3D%22166%22%20cy%3D%2250%22%20rx%3D%226%22%20ry%3D%2214%22%20fill%3D%22%23141414%22/%3E%3Cpath%20d%3D%22M132%2080c14%2010%2036%208%2044-4%22/%3E%0A%3Cpath%20d%3D%22M90%20140c30-10%2060%2010%2056%2040-4%2026-50%2034-62%2010-8-16-8-38%206-50z%22/%3E%3Cellipse%20cx%3D%22106%22%20cy%3D%22160%22%20rx%3D%225%22%20ry%3D%2211%22%20fill%3D%22%23141414%22/%3E%3Cellipse%20cx%3D%22126%22%20cy%3D%22160%22%20rx%3D%225%22%20ry%3D%2211%22%20fill%3D%22%23141414%22/%3E%3Cpath%20d%3D%22M98%20186h40M104%20180v12M116%20180v12M128%20180v12%22/%3E%0A%3Cpath%20d%3D%22M0%20150l20%2020M10%20200l40-20M180%20120c20%2010%2030%2040%2020%2060M200%20200l20-30M60%200l10%2030M170%20210l-20-20%22/%3E%0A%3C/g%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22190%22%20r%3D%228%22%20fill%3D%22%23ff8fd8%22%20opacity%3D%22.25%22/%3E%3C/svg%3E");background-size:220px 220px;
 }
 body.slawn::before{background:var(--bg)}
-body.slawn h1{font-family:"Rubik Doodle Shadow",system-ui;font-weight:400;font-size:clamp(34px,10vw,48px);letter-spacing:0}
+body.slawn h1{font-family:"Rubik Wet Paint",system-ui;font-weight:400;font-size:clamp(34px,10vw,48px);letter-spacing:0}
 body.slawn h1 em{color:var(--pink);-webkit-text-stroke:1px #141414;display:inline-block;animation:jig 1.4s steps(2) infinite}
-body.slawn h2,body.slawn h3{font-family:"Rubik Scribble",system-ui;font-weight:400;letter-spacing:.01em}
+body.slawn h2,body.slawn h3{font-family:"Rubik Spray Paint","Rubik",system-ui;font-weight:400;letter-spacing:.02em;text-transform:uppercase}
 body.slawn h2{font-size:22px} body.slawn h3{font-size:17px}
-body.slawn .eyebrow{font-family:var(--body);letter-spacing:.06em;color:var(--fg);font-size:13px}
+body.slawn .eyebrow{font-family:"Oswald",sans-serif;text-transform:uppercase;font-weight:600;letter-spacing:.06em;color:var(--fg);font-size:13px}
 /* кривые маркерные рамки */
 body.slawn :is(.card,.day,.row,.fi,.set,.chip,.stat,.lift,.meal,.food,.eat,.field,.callout,.tabs,.cardio,.iconbtn,.next,.finish,.yt,.hero,.tip,.empty){
   border:3px solid var(--line)!important;border-radius:255px 18px 225px 18px/18px 225px 18px 255px;box-shadow:5px 5px 0 var(--line)}
@@ -418,7 +418,7 @@ body.slawn .stat:nth-child(n){background:var(--card)}
 body.slawn .day{box-shadow:6px 6px 0 #c6ff1a} body.slawn .day:nth-child(2){box-shadow:6px 6px 0 #ff3df2} body.slawn .day:nth-child(3){box-shadow:6px 6px 0 #e9e9e9}
 body.slawn .day.next{box-shadow:6px 6px 0 #c6ff1a}
 body.slawn .day::after{background:linear-gradient(90deg,rgba(15,15,16,.96) 0%,rgba(15,15,16,.8) 48%,rgba(15,15,16,.1) 100%)}
-body.slawn .day img,body.slawn .row img,body.slawn .hero img,body.slawn .hero video{filter:grayscale(1) contrast(1.2) brightness(.95)}
+body.slawn .day img,body.slawn .row img,body.slawn .hero img,body.slawn .hero video{filter:none}
 body.slawn .pill.acc,body.slawn .pill.ok{background:#c6ff1a;color:#0f0f10} body.slawn .pill.cool{background:#2a2a2e}
 body.slawn .seg button[aria-pressed="true"],body.slawn .tabs button[aria-selected="true"],body.slawn .hero .ctr button[aria-pressed="true"]{background:#c6ff1a;color:#0f0f10}
 body.slawn .finish,body.slawn .next{background:#c6ff1a;color:#0f0f10;box-shadow:4px 4px 0 #ff3df2}
@@ -596,7 +596,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITONYASHKA v16 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITONYASHKA v17 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1242,7 +1242,7 @@ $("themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]")
 applyTheme();applyArt();
 S.w=autoWeek();
 go("train");
-const APP_V="16";
+const APP_V="17";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
