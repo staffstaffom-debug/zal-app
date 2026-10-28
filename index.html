@@ -384,7 +384,7 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">VolodyaFit v9 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">VolodyaFit v10 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -514,9 +514,9 @@ const FOODS=[
  ["Орехи","30 г",180,6,16,5],["Масло оливк.","1 ст.л.",120,0,14,0],["Молоко","250 мл",125,8,6,12],["Сыр","30 г",110,7,9,0],
 ];
 const MEALS=[
- {n:"До зала",t:"6:45",items:["Банан","Греческий йогурт 150 г","Кофе — можно, без сахара","Вода 0.5 л"],m:[205,16,0,33]},
+ {n:"До зала",t:"6:45",items:["Банан + греческий йогурт 150 г","Тост или 2 хлебца с мёдом — в дни ног и становой обязательно","Кофе без сахара","Вода 0.5 л"],m:[300,18,1,54]},
  {n:"Тренировка",t:"8:00",items:["С собой бутылка воды 0.7–1 л"],m:[0,0,0,0]},
- {n:"После зала — завтрак",t:"9:30",items:["Протеин 1 скуп + креатин 5 г","Омлет из 4 яиц","Овсянка 60 г"],m:[640,58,26,41]},
+ {n:"После зала — завтрак",t:"9:30",items:["Протеин 1 скуп + креатин 5 г","Омлет из 4 яиц","Овсянка 40 г"],m:[570,55,25,29]},
  {n:"Обед",t:"12:30",items:["Курица 200 г","Рис или гречка 80 г сух.","Овощи 300 г + 1 ст.л. масла"],m:[705,58,19,76]},
  {n:"Перекус",t:"16:00",items:["Творог 5% 200 г","Яблоко","Орехи 15 г"],m:[410,37,18,28]},
  {n:"Ужин",t:"19:30",items:["Рыба 150 г","Картофель 250 г","Овощи 200 г + 1 ст.л. масла"],m:[505,36,16,55]},
@@ -951,7 +951,7 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick
 
 S.w=autoWeek();
 go("train");
-const APP_V="9";
+const APP_V="10";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
