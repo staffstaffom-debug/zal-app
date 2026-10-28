@@ -532,7 +532,8 @@ const dShort=d=>{const x=new Date(d);return x.getDate()+"."+String(x.getMonth()+
 const e1rm=(w,r)=>w*(1+r/30);
 const ICON={back:`<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>`,chk:`<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`,play:`<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`};
 function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2600)}
-function range(raw){const p=String(raw).split("–").map(x=>parseInt(x)).filter(x=>!isNaN(x));if(!p.length)return null;return p.length>1?[p[0],p[1]]:[p[0],p[0]+2]}
+function range(raw){const p=String(raw).split("–").map(x=>parseInt(x)).filter(x=>!isNaN(x));if(!p.length)return null;return p.length>1?[p[0],p[1]]:[p[0],p[0]]}
+const rTxt=(lo,hi)=>lo===hi?lo+"":lo+"–"+hi;
 function stepFor(x,big){return x.db?2:(x.big&&big?5:2.5)}
 
 /* ========= ВЕС И ЦЕЛИ ========= */
@@ -571,11 +572,11 @@ function decide(i,sets){
     if(anyLow)return{w:null,reps:lo+"",why:"Не добрал повторы — держим ту же цель.",dir:"eq",fails};
     return{w:w||null,reps:null,why:"В диапазоне — добавь по повтору.",dir:"eq",fails:0}}
   const st=stepFor(x,avgF<=1.5);
-  if(fails>=2){const nw=x.db?rnd(w*.9,2):rnd(w*.9,2.5);return{w:nw,reps:lo+"–"+hi,why:"Два раза подряд тяжело — разгрузка −10%, потом снова вверх.",dir:"dn",fails:0}}
-  if(anyLow||earlyFail){const nw=x.db?rnd(w*.95,2):rnd(w*.95,2.5);return{w:nw,reps:lo+"–"+hi,why:`Повторы ниже ${lo} или отказ — вес чуть ниже.`,dir:"dn",fails}}
-  if(allTop&&avgF<=1.5)return{w:w+st*2,reps:lo+"–"+hi,why:`Все подходы на ${hi}+ и легко — сразу +${st*2} кг.`,dir:"up",fails:0};
-  if(allTop&&avgF<=3)return{w:w+st,reps:lo+"–"+hi,why:`Все подходы на ${hi}+ — +${st} кг.`,dir:"up",fails:0};
-  if(allTop)return{w,reps:lo+"–"+hi,why:"Сделал, но на пределе — повтори вес, закрепи.",dir:"eq",fails:0};
+  if(fails>=2){const nw=x.db?rnd(w*.9,2):rnd(w*.9,2.5);return{w:nw,reps:rTxt(lo,hi),why:"Два раза подряд тяжело — разгрузка −10%, потом снова вверх.",dir:"dn",fails:0}}
+  if(anyLow||earlyFail){const nw=x.db?rnd(w*.95,2):rnd(w*.95,2.5);return{w:nw,reps:rTxt(lo,hi),why:`Повторы ниже ${lo} или отказ — вес чуть ниже.`,dir:"dn",fails}}
+  if(allTop&&avgF<=1.5)return{w:w+st*2,reps:rTxt(lo,hi),why:`Все подходы на ${hi}+ и легко — сразу +${st*2} кг.`,dir:"up",fails:0};
+  if(allTop&&avgF<=3)return{w:w+st,reps:rTxt(lo,hi),why:`Все подходы на ${hi}+ — +${st} кг.`,dir:"up",fails:0};
+  if(allTop)return{w,reps:rTxt(lo,hi),why:"Сделал, но на пределе — повтори вес, закрепи.",dir:"eq",fails:0};
   const nextR=Math.min(hi,Math.max(...reps)+1);
   return{w,reps:nextR+"",why:`В диапазоне — тот же вес, цель ${nextR} повторов.`,dir:"eq",fails:0}}
 
