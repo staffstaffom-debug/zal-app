@@ -367,7 +367,7 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">VolodyaFit · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">VolodyaFit v4 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -875,7 +875,13 @@ $("tskip").onclick=stopTimer;
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick()});
 
 go("train");
-if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+const APP_V="4";
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
+// автообновление: если на сервере версия новее — чистим кеш и перезагружаем
+async function checkUpdate(){try{const r=await fetch("version.txt?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const v=(await r.text()).trim();
+  if(v&&v!==APP_V&&sessionStorage.getItem("vf_upd")!==v){sessionStorage.setItem("vf_upd",v);for(const k of await caches.keys())await caches.delete(k);
+    for(const g of await navigator.serviceWorker.getRegistrations())await g.update();location.reload()}}catch(e){}}
+checkUpdate();document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdate()});
 </script>
 </body>
 </html>
