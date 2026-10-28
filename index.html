@@ -247,6 +247,19 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .water button{width:34px;height:44px;border-radius:8px 8px 12px 12px;border:2px solid var(--cool);background:transparent;position:relative;overflow:hidden}
 .water button.f{background:rgba(90,209,255,.35)}
 .keyin{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg2);color:var(--fg);font:14px var(--mono)}
+.now{display:grid;gap:12px}
+.now .clock{font:800 44px/1 var(--mono);letter-spacing:-.02em}
+.now .clock small{font:500 13px var(--body);color:var(--muted);letter-spacing:0;margin-left:8px}
+.nowrow{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center}
+.nowrow .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--card2);font-size:18px}
+.nowrow b{display:block;font-size:15px;line-height:1.25}
+.nowrow small{color:var(--muted);font-size:12px}
+.nowrow .cd{font:700 14px var(--mono);color:var(--accent);white-space:nowrap}
+.pace{height:8px;border-radius:999px;background:var(--line);position:relative;overflow:hidden}
+.pace i{position:absolute;inset:0 auto 0 0;background:var(--cool);border-radius:999px}
+.pace u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--fg);text-decoration:none}
+.meal.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.meal.past{opacity:.55}
 .credit{font-size:11px;color:var(--muted)}
 .empty{padding:18px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);font-size:14px;text-align:center}
 @media (prefers-reduced-motion:reduce){.layer,.timer,.toast{transition:none}.hero.live .b{animation:none}}
@@ -260,6 +273,7 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <div style="display:grid;gap:6px"><span class="eyebrow" id="hello"></span><h1>Volodya<em>Fit</em></h1></div>
     <span class="pill acc mono" id="streak"></span>
   </div>
+  <section class="card now" id="nowCard"></section>
   <section class="card glow weekcard">
     <div class="ring" style="width:84px;height:84px"><svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="42" stroke-width="8"/><circle class="fgc" id="wring" cx="50" cy="50" r="42" stroke-width="8" stroke="var(--accent)" stroke-dasharray="264" stroke-dashoffset="264"/></svg><b id="wpct">0/3<small>за неделю</small></b></div>
     <div style="min-width:0;display:grid;gap:8px">
@@ -370,7 +384,7 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">VolodyaFit v7 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">VolodyaFit v8 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -610,6 +624,7 @@ function renderTrain(){
   WEEKS.forEach((w,i)=>{const b=document.createElement("button");b.type="button";b.textContent=w.n;b.setAttribute("aria-pressed",i===S.w);b.onclick=()=>{S.w=i;renderTrain()};wk.appendChild(b)});
   {const pd=progDay(),ws=new Date(S.start);ws.setDate(ws.getDate()+S.w*7);const we=new Date(ws);we.setDate(we.getDate()+6);
   $("wname").innerHTML=pd<0?`Старт ${dShort(S.start)}`:`${WEEKS[S.w].n} <span class="muted small mono">${dShort(ws)}–${dShort(we)} · день ${pd+1}</span>`}$("weektxt").textContent=WEEKS[S.w].txt;
+  setTimeout(renderNow,0);
   const wd=weekDone(),nextD=[0,1,2].find(d=>!wd.includes(d));
   $("days").innerHTML=DAYS.map((D,d)=>{const[a,b]=dayProg(d),done=wd.includes(d);
     const st=done?`<span class="st pill ok">✓ Сделано</span>`:a?`<span class="st pill acc">идёт · ${Math.round(a/b*100)}%</span>`:d===nextD?`<span class="st pill acc">следующая</span>`:"";
@@ -758,7 +773,7 @@ function renderFood(){
   $("fhint").innerHTML=t[0]===0?`Цель: <b>${T.k} ккал</b> и <b>${T.p} г белка</b>. Отмечай еду ниже — кольца заполнятся.`:leftK<-150?`Перебор на ${-leftK} ккал. Ничего страшного — завтра держи план.`:leftP>0?`Осталось <b>${leftP} г белка</b> и ~${Math.max(0,leftK)} ккал. ${leftP>30?"Например: творог 200 г или протеин + курица.":"Почти закрыл — йогурт или протеин."}`:`Белок закрыт 💪 Осталось ~${Math.max(0,leftK)} ккал.`;
   $("foods").innerHTML=FOODS.map((F,i)=>{const n=day[i]||0;return`<div class="fwrap">${n?`<button type="button" class="fminus" data-minus="${i}" aria-label="Убрать ${F[0]}">−</button>`:""}<button type="button" class="food" data-food="${i}"><span class="e">${F[3]>=15?"Б":F[5]>=20?"У":F[4]>=8?"Ж":"•"}</span><span style="min-width:0"><b>${F[0]}</b><small>${F[1]} · ${F[2]} ккал · ${F[3]} г Б</small></span>${n?`<span class="cnt">×${n}</span>`:`<span class="plus">+</span>`}</button></div>`}).join("");
   const tot=MEALS.reduce((a,m)=>a.map((v,j)=>v+m.m[j]),[0,0,0,0]);
-  $("meals").innerHTML=MEALS.map(m=>`<div class="meal"><div class="h"><h3>${m.n}</h3><span class="mono muted small">${m.t}</span></div><ul>${m.items.map(x=>`<li>${x}</li>`).join("")}</ul><span class="mac">${m.m[0]?`${m.m[0]} ккал · Б ${m.m[1]} · Ж ${m.m[2]} · У ${m.m[3]}`:"без еды"}</span></div>`).join("")
+  const mn=mealNow();$("meals").innerHTML=MEALS.map((m,mi)=>`<div class="meal${mi===mn.cur?" cur":mi<mn.cur?" past":""}"><div class="h"><h3>${mi===mn.cur?"● ":""}${m.n}</h3><span class="mono muted small">${m.t}</span></div><ul>${m.items.map(x=>`<li>${x}</li>`).join("")}</ul><span class="mac">${m.m[0]?`${m.m[0]} ккал · Б ${m.m[1]} · Ж ${m.m[2]} · У ${m.m[3]}`:"без еды"}</span></div>`).join("")
    +`<div class="callout ok"><b>Итого за день</b><span class="mono">${tot[0]} ккал · белок ${tot[1]} г · жиры ${tot[2]} г · углеводы ${tot[3]} г</span></div>`;
   $("frules").innerHTML=[["Калории",`~${T.k} ккал`],["Белок — главное",`${T.p} г (2 г/кг)`],["Жиры, не меньше 60",`${T.f} г`],["Углеводы",`${T.c} г`],["День тренировки","+50 г углеводов"],["День отдыха","−50 г углеводов"],["Вода",`${(waterTarget()*.25).toFixed(1)} л`],["Креатин","5 г / день"]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
 }
@@ -775,12 +790,48 @@ function waterTarget(){const tr=targets().trainDay;return Math.round(((+S.bw||90
 function renderWater(){const n=LS.get("vf_water_"+today(),0),t=waterTarget();
   $("water").innerHTML=Array.from({length:Math.max(t,n+1)},(_,i)=>`<button type="button" class="${i<n?"f":""}" data-w="${i}" aria-label="Стакан ${i+1}"></button>`).join("");
   $("wTxt").textContent=(n*.25).toFixed(2).replace(/0$/,"")+" / "+(t*.25).toFixed(2).replace(/0$/,"")+" л";
-  $("wHint").textContent=`Норма ${(t*.25).toFixed(1)} л: 35 мл на кг${targets().trainDay?" + 0.5 л в день тренировки":""}. Один стакан = 250 мл. С креатином пей не меньше.`}
+  $("wHint").textContent=`К этому часу стоит выпить ${waterPace()} из ${t}. Норма ${(t*.25).toFixed(1)} л: 35 мл на кг${targets().trainDay?" + 0.5 л в день тренировки":""}. Один стакан = 250 мл. С креатином пей не меньше.`}
 $("water").addEventListener("click",e=>{const b=e.target.closest("[data-w]");if(!b)return;const n=LS.get("vf_water_"+today(),0),i=+b.dataset.w;LS.set("vf_water_"+today(),i<n?i:i+1);renderWater()});
+
+/* ========= РЕЖИМ РЕАЛЬНОГО ВРЕМЕНИ ========= */
+const hm=t=>{const[a,b]=t.split(":").map(Number);return a*60+b};
+const nowMin=()=>{const d=new Date();return d.getHours()*60+d.getMinutes()};
+const dur=m=>m>=60?Math.floor(m/60)+" ч "+String(m%60).padStart(2,"0")+" мин":m+" мин";
+function phase(){const m=nowMin();
+  if(m<5*60)return{n:"Ночь",ic:"🌙",tip:"Спи. Сон 7–8 часов — половина результата."};
+  if(m<hm("6:45"))return{n:"Раннее утро",ic:"🌅",tip:"Скоро подъём к залу. Стакан воды сразу, как встал."};
+  if(m<hm("8:00"))return{n:"Перед залом",ic:"⚡",tip:"Лёгкий перекус и 0.5 л воды. Тяжёлое не ешь."};
+  if(m<hm("9:30"))return{n:"Время зала",ic:"🏋️",tip:"Отмечай подходы и ощущения, таймер сам считает отдых."};
+  if(m<hm("12:00"))return{n:"Утро после зала",ic:"☀️",tip:"Главное сейчас — белок и вода. Мышцы растут после зала."};
+  if(m<hm("17:00"))return{n:"День",ic:"💼",tip:"Сидячая работа: вставай и ходи 5 минут каждый час."};
+  if(m<hm("21:30"))return{n:"Вечер",ic:"🌆",tip:"Добери белок и шаги. Ужин без перебора."};
+  if(m<hm("23:00"))return{n:"Поздний вечер",ic:"🌙",tip:"Готовься ко сну: экраны тише, завтра зал в 8:00."};
+  return{n:"Ночь",ic:"🌙",tip:"Пора спать, чтобы встать к залу отдохнувшим."}}
+function waterPace(){const t=waterTarget(),m=nowMin(),from=hm("6:30"),to=hm("21:30");return Math.round(t*Math.max(0,Math.min(1,(m-from)/(to-from))))}
+function mealNow(){const m=nowMin(),list=MEALS.map(x=>({...x,s:hm(x.t)}));let cur=-1;list.forEach((x,i)=>{if(m>=x.s-20)cur=i});
+  const nxt=list.find(x=>x.s-20>m);return{cur,list,nxt}}
+function renderNow(){const el=$("nowCard");if(!el||!$("v-train").classList.contains("on"))return;
+  const d=new Date(),ph=phase(),{cur,list,nxt}=mealNow(),m=nowMin(),w=LS.get("vf_water_"+today(),0),wp=waterPace(),wt=waterTarget(),{t}=eaten(),T=targets();
+  const gym=hm("8:00"),wd=weekDone(),nextD=[0,1,2].find(x=>!wd.includes(x)),trainedToday=LS.get("vf_dates",[]).includes(today());
+  const rows=[];
+  if(!trainedToday&&nextD!=null&&m<gym)rows.push(`<div class="nowrow"><span class="ic">🏋️</span><span><b>Зал в 8:00 · День ${nextD+1} ${DAYS[nextD].t}</b><small>${DAYS[nextD].sub}</small></span><span class="cd">через ${dur(gym-m)}</span></div>`);
+  if(!trainedToday&&nextD!=null&&m>=gym&&m<hm("9:45"))rows.push(`<button type="button" class="nowrow" data-day="${nextD}" style="text-align:left;width:100%"><span class="ic">▶</span><span><b>Начать: День ${nextD+1} ${DAYS[nextD].t}</b><small>открыть тренировку</small></span><span class="cd">→</span></button>`);
+  if(trainedToday)rows.push(`<div class="nowrow"><span class="ic">✅</span><span><b>Тренировка сегодня сделана</b><small>теперь еда, вода и сон</small></span><span class="cd"></span></div>`);
+  const cm=cur>=0?list[cur]:null;
+  if(cm&&cm.m[0])rows.push(`<button type="button" class="nowrow" data-go="food" style="text-align:left;width:100%"><span class="ic">🍽</span><span><b>Сейчас: ${cm.n}</b><small>${cm.items.slice(0,2).join(" · ")}</small></span><span class="cd">${cm.t}</span></button>`);
+  if(nxt)rows.push(`<div class="nowrow"><span class="ic">⏭</span><span><b>Дальше: ${nxt.n}</b><small>${nxt.items[0]}</small></span><span class="cd">через ${dur(nxt.s-m)}</span></div>`);
+  const behind=wp-w;
+  rows.push(`<div style="display:grid;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>💧 Вода ${w} из ${wt} стаканов</span><span class="mono" style="color:${behind>1?"var(--accent)":"var(--ok)"}">${behind>1?"отстаёшь на "+behind:"в графике"}</span></div><div class="pace"><i style="width:${Math.min(100,w/wt*100)}%"></i><u style="left:${wp/wt*100}%"></u></div></div>`);
+  rows.push(`<div style="display:flex;justify-content:space-between;font-size:13px"><span>🥩 Белок ${Math.round(t[1])} из ${T.p} г</span><span class="mono muted">${Math.round(t[0])} / ${T.k} ккал</span></div>`);
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><div class="clock">${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}<small>${d.toLocaleDateString("ru-RU",{weekday:"short",day:"numeric",month:"short"})}</small></div><span class="pill acc">${ph.ic} ${ph.n}</span></div>
+  <p class="small muted">${ph.tip}</p>${rows.join("")}`}
+$("nowCard").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(b)return openDay(+b.dataset.day);if(e.target.closest("[data-go]"))go("food")});
+setInterval(()=>{renderNow();if($("v-food").classList.contains("on")&&document.activeElement.tagName!=="INPUT")renderFood()},30000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){renderNow();if(view==="train")renderTrain()}});
 
 /* ========= ТРЕНЕР (бесплатный, работает на телефоне) ========= */
 let CHAT=LS.get("vf_chat",[]);
-const QUICK=["Как прошла последняя тренировка?","Что мне сегодня доесть?","Где я отстаю?","Сколько воды ещё?","Почему стоит вес?","Болит плечо — что делать?","Что делать сегодня?"];
+const QUICK=["Что сейчас по плану?","Как прошла последняя тренировка?","Что мне сегодня доесть?","Где я отстаю?","Сколько воды ещё?","Почему стоит вес?","Болит плечо — что делать?","Что делать сегодня?"];
 const kg=v=>(+v).toFixed(1).replace(/\.0$/,"");
 function lastSession(){let best=null;Object.entries(LOG).forEach(([id,L])=>L.forEach(s=>{if(!best||s.date>best.date)best={date:s.date,day:s.day}}));if(!best)return null;
   const items=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(s=>{if(s.date===best.date)items.push({id,s})}));return{...best,items}}
@@ -823,6 +874,7 @@ const A={
   return`Следующая: День ${d+1} · ${D.t} (${D.sub}).${ups.length?`\n\nТам поднят вес: ${ups.join(", ")}.`:""}\n\nЗал в 8:00: в 6:45 банан + йогурт и 0.5 л воды. Тяжёлое перед залом не ешь. После зала в 9:30 — нормальный завтрак: протеин + креатин 5 г, омлет, овсянка. Обед в 12:30.`},
  help(){return"Я встроенный тренер: смотрю твои тренировки, веса, питание, воду и замеры. Спроси про тренировку, еду, воду, вес, боль или что делать сегодня.\n\nНа сложный вопрос нажми «Разобрать в ChatGPT / Claude» — я скопирую все твои данные, а ты вставишь их в бесплатный чат."}};
 function route(q){q=q.toLowerCase();
+  if(/время|сейчас|который час/.test(q)){const p=phase(),mn=mealNow();return`Сейчас ${new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})} · ${p.n}. ${p.tip}${mn.nxt?`\n\nДальше: ${mn.nxt.n} в ${mn.nxt.t}.`:""}`}
   if(/вод|пить|жажд/.test(q))return A.water();
   if(/бол|травм|ноет|тянет/.test(q))return A.pain();
   if(/съе|ед[аы]|еда|бел|калор|углев|жир[ыа ]|питан|доест|голод/.test(q))return A.food();
@@ -899,10 +951,10 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick
 
 S.w=autoWeek();
 go("train");
-const APP_V="7";
+const APP_V="8";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
-async function checkUpdate(){try{const r=await fetch("version.txt?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const v=(await r.text()).trim();
+async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
   if(v&&v!==APP_V&&sessionStorage.getItem("vf_upd")!==v){sessionStorage.setItem("vf_upd",v);for(const k of await caches.keys())await caches.delete(k);
     for(const g of await navigator.serviceWorker.getRegistrations())await g.update();location.reload()}}catch(e){}}
 checkUpdate();document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdate()});
