@@ -309,18 +309,16 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 
 <!-- ТРЕНЕР -->
 <main class="view" id="v-coach"><div class="wrap" style="padding-bottom:calc(var(--tabh) + 150px + env(safe-area-inset-bottom,0px))">
-  <div style="display:grid;gap:6px"><span class="eyebrow">ИИ-тренер · видит твои тренировки и питание</span><h1>Тренер</h1></div>
-  <section class="card" id="keyBox" style="display:grid;gap:10px">
-    <h3>Подключить тренера</h3>
-    <p class="small muted">Тренер работает на Claude. Нужен твой ключ API — создай его на <b>console.anthropic.com</b> → API Keys и вставь сюда. Ключ хранится только на этом телефоне. Каждое сообщение стоит ~$0.01–0.03 с твоего баланса Anthropic.</p>
-    <input class="keyin" id="apiKey" type="password" placeholder="sk-ant-…" autocomplete="off" aria-label="Ключ API">
-    <button type="button" class="finish" id="saveKey">Подключить</button>
+  <div style="display:grid;gap:6px"><span class="eyebrow">Видит твои тренировки, питание и воду</span><h1>Тренер</h1></div>
+  <section class="card" style="display:grid;gap:10px">
+    <p class="small muted">Тренер бесплатный и работает прямо на телефоне, даже без интернета. Для глубокого разбора отправь свои данные в бесплатный ChatGPT или Claude одной кнопкой.</p>
+    <div class="btnrow"><button type="button" class="yt dark" id="toGpt" style="justify-content:center">Разобрать в ChatGPT</button><button type="button" class="yt dark" id="toClaude" style="justify-content:center">Разобрать в Claude</button></div>
   </section>
   <div class="quick" id="quick"></div>
   <div class="chat" id="chat"></div>
   <button type="button" class="small muted" id="chatClear" style="padding:6px">Очистить переписку</button>
 </div>
-<div class="composer" id="composer" hidden><textarea id="chatIn" rows="1" placeholder="Спроси тренера…" aria-label="Сообщение тренеру"></textarea><button type="button" id="chatSend" aria-label="Отправить">↑</button></div>
+<div class="composer" id="composer"><textarea id="chatIn" rows="1" placeholder="Спроси тренера…" aria-label="Сообщение тренеру"></textarea><button type="button" id="chatSend" aria-label="Отправить">↑</button></div>
 </main>
 
 <!-- ПРОФИЛЬ -->
@@ -367,7 +365,6 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <div class="btnrow"><button type="button" class="yt dark" id="exportBtn" style="justify-content:center">Скопировать копию</button><button type="button" class="yt dark" id="importBtn" style="justify-content:center">Вставить копию</button></div>
     <textarea id="ioBox" hidden style="width:100%;min-height:90px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" aria-label="Копия данных"></textarea>
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
-    <button type="button" class="small muted" id="keyReset" style="padding:8px">Отключить ИИ-тренера (удалить ключ)</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
   <p class="credit">VolodyaFit · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
@@ -758,46 +755,85 @@ function renderWater(){const n=LS.get("vf_water_"+today(),0),t=waterTarget();
   $("wHint").textContent=`Норма ${(t*.25).toFixed(1)} л: 35 мл на кг${targets().trainDay?" + 0.5 л в день тренировки":""}. Один стакан = 250 мл. С креатином пей не меньше.`}
 $("water").addEventListener("click",e=>{const b=e.target.closest("[data-w]");if(!b)return;const n=LS.get("vf_water_"+today(),0),i=+b.dataset.w;LS.set("vf_water_"+today(),i<n?i:i+1);renderWater()});
 
-/* ========= ИИ-ТРЕНЕР ========= */
+/* ========= ТРЕНЕР (бесплатный, работает на телефоне) ========= */
 let CHAT=LS.get("vf_chat",[]);
-const QUICK=["Как прошла последняя тренировка?","Что мне сегодня съесть?","Где я отстаю?","Болит плечо, что заменить?","Сколько воды выпить?","Почему стоит вес?"];
+const QUICK=["Как прошла последняя тренировка?","Что мне сегодня доесть?","Где я отстаю?","Сколько воды ещё?","Почему стоит вес?","Болит плечо — что делать?","Что делать сегодня?"];
+const kg=v=>(+v).toFixed(1).replace(/\.0$/,"");
+function lastSession(){let best=null;Object.entries(LOG).forEach(([id,L])=>L.forEach(s=>{if(!best||s.date>best.date)best={date:s.date,day:s.day}}));if(!best)return null;
+  const items=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(s=>{if(s.date===best.date)items.push({id,s})}));return{...best,items}}
+const A={
+ last(){const L=lastSession();if(!L)return"Ты ещё не завершил ни одной тренировки. Открой день, отмечай подходы и ощущения, в конце нажми «Завершить» — и я разберу.";
+  let up=0,dn=0,eq=0,lines=[];L.items.forEach(({id,s})=>{const r=REC[id];if(!r)return;r.dir==="up"?up++:r.dir==="dn"?dn++:eq++;
+    lines.push(`${r.dir==="up"?"↑":r.dir==="dn"?"↓":"="} ${EX[id].n}: ${s.w.map((w,k)=>(w?kg(w)+"×":"")+s.r[k]).join(", ")} → дальше ${r.w!=null?kg(r.w)+" кг":"свой вес"}${r.reps?" × "+r.reps:""}`)});
+  const feel=L.items.flatMap(x=>x.s.f),avg=feel.reduce((a,b)=>a+b,0)/Math.max(1,feel.length);
+  return`Тренировка ${dShort(L.date)} · ${DAYS[L.day].t}\n\n${lines.join("\n")}\n\nИтог: вверх ${up}, держим ${eq}, вниз ${dn}. ${avg<=1.7?"Было в целом легко — веса подняты смелее.":avg>=3.2?"Было тяжело. Высыпайся 7–8 часов и добери углеводов перед залом.":"Хороший рабочий уровень, так и держи."}`},
+ food(){const T=targets(),{t}=eaten(),p=T.p-t[1],k=T.k-t[0],f=T.f-t[2];
+  if(t[0]===0)return`Сегодня ещё ничего не отмечено. Цель: ${T.k} ккал, белок ${T.p} г, жиры ${T.f} г, углеводы ${T.c} г.\n\nПростой план: 4 яйца + овсянка утром, курица с рисом в обед, йогурт перед залом, протеин + мясо с картошкой после, творог на ночь. Это закрывает всё. Готовый рацион — во вкладке «Питание».`;
+  if(k<-150)return`Калорий уже на ${-k} больше цели. Сегодня больше не ешь калорийного — если голодно, овощи или йогурт. Один перебор не страшен, завтра по плану.`;
+  const opts=[];let need=p;
+  if(need>30){opts.push("творог 5% 200 г (34 г белка, 240 ккал)");need-=34}
+  if(need>20){opts.push("курица 150 г (35 г, 165 ккал)");need-=35}
+  if(need>10){opts.push("протеин 1 скуп (24 г, 120 ккал)");need-=24}
+  if(need>0)opts.push("греческий йогурт 150 г (15 г, 100 ккал)");
+  const carbs=T.c-t[3];
+  return p<=0?`Белок закрыт 💪 Осталось ~${Math.max(0,k)} ккал${carbs>40?`, в основном углеводы (~${Math.round(carbs)} г): рис, гречка, картошка, фрукты`:""}.`
+   :`Осталось: белок ${Math.round(p)} г, ~${Math.max(0,Math.round(k))} ккал, жиры ${Math.max(0,Math.round(f))} г.\n\nДобери так:\n• ${opts.join("\n• ")}${carbs>50?`\n\nИ углеводы ~${Math.round(carbs)} г — гарнир 70–80 г сухого риса или гречки.`:""}`},
+ lag(){const ids=Object.keys(LOG);if(!ids.length)return"Пока нет данных. После 2–3 тренировок я покажу, где ты растёшь, а где стоишь.";
+  const down=[],stuck=[],grow=[];ids.forEach(id=>{const L=LOG[id],r=REC[id];if(r&&r.dir==="dn")down.push(EX[id].n);
+    if(L.length>=2){const v=L.map(s=>Math.max(...s.w.map((w,k)=>EX[id].bw?(s.r[k]||0):e1rm(w,s.r[k]||0))));const d=v.at(-1)-v[0];if(d>0.5)grow.push(EX[id].n);else stuck.push(EX[id].n)}});
+  let out=[];if(grow.length)out.push("Растёт: "+grow.join(", ")+".");
+  if(stuck.length)out.push("Стоит: "+stuck.join(", ")+". Проверь сон и белок; на этих упражнениях делай последний подход до «тяжело».");
+  if(down.length)out.push("Откат: "+down.join(", ")+". Вес уже снижен — это нормально, через 1–2 тренировки вернёшься выше.");
+  if(!out.length)out.push("Нужно хотя бы 2 тренировки по каждому упражнению, чтобы увидеть динамику.");
+  return out.join("\n\n")},
+ water(){const n=LS.get("vf_water_"+today(),0),t=waterTarget(),left=t-n;
+  return left>0?`Выпито ${kg(n*.25)} из ${kg(t*.25)} л. Осталось ${left} стакан${left===1?"":left<5?"а":"ов"} (${kg(left*.25)} л). Ставь бутылку на стол и пей по стакану каждый час.`:`Норма ${kg(t*.25)} л выполнена 👍 Дальше — по жажде.`},
+ weight(){const b=BODY;if(b.length<2)return"Вписывай вес и талию раз в неделю во вкладке «Прогресс». Через 2–3 замера скажу точно.\n\nНа рекомпозиции вес может стоять, пока уходит жир и растут мышцы. Главный ориентир — талия и рост рабочих весов.";
+  const w0=b.at(-2),w1=b.at(-1),dw=(w1.bw&&w0.bw)?w1.bw-w0.bw:null,dt=(w1.waist&&w0.waist)?w1.waist-w0.waist:null;
+  if(dt!=null&&dt<0)return`Талия ${dt.toFixed(1)} см — жир уходит${dw!=null&&dw>=0?", а вес стоит — значит растут мышцы. Это идеальная рекомпозиция":""}. Ничего не меняй.`;
+  if(dt!=null&&dt>=0)return`Талия не уменьшается (${dt>0?"+":""}${dt.toFixed(1)} см). Если так 2+ недели: убери ~150 ккал (например, масло и орехи) или добавь 2–3 тыс. шагов в день. Белок не трогай.`;
+  return`Вес ${dw!=null?(dw>0?"+":"")+dw.toFixed(1)+" кг":"без изменений"}. Добавь замер талии — по ней видно, жир это или мышцы.`},
+ pain(){return"Если боль острая, стреляющая или в суставе — прекрати упражнение и покажись врачу/физиотерапевту.\n\nЕсли просто ноет плечо:\n• Жим лёжа → жим гантелей с нейтральным хватом, локти ближе к корпусу\n• Жим стоя → жим гантелей сидя или уменьши вес на 20%\n• Брусья → убрать, вместо них трицепс на блоке\n• Махи → лёгкие в кроссовере\n• Тягу к лицу оставь — она полезна для плеч\n\nВ упражнении есть вкладка «Замена» с вариантами."},
+ today(){const wd=weekDone(),d=[0,1,2].find(x=>!wd.includes(x));const T=targets();
+  if(d==null)return`На этой неделе все 3 тренировки сделаны 🔥 Сегодня отдых: 8–10 тыс. шагов, белок ${T.p} г, вода ${kg(waterTarget()*.25)} л. Переключи неделю наверху, когда начнёшь новую.`;
+  const D=DAYS[d],ups=D.list.filter(it=>REC[it[1]]&&REC[it[1]].dir==="up").map(it=>EX[it[1]].n);
+  return`Следующая: День ${d+1} · ${D.t} (${D.sub}).${ups.length?`\n\nТам поднят вес: ${ups.join(", ")}.`:""}\n\nДо зала за 1.5–2 часа — углеводы и белок (рис + курица или йогурт + банан). Вода с собой. После — протеин и креатин 5 г.`},
+ help(){return"Я встроенный тренер: смотрю твои тренировки, веса, питание, воду и замеры. Спроси про тренировку, еду, воду, вес, боль или что делать сегодня.\n\nНа сложный вопрос нажми «Разобрать в ChatGPT / Claude» — я скопирую все твои данные, а ты вставишь их в бесплатный чат."}};
+function route(q){q=q.toLowerCase();
+  if(/вод|пить|жажд/.test(q))return A.water();
+  if(/бол|травм|ноет|тянет/.test(q))return A.pain();
+  if(/съе|ед[аы]|еда|бел|калор|углев|жир[ыа ]|питан|доест|голод/.test(q))return A.food();
+  if(/отста|расту|прогресс|стоит.*(жим|присед|тяг)|сила/.test(q))return A.lag();
+  if(/вес|талия|худ|жир|сушк|стоит/.test(q))return A.weight();
+  if(/последн|прошл|как прошл|разбор/.test(q))return A.last();
+  if(/сегодня|что делать|план|следующ|завтра/.test(q))return A.today();
+  return A.help()}
+function coachPrompt(){return`Ты мой персональный тренер и нутрициолог. Вот мои данные из приложения VolodyaFit (JSON). Проанализируй прогресс, питание и воду, скажи что улучшить и что делать на следующей тренировке. Отвечай по-русски, конкретно, с цифрами.\n\n${coachContext()}`}
 function coachContext(){
   const T=targets(),{t}=eaten(),hist={};
-  Object.entries(LOG).forEach(([id,L])=>hist[EX[id].n]=L.slice(-4).map(s=>({дата:s.date,вес:s.w,повторы:s.r,ощущения:s.f})));
-  const recs={};Object.entries(REC).forEach(([id,r])=>recs[EX[id].n]={вес:r.w,повторы:r.reps,почему:r.why});
+  Object.entries(LOG).forEach(([id,L])=>hist[EX[id].n]=L.slice(-4).map(s=>({дата:s.date,вес:s.w,повторы:s.r,ощущения_1легко_4отказ:s.f})));
+  const recs={};Object.entries(REC).forEach(([id,r])=>recs[EX[id].n]={вес:r.w,повторы:r.reps});
   return JSON.stringify({профиль:{вес_тела:S.bw,подтягивания_макс:S.pu,прошлые_рабочие:{жим:S.bench,присед:S.squat,становая:S.dead}},
-    цель:"рекомпозиция: убрать жир, сохранить и нарастить мышцы, после перерыва 3 месяца, сидячая работа",
-    неделя_программы:WEEKS[S.w].n,программа:DAYS.map(D=>({день:D.t,упражнения:D.list.map(it=>EX[it[1]].n)})),
-    сделано_тренировок:LS.get("vf_dates",[]).length,история_по_упражнениям:hist,план_на_следующий_раз:recs,
-    тело:BODY.slice(-8),питание_сегодня:{ккал:Math.round(t[0]),белок:Math.round(t[1]),жиры:Math.round(t[2]),углеводы:Math.round(t[3])},
-    цели_питания:{ккал:T.k,белок:T.p,жиры:T.f,углеводы:T.c},вода_сегодня_л:LS.get("vf_water_"+today(),0)*.25,вода_норма_л:waterTarget()*.25,
-    сегодня:today(),день_тренировки:T.trainDay})}
-const SYS="Ты личный тренер и нутрициолог Володи в приложении VolodyaFit. Отвечай по-русски, коротко и по делу, как живой тренер в чате: 2–6 предложений или короткий список. Опирайся на его реальные данные ниже — называй конкретные веса, повторы, граммы. Не выдумывай данных, которых нет. При боли, травме или подозрении на проблемы со здоровьем советуй облегчить нагрузку и обратиться к врачу. Не назначай лекарства и препараты.";
+    цель:"рекомпозиция: убрать жир, нарастить мышцы; перерыв был 3 месяца; сидячая работа",неделя:WEEKS[S.w].n,
+    программа:DAYS.map(D=>({день:D.t,упражнения:D.list.map(it=>EX[it[1]].n)})),тренировок:LS.get("vf_dates",[]).length,
+    история:hist,план_дальше:recs,замеры:BODY.slice(-8),питание_сегодня:{ккал:Math.round(t[0]),белок:Math.round(t[1])},
+    цели:{ккал:T.k,белок:T.p,жиры:T.f,углеводы:T.c},вода_л:LS.get("vf_water_"+today(),0)*.25,вода_норма_л:waterTarget()*.25},null,1)}
+function esc(t){return t.replace(/[<&]/g,c=>c==="<"?"&lt;":"&amp;")}
 function renderCoach(){
-  const key=LS.get("vf_key","");$("keyBox").hidden=!!key;$("composer").hidden=!key;$("quick").hidden=!key;
   $("quick").innerHTML=QUICK.map(q=>`<button type="button" data-q="${q}">${q}</button>`).join("");
-  $("chat").innerHTML=CHAT.length?CHAT.map(m=>`<div class="msg ${m.role==="user"?"me":"ai"}">${m.content.replace(/[<&]/g,c=>c==="<"?"&lt;":"&amp;")}</div>`).join(""):(key?`<div class="msg ai">Привет, Володя. Я вижу твои тренировки, веса, питание и воду. Спрашивай что угодно — или нажми быстрый вопрос сверху.</div>`:"");
-  $("chatClear").hidden=!CHAT.length;
+  $("chat").innerHTML=(CHAT.length?CHAT:[{role:"assistant",content:"Привет, Володя 👋 Я вижу твои тренировки, веса, питание и воду. Нажми быстрый вопрос сверху или напиши свой."}]).map(m=>`<div class="msg ${m.role==="user"?"me":"ai"}">${esc(m.content)}</div>`).join("");
+  $("chatClear").hidden=!CHAT.length;$("composer").hidden=false;
   setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),30)}
-async function sendChat(text){
-  text=(text||"").trim();if(!text)return;const key=LS.get("vf_key","");if(!key)return;
-  CHAT.push({role:"user",content:text});LS.set("vf_chat",CHAT.slice(-40));renderCoach();
-  $("chat").insertAdjacentHTML("beforeend",`<div class="msg ai wait" id="typing">Думаю…</div>`);window.scrollTo(0,document.body.scrollHeight);
-  try{
-    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-      body:JSON.stringify({model:"claude-sonnet-5-5",max_tokens:700,system:SYS+"\n\nДАННЫЕ ВОЛОДИ:\n"+coachContext(),messages:CHAT.slice(-16).map(m=>({role:m.role,content:m.content}))})});
-    const j=await r.json();
-    if(!r.ok)throw new Error(r.status===401?"Ключ не подошёл. Проверь его в Профиле.":r.status===429?"Слишком много запросов, подожди минуту.":(j.error&&j.error.message)||("Ошибка "+r.status));
-    const out=(j.content||[]).filter(c=>c.type==="text").map(c=>c.text).join("\n").trim()||"…";
-    CHAT.push({role:"assistant",content:out});LS.set("vf_chat",CHAT.slice(-40));
-  }catch(e){CHAT.push({role:"assistant",content:"⚠️ "+(e.message==="Failed to fetch"?"Нет связи с интернетом.":e.message)});CHAT=CHAT.slice(0,-2).concat(CHAT.slice(-1));}
-  renderCoach()}
-$("saveKey").onclick=()=>{const k=$("apiKey").value.trim();if(!/^sk-ant-/.test(k))return toast("Ключ начинается с sk-ant-");LS.set("vf_key",k);$("apiKey").value="";toast("Тренер подключён");renderCoach()};
+function sendChat(text){text=(text||"").trim();if(!text)return;
+  CHAT.push({role:"user",content:text});CHAT.push({role:"assistant",content:route(text)});LS.set("vf_chat",CHAT.slice(-40));renderCoach()}
 $("chatSend").onclick=()=>{const v=$("chatIn").value;$("chatIn").value="";sendChat(v)};
 $("chatIn").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("chatSend").click()}});
 $("quick").addEventListener("click",e=>{const b=e.target.closest("[data-q]");if(b)sendChat(b.dataset.q)});
 let chClr=false;$("chatClear").onclick=()=>{if(!chClr){chClr=true;$("chatClear").textContent="Нажми ещё раз";return}CHAT=[];LS.set("vf_chat",[]);chClr=false;$("chatClear").textContent="Очистить переписку";renderCoach()};
-$("keyReset").onclick=()=>{LS.set("vf_key","");toast("Ключ удалён")};
+async function copyFor(app){const txt=coachPrompt();let ok=false;try{await navigator.clipboard.writeText(txt);ok=true}catch(e){}
+  if(!ok){const b=$("ioBox");b.hidden=false;b.value=txt;toast("Скопируй текст в Профиле → Данные");return}
+  toast("Данные скопированы — вставь в чат");setTimeout(()=>{location.href=app==="gpt"?"https://chatgpt.com/":"https://claude.ai/new"},700)}
+$("toGpt").onclick=()=>copyFor("gpt");$("toClaude").onclick=()=>copyFor("claude");
 
 /* ========= ПРОФИЛЬ ========= */
 const PF=["bw","pu","bench","squat","dead","kcal"];
