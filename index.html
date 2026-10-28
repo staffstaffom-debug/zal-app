@@ -273,16 +273,16 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 
 /* ===== ТЕМА «ДУДЛ»: наивная уличная графика — маркерный контур, чистые цвета, кривые рамки, живые анимации ===== */
 body.slawn{
-  --bg:#fff6e5; --bg2:#fff; --card:#fffdf8; --card2:#ffe9b8; --line:#141414;
-  --fg:#141414; --muted:#5b554c; --accent:#ff3b1f; --accent-ink:#fff; --cool:#2a52ff; --ok:#13a85b; --bad:#ff3b1f; --pink:#ff5fb0; --yel:#ffd21f;
+  --bg:#e7e7ea; --bg2:#fff; --card:#fbfbfc; --card2:#cfd1d6; --line:#141414;
+  --fg:#141414; --muted:#55575d; --accent:#141414; --accent-ink:#fff; --cool:#7c818c; --ok:#d95fbf; --bad:#141414; --pink:#ff8fd8; --yel:#c6c9cf;
   --display:"Rubik Doodle Shadow","Rubik Scribble",system-ui,sans-serif; --body:"Pangolin","Onest",system-ui,sans-serif; --mono:"Pangolin","Onest",system-ui,sans-serif;
   color-scheme:light;
   background-color:var(--bg);
-  background-image:radial-gradient(#14141418 1.2px,transparent 1.3px);background-size:18px 18px;
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22220%22%20height%3D%22220%22%20viewBox%3D%220%200%20220%20220%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23141414%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.13%22%3E%0A%3Cpath%20d%3D%22M20%2070c-4-40%2050-50%2060-14%208%2030-6%2060-30%2058-20-2-28-20-30-44z%22/%3E%3Cellipse%20cx%3D%2238%22%20cy%3D%2266%22%20rx%3D%225%22%20ry%3D%2212%22%20fill%3D%22%23141414%22/%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2264%22%20rx%3D%225%22%20ry%3D%2212%22%20fill%3D%22%23141414%22/%3E%3Cpath%20d%3D%22M30%2096c10%208%2028%208%2038-2M38%2096v6M48%2098v6M58%2096v6%22/%3E%0A%3Cpath%20d%3D%22M120%2020c40-6%2070%2020%2062%2060-6%2030-60%2034-70%204-6-20-6-50%208-64z%22/%3E%3Cellipse%20cx%3D%22140%22%20cy%3D%2248%22%20rx%3D%226%22%20ry%3D%2214%22%20fill%3D%22%23141414%22/%3E%3Cellipse%20cx%3D%22166%22%20cy%3D%2250%22%20rx%3D%226%22%20ry%3D%2214%22%20fill%3D%22%23141414%22/%3E%3Cpath%20d%3D%22M132%2080c14%2010%2036%208%2044-4%22/%3E%0A%3Cpath%20d%3D%22M90%20140c30-10%2060%2010%2056%2040-4%2026-50%2034-62%2010-8-16-8-38%206-50z%22/%3E%3Cellipse%20cx%3D%22106%22%20cy%3D%22160%22%20rx%3D%225%22%20ry%3D%2211%22%20fill%3D%22%23141414%22/%3E%3Cellipse%20cx%3D%22126%22%20cy%3D%22160%22%20rx%3D%225%22%20ry%3D%2211%22%20fill%3D%22%23141414%22/%3E%3Cpath%20d%3D%22M98%20186h40M104%20180v12M116%20180v12M128%20180v12%22/%3E%0A%3Cpath%20d%3D%22M0%20150l20%2020M10%20200l40-20M180%20120c20%2010%2030%2040%2020%2060M200%20200l20-30M60%200l10%2030M170%20210l-20-20%22/%3E%0A%3C/g%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22190%22%20r%3D%228%22%20fill%3D%22%23ff8fd8%22%20opacity%3D%22.25%22/%3E%3C/svg%3E");background-size:220px 220px;
 }
 body.slawn::before{background:var(--bg)}
 body.slawn h1{font-family:"Rubik Doodle Shadow",system-ui;font-weight:400;font-size:clamp(34px,10vw,48px);letter-spacing:0}
-body.slawn h1 em{color:var(--accent);display:inline-block;animation:jig 1.4s steps(2) infinite}
+body.slawn h1 em{color:var(--pink);-webkit-text-stroke:1px #141414;display:inline-block;animation:jig 1.4s steps(2) infinite}
 body.slawn h2,body.slawn h3{font-family:"Rubik Scribble",system-ui;font-weight:400;letter-spacing:.01em}
 body.slawn h2{font-size:22px} body.slawn h3{font-size:17px}
 body.slawn .eyebrow{font-family:var(--body);letter-spacing:.06em;color:var(--fg);font-size:13px}
@@ -290,61 +290,62 @@ body.slawn .eyebrow{font-family:var(--body);letter-spacing:.06em;color:var(--fg)
 body.slawn :is(.card,.day,.row,.fi,.set,.chip,.stat,.lift,.meal,.food,.eat,.field,.callout,.tabs,.cardio,.iconbtn,.next,.finish,.yt,.hero,.tip,.empty){
   border:3px solid var(--line)!important;border-radius:255px 18px 225px 18px/18px 225px 18px 255px;box-shadow:5px 5px 0 var(--line)}
 body.slawn :is(.row,.fi,.set,.food,.eat,.chip,.stat){box-shadow:3px 3px 0 var(--line)}
-body.slawn .glow{background:var(--yel)}
+body.slawn .glow{background:#fff}
 body.slawn .card.now{background:#fff;animation:wob 6s ease-in-out infinite}
-body.slawn .weekcard{background:var(--yel)}
+body.slawn .weekcard{background:#fff}
 body.slawn .callout{border-left-width:3px!important}
-body.slawn .callout.bad{background:#ffe1da} body.slawn .callout.cool{background:#e2e8ff} body.slawn .callout.ok{background:#dcf5e6}
+body.slawn .callout.bad{background:#fff} body.slawn .callout.cool{background:#f1f1f3} body.slawn .callout.ok{background:#ffe3f6}
 body.slawn .callout b{color:var(--fg)}
 /* дни — наклейки с цветной тенью */
-body.slawn .day{transform:rotate(-1.2deg);box-shadow:6px 6px 0 var(--cool)}
-body.slawn .day:nth-child(2){transform:rotate(1deg);box-shadow:6px 6px 0 var(--accent)}
-body.slawn .day:nth-child(3){transform:rotate(-.6deg);box-shadow:6px 6px 0 var(--ok)}
-body.slawn .day img{filter:saturate(1.2) contrast(1.1)}
-body.slawn .day::after{background:linear-gradient(90deg,rgba(255,246,229,.97) 0%,rgba(255,246,229,.85) 48%,rgba(255,246,229,0) 100%)}
-body.slawn .day.next{box-shadow:6px 6px 0 var(--accent);animation:wob 3.5s ease-in-out infinite}
+body.slawn .day{transform:rotate(-1.2deg);box-shadow:6px 6px 0 #141414}
+body.slawn .day:nth-child(2){transform:rotate(1deg);box-shadow:6px 6px 0 var(--pink)}
+body.slawn .day:nth-child(3){transform:rotate(-.6deg);box-shadow:6px 6px 0 #7c818c}
+body.slawn .day img,body.slawn .row img,body.slawn .hero img,body.slawn .hero video{filter:grayscale(1) contrast(1.25)}
+body.slawn .day::after{background:linear-gradient(90deg,rgba(251,251,252,.97) 0%,rgba(251,251,252,.85) 48%,rgba(251,251,252,0) 100%)}
+body.slawn .day.next{box-shadow:6px 6px 0 var(--pink);animation:wob 3.5s ease-in-out infinite}
 body.slawn .pill{background:#fff;border:2px solid var(--line);color:var(--fg)}
-body.slawn .pill.acc{background:var(--yel)} body.slawn .pill.ok{background:#bff0d2;color:var(--fg)} body.slawn .pill.cool{background:#cfd9ff;color:var(--fg)}
+body.slawn .pill.acc{background:var(--pink)} body.slawn .pill.ok{background:#141414;color:#fff} body.slawn .pill.cool{background:#cfd1d6;color:var(--fg)}
 body.slawn .seg button{border:2px solid var(--line);color:var(--fg);background:#fff;border-radius:20px 8px 18px 8px}
-body.slawn .seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
-body.slawn .tabs button[aria-selected="true"]{background:var(--yel)}
+body.slawn .seg button[aria-pressed="true"]{background:#141414;color:#fff}
+body.slawn .tabs button[aria-selected="true"]{background:var(--pink)}
 body.slawn .finish,body.slawn .next{background:var(--accent);color:#fff}
-body.slawn .yt{background:var(--cool);color:#fff} body.slawn .yt.dark{background:#fff;color:var(--fg)}
+body.slawn .yt{background:#141414;color:#fff} body.slawn .yt.dark{background:#fff;color:var(--fg)}
 body.slawn .ring .bgc{stroke:#14141422}
 body.slawn .ring b,body.slawn .mono{font-family:var(--mono)}
 body.slawn .step{background:#fff;border:2px solid var(--line);border-radius:14px 6px 14px 6px}
 body.slawn .set .chk{background:#fff;border:2px solid var(--line)}
-body.slawn .set.ok{background:#dcf5e6}
+body.slawn .set.ok{background:#ffe3f6}
 body.slawn .set.ok .chk{background:var(--ok)}
 body.slawn .feel button{background:#fff;border:2px solid var(--line);color:var(--fg);border-radius:14px 6px 14px 6px}
 body.slawn .row img{border:2px solid var(--line)}
 body.slawn .progress{border:2px solid var(--line);height:12px;background:#fff}
-body.slawn .progress i{background:repeating-linear-gradient(-45deg,var(--accent) 0 8px,#ff7a5c 8px 16px)}
+body.slawn .progress i{background:repeating-linear-gradient(-45deg,#141414 0 6px,#7c818c 6px 12px)}
 body.slawn .pace{border:2px solid var(--line);height:12px;background:#fff}
-body.slawn .pace i{background:repeating-linear-gradient(-45deg,var(--cool) 0 8px,#7d95ff 8px 16px)}
+body.slawn .pace i{background:repeating-linear-gradient(-45deg,#ff8fd8 0 6px,#ffc4ec 6px 12px)}
 body.slawn .water button{border:3px solid var(--line);border-radius:6px 6px 14px 14px;background:#fff}
-body.slawn .water button.f{background:var(--cool)}
+body.slawn .water button.f{background:repeating-linear-gradient(-45deg,#141414 0 4px,#7c818c 4px 8px)}
 body.slawn .tabbar{background:#fff;border-top:3px solid var(--line)}
-body.slawn .tabbar button[aria-selected="true"]{color:var(--accent)}
+body.slawn .tabbar button[aria-selected="true"]{color:#141414}
+body.slawn .tabbar button[aria-selected="true"] svg{fill:var(--pink)}
 body.slawn .tabbar button[aria-selected="true"] svg{animation:hop .5s ease}
 body.slawn .tabbar svg{stroke-width:2.6}
-body.slawn .timer{background:var(--yel);border:3px solid var(--line);box-shadow:5px 5px 0 var(--line);border-radius:30px 12px 28px 12px}
+body.slawn .timer{background:#fff;border:3px solid var(--line);box-shadow:5px 5px 0 var(--line);border-radius:30px 12px 28px 12px}
 body.slawn .timer .tb button{background:#fff;border:2px solid var(--line)}
-body.slawn .toast{background:var(--yel);border:3px solid var(--line);box-shadow:4px 4px 0 var(--line);color:var(--fg)}
+body.slawn .toast{background:var(--pink);border:3px solid var(--line);box-shadow:4px 4px 0 var(--line);color:var(--fg)}
 body.slawn .composer{background:#fff;border-top:3px solid var(--line)}
 body.slawn .composer textarea,body.slawn .keyin,body.slawn .inrow input{background:#fff;border:2px solid var(--line);color:var(--fg)}
 body.slawn .composer button,body.slawn .inrow button{border:2px solid var(--line)}
-body.slawn .msg.ai{background:#fff;border:2px solid var(--line)} body.slawn .msg.me{background:var(--cool);color:#fff;border:2px solid var(--line)}
+body.slawn .msg.ai{background:#fff;border:2px solid var(--line)} body.slawn .msg.me{background:#141414;color:#fff;border:2px solid var(--line)}
 body.slawn .quick button{background:#fff;border:2px solid var(--line)}
 body.slawn .fminus{border:2px solid var(--line)}
-body.slawn .food .e{background:var(--yel);border:2px solid var(--line);color:var(--fg)}
-body.slawn .steps li::before{background:var(--yel);border:2px solid var(--line);color:var(--fg)}
+body.slawn .food .e{background:var(--pink);border:2px solid var(--line);color:var(--fg)}
+body.slawn .steps li::before{background:var(--pink);border:2px solid var(--line);color:var(--fg)}
 body.slawn .hero .tag,body.slawn .hero .ctr button{background:#fff;color:var(--fg);border:2px solid var(--line)}
-body.slawn .hero .ctr button[aria-pressed="true"]{background:var(--yel)}
+body.slawn .hero .ctr button[aria-pressed="true"]{background:var(--pink)}
 body.slawn .fi .ic{border:2px solid var(--line)}
 body.slawn .ss{color:var(--cool)}
-body.slawn .layer{background-color:var(--bg);background-image:radial-gradient(#14141418 1.2px,transparent 1.3px);background-size:18px 18px}
-body.slawn .spark path{stroke:var(--accent);stroke-width:3}
+body.slawn .layer{background-color:var(--bg);background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22220%22%20height%3D%22220%22%20viewBox%3D%220%200%20220%20220%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23141414%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.13%22%3E%0A%3Cpath%20d%3D%22M20%2070c-4-40%2050-50%2060-14%208%2030-6%2060-30%2058-20-2-28-20-30-44z%22/%3E%3Cellipse%20cx%3D%2238%22%20cy%3D%2266%22%20rx%3D%225%22%20ry%3D%2212%22%20fill%3D%22%23141414%22/%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2264%22%20rx%3D%225%22%20ry%3D%2212%22%20fill%3D%22%23141414%22/%3E%3Cpath%20d%3D%22M30%2096c10%208%2028%208%2038-2M38%2096v6M48%2098v6M58%2096v6%22/%3E%0A%3Cpath%20d%3D%22M120%2020c40-6%2070%2020%2062%2060-6%2030-60%2034-70%204-6-20-6-50%208-64z%22/%3E%3Cellipse%20cx%3D%22140%22%20cy%3D%2248%22%20rx%3D%226%22%20ry%3D%2214%22%20fill%3D%22%23141414%22/%3E%3Cellipse%20cx%3D%22166%22%20cy%3D%2250%22%20rx%3D%226%22%20ry%3D%2214%22%20fill%3D%22%23141414%22/%3E%3Cpath%20d%3D%22M132%2080c14%2010%2036%208%2044-4%22/%3E%0A%3Cpath%20d%3D%22M90%20140c30-10%2060%2010%2056%2040-4%2026-50%2034-62%2010-8-16-8-38%206-50z%22/%3E%3Cellipse%20cx%3D%22106%22%20cy%3D%22160%22%20rx%3D%225%22%20ry%3D%2211%22%20fill%3D%22%23141414%22/%3E%3Cellipse%20cx%3D%22126%22%20cy%3D%22160%22%20rx%3D%225%22%20ry%3D%2211%22%20fill%3D%22%23141414%22/%3E%3Cpath%20d%3D%22M98%20186h40M104%20180v12M116%20180v12M128%20180v12%22/%3E%0A%3Cpath%20d%3D%22M0%20150l20%2020M10%20200l40-20M180%20120c20%2010%2030%2040%2020%2060M200%20200l20-30M60%200l10%2030M170%20210l-20-20%22/%3E%0A%3C/g%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22190%22%20r%3D%228%22%20fill%3D%22%23ff8fd8%22%20opacity%3D%22.25%22/%3E%3C/svg%3E");background-size:220px 220px}
+body.slawn .spark path{stroke:#141414;stroke-width:3}
 body.slawn .chart .grid{stroke:#14141433}
 /* пружина на нажатие */
 body.slawn :is(.day,.row,.food,.next,.finish,.yt,.seg button,.feel button,.chk,.quick button):active{transform:scale(.96) rotate(-1deg);transition:transform .08s}
@@ -365,16 +366,52 @@ body.slawn .wrap{position:relative;z-index:1}
 @keyframes pop{0%{transform:scale(.6) rotate(-10deg)}70%{transform:scale(1.15) rotate(4deg)}100%{transform:scale(1)}}
 body.slawn .set.ok .chk svg{animation:pop .35s ease}
 body.slawn .row.done .code{animation:pop .4s ease}
+
+/* ===== КЛОУНЫ: яркие пятна баллончика, белые лица-овалы, синие глаза, красные носы, маркерный контур ===== */
+body.slawn{--bg:#fff7fb;--card:#ffffff;--card2:#ffe0ef;--muted:#4d4a57;--accent:#ff2a2a;--accent-ink:#fff;--cool:#1f4bd8;--ok:#19b3a6;--bad:#ff2a2a;--pink:#ff8fc7;--yel:#ffb51f;--lilac:#c9b6f2;--lime:#c8f46a;
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22300%22%20height%3D%22300%22%20viewBox%3D%220%200%20300%20300%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22b%22%3E%3CfeGaussianBlur%20stdDeviation%3D%2214%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Cg%20filter%3D%22url%28%23b%29%22%20opacity%3D%22.38%22%3E%3Ccircle%20cx%3D%2240%22%20cy%3D%2240%22%20r%3D%2250%22%20fill%3D%22%231f4bd8%22/%3E%3Ccircle%20cx%3D%22250%22%20cy%3D%2270%22%20r%3D%2255%22%20fill%3D%22%23ff8fc7%22/%3E%3Ccircle%20cx%3D%22120%22%20cy%3D%22260%22%20r%3D%2260%22%20fill%3D%22%23ffb51f%22/%3E%3Ccircle%20cx%3D%22270%22%20cy%3D%22250%22%20r%3D%2240%22%20fill%3D%22%23c8f46a%22/%3E%3Ccircle%20cx%3D%22160%22%20cy%3D%22130%22%20r%3D%2240%22%20fill%3D%22%23ff2a2a%22/%3E%3C/g%3E%0A%3Cg%20stroke%3D%22%23141414%22%20stroke-width%3D%223%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.22%22%3E%0A%3Cellipse%20cx%3D%2270%22%20cy%3D%22150%22%20rx%3D%2226%22%20ry%3D%2234%22%20fill%3D%22%23fff%22/%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%22146%22%20rx%3D%226%22%20ry%3D%2212%22%20fill%3D%22%231f4bd8%22/%3E%3Cellipse%20cx%3D%2282%22%20cy%3D%22146%22%20rx%3D%226%22%20ry%3D%2212%22%20fill%3D%22%231f4bd8%22/%3E%3Ccircle%20cx%3D%2271%22%20cy%3D%22168%22%20r%3D%227%22%20fill%3D%22%23ff2a2a%22/%3E%0A%3Cellipse%20cx%3D%22220%22%20cy%3D%22170%22%20rx%3D%2222%22%20ry%3D%2230%22%20fill%3D%22%23fff%22/%3E%3Cellipse%20cx%3D%22212%22%20cy%3D%22166%22%20rx%3D%225%22%20ry%3D%2210%22%20fill%3D%22%231f4bd8%22/%3E%3Cellipse%20cx%3D%22230%22%20cy%3D%22166%22%20rx%3D%225%22%20ry%3D%2210%22%20fill%3D%22%231f4bd8%22/%3E%3Ccircle%20cx%3D%22221%22%20cy%3D%22186%22%20r%3D%226%22%20fill%3D%22%23ff2a2a%22/%3E%0A%3Cpath%20d%3D%22M150%2030c6-10%2014%200%208%206s-14-4-6-10M20%20280c8-8%2016%204%208%208M280%20140v18M286%20140v12M180%20220c0%2010%204%2016%204%2022%22/%3E%3C/g%3E%3C/svg%3E");background-size:300px 300px}
+body.slawn .layer{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22300%22%20height%3D%22300%22%20viewBox%3D%220%200%20300%20300%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22b%22%3E%3CfeGaussianBlur%20stdDeviation%3D%2214%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Cg%20filter%3D%22url%28%23b%29%22%20opacity%3D%22.38%22%3E%3Ccircle%20cx%3D%2240%22%20cy%3D%2240%22%20r%3D%2250%22%20fill%3D%22%231f4bd8%22/%3E%3Ccircle%20cx%3D%22250%22%20cy%3D%2270%22%20r%3D%2255%22%20fill%3D%22%23ff8fc7%22/%3E%3Ccircle%20cx%3D%22120%22%20cy%3D%22260%22%20r%3D%2260%22%20fill%3D%22%23ffb51f%22/%3E%3Ccircle%20cx%3D%22270%22%20cy%3D%22250%22%20r%3D%2240%22%20fill%3D%22%23c8f46a%22/%3E%3Ccircle%20cx%3D%22160%22%20cy%3D%22130%22%20r%3D%2240%22%20fill%3D%22%23ff2a2a%22/%3E%3C/g%3E%0A%3Cg%20stroke%3D%22%23141414%22%20stroke-width%3D%223%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.22%22%3E%0A%3Cellipse%20cx%3D%2270%22%20cy%3D%22150%22%20rx%3D%2226%22%20ry%3D%2234%22%20fill%3D%22%23fff%22/%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%22146%22%20rx%3D%226%22%20ry%3D%2212%22%20fill%3D%22%231f4bd8%22/%3E%3Cellipse%20cx%3D%2282%22%20cy%3D%22146%22%20rx%3D%226%22%20ry%3D%2212%22%20fill%3D%22%231f4bd8%22/%3E%3Ccircle%20cx%3D%2271%22%20cy%3D%22168%22%20r%3D%227%22%20fill%3D%22%23ff2a2a%22/%3E%0A%3Cellipse%20cx%3D%22220%22%20cy%3D%22170%22%20rx%3D%2222%22%20ry%3D%2230%22%20fill%3D%22%23fff%22/%3E%3Cellipse%20cx%3D%22212%22%20cy%3D%22166%22%20rx%3D%225%22%20ry%3D%2210%22%20fill%3D%22%231f4bd8%22/%3E%3Cellipse%20cx%3D%22230%22%20cy%3D%22166%22%20rx%3D%225%22%20ry%3D%2210%22%20fill%3D%22%231f4bd8%22/%3E%3Ccircle%20cx%3D%22221%22%20cy%3D%22186%22%20r%3D%226%22%20fill%3D%22%23ff2a2a%22/%3E%0A%3Cpath%20d%3D%22M150%2030c6-10%2014%200%208%206s-14-4-6-10M20%20280c8-8%2016%204%208%208M280%20140v18M286%20140v12M180%20220c0%2010%204%2016%204%2022%22/%3E%3C/g%3E%3C/svg%3E");background-size:300px 300px}
+body.slawn h1{color:#1f4bd8;text-shadow:3px 3px 0 #ffb51f}
+body.slawn h1 em{color:#ff2a2a;-webkit-text-stroke:0;text-shadow:3px 3px 0 #ff8fc7}
+body.slawn .day img,body.slawn .row img,body.slawn .hero img,body.slawn .hero video{filter:saturate(1.25) contrast(1.05)}
+body.slawn .day{box-shadow:7px 7px 0 #1f4bd8} body.slawn .day:nth-child(2){box-shadow:7px 7px 0 #ff2a2a} body.slawn .day:nth-child(3){box-shadow:7px 7px 0 #19b3a6}
+body.slawn .day.next{box-shadow:7px 7px 0 #ff8fc7}
+body.slawn .day::after{background:linear-gradient(90deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.82) 48%,rgba(255,255,255,0) 100%)}
+body.slawn .card.now{background:#fff;box-shadow:6px 6px 0 #ff8fc7}
+body.slawn .weekcard{background:#c9b6f2}
+body.slawn .glow{background:#fff}
+body.slawn .rings,body.slawn #frings{}
+body.slawn .pill.acc{background:#ffb51f} body.slawn .pill.ok{background:#c8f46a;color:#141414} body.slawn .pill.cool{background:#c9b6f2;color:#141414}
+body.slawn .seg button[aria-pressed="true"]{background:#ff2a2a;color:#fff}
+body.slawn .tabs button[aria-selected="true"]{background:#ffb51f}
+body.slawn .finish,body.slawn .next{background:#ff2a2a;color:#fff}
+body.slawn .yt{background:#1f4bd8;color:#fff}
+body.slawn .set.ok{background:#e4fbf8}
+body.slawn .set.ok .chk{background:#19b3a6}
+body.slawn .progress i{background:repeating-linear-gradient(-45deg,#ff2a2a 0 8px,#ff8fc7 8px 16px)}
+body.slawn .pace i{background:repeating-linear-gradient(-45deg,#1f4bd8 0 8px,#6f8cff 8px 16px)}
+body.slawn .water button.f{background:#1f4bd8}
+body.slawn .tabbar button[aria-selected="true"]{color:#ff2a2a}
+body.slawn .tabbar button[aria-selected="true"] svg{fill:#ffb51f}
+body.slawn .timer{background:#c8f46a}
+body.slawn .toast{background:#ffb51f}
+body.slawn .msg.me{background:#1f4bd8}
+body.slawn .food .e{background:#ff8fc7}
+body.slawn .steps li::before{background:#ffb51f}
+body.slawn .callout.bad{background:#ffe3e3} body.slawn .callout.cool{background:#e6ecff} body.slawn .callout.ok{background:#e4fbf8}
+body.slawn .hero .ctr button[aria-pressed="true"]{background:#ffb51f}
+body.slawn .stat:nth-child(1){background:#ffe0ef} body.slawn .stat:nth-child(2){background:#e6ecff} body.slawn .stat:nth-child(3){background:#f2ffd9}
+body.slawn .spark path{stroke:#ff2a2a} body.slawn .spark circle{fill:#1f4bd8}
 @media (prefers-reduced-motion:reduce){body.slawn *{animation:none!important}}
 </style>
 </head>
 <body>
 
 <div class="doodles" aria-hidden="true">
-  <svg class="d1" viewBox="0 0 60 60"><path d="M30 4l7 17 18 2-14 12 5 18-16-10-16 10 5-18L5 23l18-2z" fill="#ffd21f"/></svg>
-  <svg class="d2" viewBox="0 0 60 60"><path d="M22 18L30 4l8 14z" fill="#ff5fb0"/><circle cx="30" cy="34" r="17" fill="#fff6e5"/><path d="M14 26c-6-2-10 2-10 6M46 26c6-2 10 2 10 6" stroke="#2a52ff"/><path d="M22 30l4 4M26 30l-4 4"/><circle cx="37" cy="32" r="2.5" fill="#141414"/><circle cx="30" cy="38" r="4" fill="#ff3b1f"/><path d="M21 43c5 5 13 5 18 0"/></svg>
-  <svg class="d3" viewBox="0 0 60 60"><path d="M8 40c10-30 34-30 44-8M44 22l8 10-12 3" stroke="#2a52ff"/></svg>
-  <svg class="d4" viewBox="0 0 60 60"><path d="M10 30h40M30 10v40M16 16l28 28M44 16L16 44" stroke="#ff3b1f"/></svg>
+  <svg class="d1" viewBox="0 0 60 60"><path d="M14 22c-6-10 6-18 12-10M46 22c6-10-6-18-12-10" stroke="#ff2a2a"/><ellipse cx="30" cy="32" rx="18" ry="22" fill="#fff"/><ellipse cx="23" cy="28" rx="4" ry="8" fill="#1f4bd8"/><ellipse cx="37" cy="28" rx="4" ry="8" fill="#1f4bd8"/><circle cx="30" cy="40" r="5" fill="#ff2a2a"/></svg>
+  <svg class="d2" viewBox="0 0 60 60"><path d="M22 14L30 2l8 12z" fill="#ffb51f"/><ellipse cx="30" cy="34" rx="20" ry="20" fill="#fff"/><ellipse cx="22" cy="31" rx="4" ry="8" fill="#1f4bd8"/><ellipse cx="38" cy="31" rx="4" ry="8" fill="#1f4bd8"/><circle cx="30" cy="40" r="5" fill="#ff2a2a"/><path d="M18 46c6 6 18 6 24 0" stroke="#ff2a2a" stroke-width="5"/></svg>
+  <svg class="d3" viewBox="0 0 60 60"><path d="M10 30c0-10 14-10 14 0s-10 10-10 2 6-6 6-2M30 30c0-10 14-10 14 0s-10 10-10 2 6-6 6-2" stroke="#19b3a6"/><path d="M10 46v8M22 48v6M38 46v10" stroke="#1f4bd8"/></svg>
+  <svg class="d4" viewBox="0 0 60 60"><circle cx="30" cy="30" r="16" fill="#ff8fc7"/><path d="M30 30c0-6 8-6 8 0s-12 8-12-2 14-12 16 0" stroke="#141414"/></svg>
 </div>
 <!-- ТРЕНИРОВКА -->
 <main class="view on" id="v-train"><div class="wrap">
@@ -515,7 +552,7 @@ body.slawn .row.done .code{animation:pop .4s ease}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITONYASHKA v13 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITONYASHKA v14 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1133,12 +1170,12 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick
 
 function applyTheme(){const t=S.theme||"slawn";document.body.classList.toggle("slawn",t==="slawn");
   document.querySelectorAll("#themeSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.th===t));
-  document.querySelector('meta[name="theme-color"]').content=t==="slawn"?"#fff6e5":"#0b0d12"}
+  document.querySelector('meta[name="theme-color"]').content=t==="slawn"?"#fff7fb":"#0b0d12"}
 $("themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!b)return;S.theme=b.dataset.th;saveS();applyTheme()});
 applyTheme();
 S.w=autoWeek();
 go("train");
-const APP_V="13";
+const APP_V="14";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
