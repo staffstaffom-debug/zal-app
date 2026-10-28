@@ -384,7 +384,7 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">VolodyaFit v8 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">VolodyaFit v9 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -809,7 +809,7 @@ function phase(){const m=nowMin();
   return{n:"Ночь",ic:"🌙",tip:"Пора спать, чтобы встать к залу отдохнувшим."}}
 function waterPace(){const t=waterTarget(),m=nowMin(),from=hm("6:30"),to=hm("21:30");return Math.round(t*Math.max(0,Math.min(1,(m-from)/(to-from))))}
 function mealNow(){const m=nowMin(),list=MEALS.map(x=>({...x,s:hm(x.t)}));let cur=-1;list.forEach((x,i)=>{if(m>=x.s-20)cur=i});
-  const nxt=list.find(x=>x.s-20>m);return{cur,list,nxt}}
+  if(cur>=0&&m-list[cur].s>150)cur=-1;const nxt=list.find(x=>x.s-20>m);return{cur,list,nxt}}
 function renderNow(){const el=$("nowCard");if(!el||!$("v-train").classList.contains("on"))return;
   const d=new Date(),ph=phase(),{cur,list,nxt}=mealNow(),m=nowMin(),w=LS.get("vf_water_"+today(),0),wp=waterPace(),wt=waterTarget(),{t}=eaten(),T=targets();
   const gym=hm("8:00"),wd=weekDone(),nextD=[0,1,2].find(x=>!wd.includes(x)),trainedToday=LS.get("vf_dates",[]).includes(today());
@@ -951,7 +951,7 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick
 
 S.w=autoWeek();
 go("train");
-const APP_V="8";
+const APP_V="9";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
