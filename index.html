@@ -517,7 +517,6 @@ if(!S.v5){if(+S.bw===90)S.bw=94;if(+S.kcal===2450)S.kcal=2500;S.v5=1;LS.set("vf_
 if(!S.start)S.start="2026-10-29";
 const progDay=()=>Math.floor((new Date(today())-new Date(S.start))/864e5);
 const autoWeek=()=>Math.max(0,Math.min(2,Math.floor(progDay()/7)));
-S.w=autoWeek();
 const autoKcal=bw=>Math.round((bw*29-200)/50)*50;
 const saveS=()=>LS.set("vf_s",S);
 // журнал: vf_log = { "<id>": [ {date, w:[кг..], r:[повт..], f:[ощущ..], day, code} ] }
@@ -898,6 +897,7 @@ $("tplus").onclick=()=>{tEnd=Math.max(tEnd,Date.now())+15000;tLen=Math.max(tLen,
 $("tskip").onclick=stopTimer;
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick()});
 
+S.w=autoWeek();
 go("train");
 const APP_V="6";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
