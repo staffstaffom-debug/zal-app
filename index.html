@@ -370,7 +370,7 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">VolodyaFit v6 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">VolodyaFit v7 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -773,7 +773,7 @@ let clrArm=false;$("fClear").onclick=()=>{if(!clrArm){clrArm=true;$("fClear").te
 /* ========= ВОДА ========= */
 function waterTarget(){const tr=targets().trainDay;return Math.round(((+S.bw||90)*35+(tr?500:0))/250)}
 function renderWater(){const n=LS.get("vf_water_"+today(),0),t=waterTarget();
-  $("water").innerHTML=Array.from({length:Math.max(t,n)},(_,i)=>`<button type="button" class="${i<n?"f":""}" data-w="${i}" aria-label="Стакан ${i+1}"></button>`).join("");
+  $("water").innerHTML=Array.from({length:Math.max(t,n+1)},(_,i)=>`<button type="button" class="${i<n?"f":""}" data-w="${i}" aria-label="Стакан ${i+1}"></button>`).join("");
   $("wTxt").textContent=(n*.25).toFixed(2).replace(/0$/,"")+" / "+(t*.25).toFixed(2).replace(/0$/,"")+" л";
   $("wHint").textContent=`Норма ${(t*.25).toFixed(1)} л: 35 мл на кг${targets().trainDay?" + 0.5 л в день тренировки":""}. Один стакан = 250 мл. С креатином пей не меньше.`}
 $("water").addEventListener("click",e=>{const b=e.target.closest("[data-w]");if(!b)return;const n=LS.get("vf_water_"+today(),0),i=+b.dataset.w;LS.set("vf_water_"+today(),i<n?i:i+1);renderWater()});
@@ -899,7 +899,7 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick
 
 S.w=autoWeek();
 go("train");
-const APP_V="6";
+const APP_V="7";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("version.txt?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const v=(await r.text()).trim();
