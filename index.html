@@ -596,7 +596,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v18 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v19 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1225,8 +1225,8 @@ async function makeIcon(im){const z=512,c=document.createElement("canvas");c.wid
   g.fillStyle="rgba(0,0,0,.25)";g.fillRect(0,0,z,z);
   try{await document.fonts.load("400 260px 'Rubik Wet Paint'")}catch(e){}
   g.save();g.translate(z/2,z*.56);g.rotate(-.12);g.font="400 270px 'Rubik Wet Paint', Impact, sans-serif";g.textAlign="center";g.textBaseline="middle";g.lineJoin="round";
-  g.lineWidth=36;g.strokeStyle="#0f0f10";g.strokeText("FN",0,0);g.lineWidth=18;g.strokeStyle="#ff3df2";g.strokeText("FN",0,0);
-  g.fillStyle="#c6ff1a";g.fillText("FN",0,0);g.lineWidth=3;g.strokeStyle="#0f0f10";g.strokeText("FN",0,0);
+  g.lineWidth=36;g.strokeStyle="#0f0f10";g.strokeText("FK",0,0);g.lineWidth=18;g.strokeStyle="#ff3df2";g.strokeText("FK",0,0);
+  g.fillStyle="#c6ff1a";g.fillText("FK",0,0);g.lineWidth=3;g.strokeStyle="#0f0f10";g.strokeText("FK",0,0);
   g.fillStyle="#fff";[[-90,-80,11],[30,-90,8],[105,-62,6]].forEach(([x,y,r])=>{g.beginPath();g.arc(x,y,r,0,7);g.fill()});g.restore();
   return c.toDataURL("image/png")}
 $("artIn").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;toast("Обрабатываю картинку…");
@@ -1242,7 +1242,7 @@ $("themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]")
 applyTheme();applyArt();
 S.w=autoWeek();
 go("train");
-const APP_V="18";
+const APP_V="19";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
