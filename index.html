@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<title>VolodyaFit</title>
+<title>FITONYASHKA</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="VolodyaFit">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FITONYASHKA">
 <meta name="theme-color" content="#0b0d12">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Rubik+Doodle+Shadow&family=Rubik+Scribble&family=Pangolin&display=swap">
 <style>
 /* VolodyaFit — тёмное приложение-тренер. Нижние вкладки: Тренировка / Прогресс / Питание / Профиль.
    Поверх — экран дня и лист упражнения, плавающий таймер отдыха над таб-баром. */
@@ -270,14 +270,116 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .credit{font-size:11px;color:var(--muted)}
 .empty{padding:18px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);font-size:14px;text-align:center}
 @media (prefers-reduced-motion:reduce){.layer,.timer,.toast{transition:none}.hero.live .b{animation:none}}
+
+/* ===== ТЕМА «ДУДЛ»: наивная уличная графика — маркерный контур, чистые цвета, кривые рамки, живые анимации ===== */
+body.slawn{
+  --bg:#fff6e5; --bg2:#fff; --card:#fffdf8; --card2:#ffe9b8; --line:#141414;
+  --fg:#141414; --muted:#5b554c; --accent:#ff3b1f; --accent-ink:#fff; --cool:#2a52ff; --ok:#13a85b; --bad:#ff3b1f; --pink:#ff5fb0; --yel:#ffd21f;
+  --display:"Rubik Doodle Shadow","Rubik Scribble",system-ui,sans-serif; --body:"Pangolin","Onest",system-ui,sans-serif; --mono:"Pangolin","Onest",system-ui,sans-serif;
+  color-scheme:light;
+  background-color:var(--bg);
+  background-image:radial-gradient(#14141418 1.2px,transparent 1.3px);background-size:18px 18px;
+}
+body.slawn::before{background:var(--bg)}
+body.slawn h1{font-family:"Rubik Doodle Shadow",system-ui;font-weight:400;font-size:clamp(34px,10vw,48px);letter-spacing:0}
+body.slawn h1 em{color:var(--accent);display:inline-block;animation:jig 1.4s steps(2) infinite}
+body.slawn h2,body.slawn h3{font-family:"Rubik Scribble",system-ui;font-weight:400;letter-spacing:.01em}
+body.slawn h2{font-size:22px} body.slawn h3{font-size:17px}
+body.slawn .eyebrow{font-family:var(--body);letter-spacing:.06em;color:var(--fg);font-size:13px}
+/* кривые маркерные рамки */
+body.slawn :is(.card,.day,.row,.fi,.set,.chip,.stat,.lift,.meal,.food,.eat,.field,.callout,.tabs,.cardio,.iconbtn,.next,.finish,.yt,.hero,.tip,.empty){
+  border:3px solid var(--line)!important;border-radius:255px 18px 225px 18px/18px 225px 18px 255px;box-shadow:5px 5px 0 var(--line)}
+body.slawn :is(.row,.fi,.set,.food,.eat,.chip,.stat){box-shadow:3px 3px 0 var(--line)}
+body.slawn .glow{background:var(--yel)}
+body.slawn .card.now{background:#fff;animation:wob 6s ease-in-out infinite}
+body.slawn .weekcard{background:var(--yel)}
+body.slawn .callout{border-left-width:3px!important}
+body.slawn .callout.bad{background:#ffe1da} body.slawn .callout.cool{background:#e2e8ff} body.slawn .callout.ok{background:#dcf5e6}
+body.slawn .callout b{color:var(--fg)}
+/* дни — наклейки с цветной тенью */
+body.slawn .day{transform:rotate(-1.2deg);box-shadow:6px 6px 0 var(--cool)}
+body.slawn .day:nth-child(2){transform:rotate(1deg);box-shadow:6px 6px 0 var(--accent)}
+body.slawn .day:nth-child(3){transform:rotate(-.6deg);box-shadow:6px 6px 0 var(--ok)}
+body.slawn .day img{filter:saturate(1.2) contrast(1.1)}
+body.slawn .day::after{background:linear-gradient(90deg,rgba(255,246,229,.97) 0%,rgba(255,246,229,.85) 48%,rgba(255,246,229,0) 100%)}
+body.slawn .day.next{box-shadow:6px 6px 0 var(--accent);animation:wob 3.5s ease-in-out infinite}
+body.slawn .pill{background:#fff;border:2px solid var(--line);color:var(--fg)}
+body.slawn .pill.acc{background:var(--yel)} body.slawn .pill.ok{background:#bff0d2;color:var(--fg)} body.slawn .pill.cool{background:#cfd9ff;color:var(--fg)}
+body.slawn .seg button{border:2px solid var(--line);color:var(--fg);background:#fff;border-radius:20px 8px 18px 8px}
+body.slawn .seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+body.slawn .tabs button[aria-selected="true"]{background:var(--yel)}
+body.slawn .finish,body.slawn .next{background:var(--accent);color:#fff}
+body.slawn .yt{background:var(--cool);color:#fff} body.slawn .yt.dark{background:#fff;color:var(--fg)}
+body.slawn .ring .bgc{stroke:#14141422}
+body.slawn .ring b,body.slawn .mono{font-family:var(--mono)}
+body.slawn .step{background:#fff;border:2px solid var(--line);border-radius:14px 6px 14px 6px}
+body.slawn .set .chk{background:#fff;border:2px solid var(--line)}
+body.slawn .set.ok{background:#dcf5e6}
+body.slawn .set.ok .chk{background:var(--ok)}
+body.slawn .feel button{background:#fff;border:2px solid var(--line);color:var(--fg);border-radius:14px 6px 14px 6px}
+body.slawn .row img{border:2px solid var(--line)}
+body.slawn .progress{border:2px solid var(--line);height:12px;background:#fff}
+body.slawn .progress i{background:repeating-linear-gradient(-45deg,var(--accent) 0 8px,#ff7a5c 8px 16px)}
+body.slawn .pace{border:2px solid var(--line);height:12px;background:#fff}
+body.slawn .pace i{background:repeating-linear-gradient(-45deg,var(--cool) 0 8px,#7d95ff 8px 16px)}
+body.slawn .water button{border:3px solid var(--line);border-radius:6px 6px 14px 14px;background:#fff}
+body.slawn .water button.f{background:var(--cool)}
+body.slawn .tabbar{background:#fff;border-top:3px solid var(--line)}
+body.slawn .tabbar button[aria-selected="true"]{color:var(--accent)}
+body.slawn .tabbar button[aria-selected="true"] svg{animation:hop .5s ease}
+body.slawn .tabbar svg{stroke-width:2.6}
+body.slawn .timer{background:var(--yel);border:3px solid var(--line);box-shadow:5px 5px 0 var(--line);border-radius:30px 12px 28px 12px}
+body.slawn .timer .tb button{background:#fff;border:2px solid var(--line)}
+body.slawn .toast{background:var(--yel);border:3px solid var(--line);box-shadow:4px 4px 0 var(--line);color:var(--fg)}
+body.slawn .composer{background:#fff;border-top:3px solid var(--line)}
+body.slawn .composer textarea,body.slawn .keyin,body.slawn .inrow input{background:#fff;border:2px solid var(--line);color:var(--fg)}
+body.slawn .composer button,body.slawn .inrow button{border:2px solid var(--line)}
+body.slawn .msg.ai{background:#fff;border:2px solid var(--line)} body.slawn .msg.me{background:var(--cool);color:#fff;border:2px solid var(--line)}
+body.slawn .quick button{background:#fff;border:2px solid var(--line)}
+body.slawn .fminus{border:2px solid var(--line)}
+body.slawn .food .e{background:var(--yel);border:2px solid var(--line);color:var(--fg)}
+body.slawn .steps li::before{background:var(--yel);border:2px solid var(--line);color:var(--fg)}
+body.slawn .hero .tag,body.slawn .hero .ctr button{background:#fff;color:var(--fg);border:2px solid var(--line)}
+body.slawn .hero .ctr button[aria-pressed="true"]{background:var(--yel)}
+body.slawn .fi .ic{border:2px solid var(--line)}
+body.slawn .ss{color:var(--cool)}
+body.slawn .layer{background-color:var(--bg);background-image:radial-gradient(#14141418 1.2px,transparent 1.3px);background-size:18px 18px}
+body.slawn .spark path{stroke:var(--accent);stroke-width:3}
+body.slawn .chart .grid{stroke:#14141433}
+/* пружина на нажатие */
+body.slawn :is(.day,.row,.food,.next,.finish,.yt,.seg button,.feel button,.chk,.quick button):active{transform:scale(.96) rotate(-1deg);transition:transform .08s}
+/* дудлы */
+.doodles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;display:none}
+body.slawn .doodles{display:block}
+.doodles svg{position:absolute;width:56px;height:56px;fill:none;stroke:#141414;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.doodles .d1{top:calc(70px + env(safe-area-inset-top,0px));right:76px;animation:spin 9s linear infinite}
+.doodles .d2{top:42%;left:-10px;width:46px;height:46px;animation:floaty 4s ease-in-out infinite}
+.doodles .d3{bottom:150px;right:-6px;width:60px;height:60px;animation:floaty 5s ease-in-out infinite reverse}
+.doodles .d4{top:62%;right:20px;width:34px;height:34px;animation:jig 1.2s steps(2) infinite}
+body.slawn .wrap{position:relative;z-index:1}
+@keyframes jig{0%{transform:rotate(-3deg)}100%{transform:rotate(3deg)}}
+@keyframes wob{0%,100%{border-radius:255px 18px 225px 18px/18px 225px 18px 255px}50%{border-radius:18px 225px 18px 255px/255px 18px 225px 18px}}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-12px) rotate(6deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes hop{0%{transform:translateY(0)}40%{transform:translateY(-6px) rotate(-8deg)}100%{transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(.6) rotate(-10deg)}70%{transform:scale(1.15) rotate(4deg)}100%{transform:scale(1)}}
+body.slawn .set.ok .chk svg{animation:pop .35s ease}
+body.slawn .row.done .code{animation:pop .4s ease}
+@media (prefers-reduced-motion:reduce){body.slawn *{animation:none!important}}
 </style>
 </head>
 <body>
 
+<div class="doodles" aria-hidden="true">
+  <svg class="d1" viewBox="0 0 60 60"><path d="M30 4l7 17 18 2-14 12 5 18-16-10-16 10 5-18L5 23l18-2z" fill="#ffd21f"/></svg>
+  <svg class="d2" viewBox="0 0 60 60"><path d="M22 18L30 4l8 14z" fill="#ff5fb0"/><circle cx="30" cy="34" r="17" fill="#fff6e5"/><path d="M14 26c-6-2-10 2-10 6M46 26c6-2 10 2 10 6" stroke="#2a52ff"/><path d="M22 30l4 4M26 30l-4 4"/><circle cx="37" cy="32" r="2.5" fill="#141414"/><circle cx="30" cy="38" r="4" fill="#ff3b1f"/><path d="M21 43c5 5 13 5 18 0"/></svg>
+  <svg class="d3" viewBox="0 0 60 60"><path d="M8 40c10-30 34-30 44-8M44 22l8 10-12 3" stroke="#2a52ff"/></svg>
+  <svg class="d4" viewBox="0 0 60 60"><path d="M10 30h40M30 10v40M16 16l28 28M44 16L16 44" stroke="#ff3b1f"/></svg>
+</div>
 <!-- ТРЕНИРОВКА -->
 <main class="view on" id="v-train"><div class="wrap">
   <div class="top">
-    <div style="display:grid;gap:6px"><span class="eyebrow" id="hello"></span><h1>Volodya<em>Fit</em></h1></div>
+    <div style="display:grid;gap:6px"><span class="eyebrow" id="hello"></span><h1>FITO<em>NYASHKA</em></h1></div>
     <span class="pill acc mono" id="streak"></span>
   </div>
   <section class="card now" id="nowCard"></section>
@@ -365,6 +467,10 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <label class="field">Становая × 5<input id="dead" inputmode="decimal"></label>
     <label class="field">Калории в день<input id="kcal" inputmode="numeric"></label>
   </div>
+  <section class="card" style="display:grid;gap:10px">
+    <h3>Оформление</h3>
+    <div class="seg" id="themeSeg"><button type="button" data-th="slawn">Дудл</button><button type="button" data-th="dark">Тёмная</button></div>
+  </section>
   <section class="card" style="display:grid;gap:6px">
     <h3>Как программа думает</h3>
     <p class="small muted">После каждого подхода отмечаешь повторы и ощущение: <b style="color:var(--ok)">легко</b> · <b style="color:var(--cool)">норм</b> · <b style="color:var(--accent)">тяжело</b> · <b style="color:var(--bad)">отказ</b>. В следующий раз:</p>
@@ -409,7 +515,7 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">VolodyaFit v12 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITONYASHKA v13 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -959,7 +1065,7 @@ function route(q){q=q.toLowerCase();
   if(/последн|прошл|как прошл|разбор/.test(q))return A.last();
   if(/сегодня|что делать|план|следующ|завтра/.test(q))return A.today();
   return A.help()}
-function coachPrompt(){return`Ты мой персональный тренер и нутрициолог. Вот мои данные из приложения VolodyaFit (JSON). Проанализируй прогресс, питание и воду, скажи что улучшить и что делать на следующей тренировке. Отвечай по-русски, конкретно, с цифрами.\n\n${coachContext()}`}
+function coachPrompt(){return`Ты мой персональный тренер и нутрициолог. Вот мои данные из приложения FITONYASHKA (JSON). Проанализируй прогресс, питание и воду, скажи что улучшить и что делать на следующей тренировке. Отвечай по-русски, конкретно, с цифрами.\n\n${coachContext()}`}
 function coachContext(){
   const T=targets(),{t}=eaten(),hist={};
   Object.entries(LOG).forEach(([id,L])=>hist[EX[id].n]=L.slice(-4).map(s=>({дата:s.date,вес:s.w,повторы:s.r,ощущения_1легко_4отказ:s.f})));
@@ -1025,9 +1131,14 @@ $("tplus").onclick=()=>{tEnd=Math.max(tEnd,Date.now())+15000;tLen=Math.max(tLen,
 $("tskip").onclick=stopTimer;
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick()});
 
+function applyTheme(){const t=S.theme||"slawn";document.body.classList.toggle("slawn",t==="slawn");
+  document.querySelectorAll("#themeSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.th===t));
+  document.querySelector('meta[name="theme-color"]').content=t==="slawn"?"#fff6e5":"#0b0d12"}
+$("themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!b)return;S.theme=b.dataset.th;saveS();applyTheme()});
+applyTheme();
 S.w=autoWeek();
 go("train");
-const APP_V="12";
+const APP_V="13";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
