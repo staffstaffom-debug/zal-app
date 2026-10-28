@@ -388,6 +388,16 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     </tbody></table>
   </section>
   <section class="card" style="display:grid;gap:6px">
+    <h3>Сон и восстановление</h3>
+    <table class="mtab"><tbody>
+      <tr><td>Сколько спать</td><td>7.5–8 ч</td></tr>
+      <tr><td>Лечь</td><td>22:30</td></tr>
+      <tr><td>Крайний срок</td><td>23:00</td></tr>
+      <tr><td>Подъём (зал в 8:00)</td><td>6:30</td></tr>
+    </tbody></table>
+    <p class="small muted">Меньше 7 часов — хуже растут веса, сильнее голод и тяга к сладкому, медленнее уходит жир. Ложись и вставай в одно время, даже в выходные ±1 час. За час до сна — без экранов и плотной еды, кофе не позже 14:00. В спальне темно и прохладно, 18–20°.</p>
+  </section>
+  <section class="card" style="display:grid;gap:6px">
     <h3>Добавки</h3>
     <p class="small">Креатин моногидрат <b class="mono">5 г</b> каждый день, в любое время. Воды 2.5–3 л. Вес может вырасти на 1–2 кг за счёт воды в мышцах — это нормально.</p>
   </section>
@@ -399,7 +409,7 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">VolodyaFit v11 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">VolodyaFit v12 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -867,7 +877,7 @@ function phase(){const m=nowMin();
   if(m<hm("12:00"))return{n:"Утро после зала",ic:"☀️",tip:"Главное сейчас — белок и вода. Мышцы растут после зала."};
   if(m<hm("17:00"))return{n:"День",ic:"💼",tip:"Сидячая работа: вставай и ходи 5 минут каждый час."};
   if(m<hm("21:30"))return{n:"Вечер",ic:"🌆",tip:"Добери белок и шаги. Ужин без перебора."};
-  if(m<hm("23:00"))return{n:"Поздний вечер",ic:"🌙",tip:"Готовься ко сну: экраны тише, завтра зал в 8:00."};
+  if(m<hm("23:00"))return{n:"Время сна",ic:"🌙",tip:"Отбой в 22:30: телефон в сторону, свет приглуши. Спать нужно 7.5–8 часов."};
   return{n:"Ночь",ic:"🌙",tip:"Пора спать, чтобы встать к залу отдохнувшим."}}
 function waterPace(){const t=waterTarget(),m=nowMin(),from=hm("6:30"),to=hm("21:30");return Math.round(t*Math.max(0,Math.min(1,(m-from)/(to-from))))}
 function mealNow(){const m=nowMin(),list=MEALS.map(x=>({...x,s:hm(x.t)}));let cur=-1;list.forEach((x,i)=>{if(m>=x.s-20)cur=i});
@@ -882,6 +892,9 @@ function renderNow(){const el=$("nowCard");if(!el||!$("v-train").classList.conta
   const cm=cur>=0?list[cur]:null;
   if(cm&&cm.m[0])rows.push(`<button type="button" class="nowrow" data-go="food" style="text-align:left;width:100%"><span class="ic">🍽</span><span><b>Сейчас: ${cm.n}</b><small>${cm.items.slice(0,2).join(" · ")}</small></span><span class="cd">${cm.t}</span></button>`);
   if(nxt)rows.push(`<div class="nowrow"><span class="ic">⏭</span><span><b>Дальше: ${nxt.n}</b><small>${nxt.items[0]}</small></span><span class="cd">через ${dur(nxt.s-m)}</span></div>`);
+  const bed=hm("22:30");
+  if(m>=hm("20:00")&&m<bed)rows.push(`<div class="nowrow"><span class="ic">😴</span><span><b>Отбой в 22:30</b><small>подъём 6:30 → 8 часов сна</small></span><span class="cd">через ${dur(bed-m)}</span></div>`);
+  else if(m>=bed||m<hm("5:00"))rows.push(`<div class="nowrow"><span class="ic">😴</span><span><b>Пора спать</b><small>${m>=hm("23:00")||m<hm("5:00")?"уже меньше 7.5 ч до подъёма":"ляг до 23:00"}</small></span><span class="cd">подъём 6:30</span></div>`);
   const behind=wp-w;
   rows.push(`<div style="display:grid;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>💧 Вода ${w} из ${wt} стаканов</span><span class="mono" style="color:${behind>1?"var(--accent)":"var(--ok)"}">${behind>1?"отстаёшь на "+behind:"в графике"}</span></div><div class="pace"><i style="width:${Math.min(100,w/wt*100)}%"></i><u style="left:${wp/wt*100}%"></u></div></div>`);
   rows.push(`<div style="display:flex;justify-content:space-between;font-size:13px"><span>🥩 Белок ${Math.round(t[1])} из ${T.p} г</span><span class="mono muted">${Math.round(t[0])} / ${T.k} ккал</span></div>`);
@@ -893,7 +906,7 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden){renderNow
 
 /* ========= ТРЕНЕР (бесплатный, работает на телефоне) ========= */
 let CHAT=LS.get("vf_chat",[]);
-const QUICK=["Что сейчас по плану?","Как прошла последняя тренировка?","Что мне сегодня доесть?","Где я отстаю?","Сколько воды ещё?","Почему стоит вес?","Болит плечо — что делать?","Что делать сегодня?"];
+const QUICK=["Что сейчас по плану?","Во сколько ложиться?","Как прошла последняя тренировка?","Что мне сегодня доесть?","Где я отстаю?","Сколько воды ещё?","Почему стоит вес?","Болит плечо — что делать?","Что делать сегодня?"];
 const kg=v=>(+v).toFixed(1).replace(/\.0$/,"");
 function lastSession(){let best=null;Object.entries(LOG).forEach(([id,L])=>L.forEach(s=>{if(!best||s.date>best.date)best={date:s.date,day:s.day}}));if(!best)return null;
   const items=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(s=>{if(s.date===best.date)items.push({id,s})}));return{...best,items}}
@@ -937,6 +950,7 @@ const A={
  help(){return"Я встроенный тренер: смотрю твои тренировки, веса, питание, воду и замеры. Спроси про тренировку, еду, воду, вес, боль или что делать сегодня.\n\nНа сложный вопрос нажми «Разобрать в ChatGPT / Claude» — я скопирую все твои данные, а ты вставишь их в бесплатный чат."}};
 function route(q){q=q.toLowerCase();
   if(/время|сейчас|который час/.test(q)){const p=phase(),mn=mealNow();return`Сейчас ${new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"})} · ${p.n}. ${p.tip}${mn.nxt?`\n\nДальше: ${mn.nxt.n} в ${mn.nxt.t}.`:""}`}
+  if(/сон|спать|сплю|ложит|отбой|высып|восстан/.test(q))return"Спать нужно 7.5–8 часов. Зал в 8:00, значит подъём 6:30 и отбой в 22:30, крайний срок 23:00.\n\nЕсли не высыпаешься: кофе не позже 14:00, за час до сна без телефона, в комнате темно и прохладно. При недосыпе меньше 6 часов делай тренировку на 10% легче.";
   if(/вод|пить|жажд/.test(q))return A.water();
   if(/бол|травм|ноет|тянет/.test(q))return A.pain();
   if(/съе|ед[аы]|еда|бел|калор|углев|жир[ыа ]|питан|доест|голод/.test(q))return A.food();
@@ -1013,7 +1027,7 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tInt)tick
 
 S.w=autoWeek();
 go("train");
-const APP_V="11";
+const APP_V="12";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
