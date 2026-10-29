@@ -829,7 +829,7 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v43 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v44 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1053,6 +1053,7 @@ const BMR=()=>10*(+S.bw||94)+6.25*(+S.h||180)-5*(+S.age||35)+5;   // Миффл�
 const TDEE=()=>Math.round(BMR()*(S.act||1.35)+(PROGRAMS[S.prog]||PROGRAMS.ULF3).d*280/7);                       // сидячая работа + 3 силовые в неделю
 const autoKcal=()=>Math.round((TDEE()-300+(S.goalAdj||0)+(S.adj||0))/10)*10;      // средняя за неделю
 const saveS=()=>LS.set("vf_s",S);
+const NAME=()=>(S.name||"").trim();
 // журнал: vf_log = { "<id>": [ {date, w:[кг..], r:[повт..], f:[ощущ..], day, code} ] }
 let LOG=LS.get("vf_log",{});
 // рекомендации: vf_rec = { "<id>": {w, reps, why, dir, fails} }
@@ -1729,7 +1730,6 @@ $("toGpt").onclick=()=>copyFor("gpt");$("toClaude").onclick=()=>copyFor("claude"
 
 /* ========= ПРОФИЛЬ ========= */
 const PF=["name","bw","pu","bench","squat","dead","h","age","kcal"];
-const NAME=()=>(S.name||"").trim();
 function renderProf(){PF.forEach(id=>{if(document.activeElement!==$(id))$(id).value=S[id]});{const b=LS.get("vf_bak","");const d=b?(dUTC(today())-dUTC(b))/864e5:null;$("bakHint").textContent=b?`Последняя копия: ${dShort(b)}${d>7?" — пора обновить":""}`:"Копии ещё не было. Сохрани в Файлы или iCloud."}
   $("progList").innerHTML=Object.entries(PROGRAMS).map(([k,P])=>`<button type="button" class="row${S.prog===k?" done":""}" data-prog="${k}" style="grid-template-columns:1fr auto"><span class="nm"><b>${P.n}</b><small>${P.desc}</small></span><span class="mono ${S.prog===k?"":"muted"}">${S.prog===k?"✓":P.d+" дн"}</span></button>`).join("")}
 $("progList").addEventListener("click",e=>{const b=e.target.closest("[data-prog]");if(!b)return;S.prog=b.dataset.prog;saveS();applyProgram();renderProf();toast("Программа: "+PROGRAMS[S.prog].n)});
@@ -1863,7 +1863,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="43";
+const APP_V="44";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
