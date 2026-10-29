@@ -666,7 +666,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v27 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v28 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -825,10 +825,6 @@ const PROGRAMS={
   {t:"Верх Б · объём",sub:"Гантели, блоки, руки",img:"incline",list:[["1","incline",[3,"10"],[3,"8–10"],[4,"8–12"]],["2","chin",[2,""],[3,""],[3,""]],["3","cablerow",[2,"12"],[3,"10–12"],[3,"10–12"]],["4","lateral",[3,"15"],[3,"12–15"],[4,"12–15"]],["5А","dip",[2,"8"],[3,"10"],[3,"10–12"],"ss"],["5Б","inclinecurl",[2,"10"],[3,"10–12"],[3,"10–12"],"ss"],["6А","ohext",[2,"12"],[3,"12"],[3,"10–12"],"ss"],["6Б","hammer",[2,"10"],[3,"10–12"],[3,"10–12"],"ss"],["7","crunch",[2,"12"],[3,"15"],[3,"15"]]]},
   {t:"Низ Б · объём",sub:"Становая, гакк, мост",img:"dead",list:[["1","dead",[2,"5"],[3,"5"],[3,"4–6"]],["2","hack",[2,"10"],[3,"10"],[3,"8–12"]],["3","hip",[2,"10"],[3,"10"],[3,"10–12"]],["4","goblet",[2,"12"],[2,"12"],[3,"12–15"]],["5","legcurl",[2,"12"],[3,"12"],[3,"12–15"]],["6","roll",[2,"8"],[3,"10"],[3,"12"]]]}]}};
 let DAYS=PROGRAMS.ULF3.days;
-// пользовательский контент: EX_U и PROG_U хранятся на телефоне и подмешиваются в базу
-const EX_U=LS.get("vf_ex_u",{}),PROG_U=LS.get("vf_prog_u",{});
-Object.entries(EX_U).forEach(([k,v])=>{EX[k]=v});Object.entries(PROG_U).forEach(([k,v])=>{PROGRAMS[k]=v});
-const saveU=()=>{LS.set("vf_ex_u",EX_U);LS.set("vf_prog_u",PROG_U)};
 const GROUP={bench:"грудь",incline:"грудь",dip:"грудь",dbbench:"грудь",pushup:"грудь",pullup:"спина",chin:"спина",bentrow:"спина",dbrow:"спина",latpull:"спина",cablerow:"спина",chestrow:"спина",ohp:"плечи",dbpress:"плечи",lateral:"плечи",facepull:"плечи",rearfly:"плечи",inclinecurl:"бицепс",hammer:"бицепс",ohext:"трицепс",pushdown:"трицепс",squat:"квадрицепс",hack:"квадрицепс",legpress:"квадрицепс",goblet:"квадрицепс",bulgarian:"ягодицы",hip:"ягодицы",dead:"задняя цепь",rdl:"задняя цепь",legcurl:"задняя цепь",calf:"икры",hanging:"пресс",crunch:"пресс",roll:"пресс",sideplank:"пресс"};
 const REST_H={"грудь":48,"спина":48,"плечи":36,"бицепс":36,"трицепс":36,"квадрицепс":60,"ягодицы":48,"задняя цепь":60,"икры":24,"пресс":24};
 const WEEKS=[
@@ -899,6 +895,11 @@ let REC=LS.get("vf_rec",{});
 // текущая тренировка: vf_cur = { "<day>_<code>": [{w,r,f,ok}] }
 let CUR=LS.get("vf_cur",{});
 let BODY=LS.get("vf_body",[]);
+// пользовательский контент: EX_U и PROG_U хранятся на телефоне и подмешиваются в базу
+const EX_U=LS.get("vf_ex_u",{}),PROG_U=LS.get("vf_prog_u",{});
+Object.entries(EX_U).forEach(([k,v])=>{EX[k]=v});Object.entries(PROG_U).forEach(([k,v])=>{PROGRAMS[k]=v});
+const saveU=()=>{LS.set("vf_ex_u",EX_U);LS.set("vf_prog_u",PROG_U)};
+
 Object.values(REC).forEach(r=>{if(r&&r.w!=null)r.w=Math.max(2.5,Math.round(r.w/2.5)*2.5)});
 const saveAll=()=>{LS.set("vf_log",LOG);LS.set("vf_rec",REC);LS.set("vf_cur",CUR);LS.set("vf_body",BODY)};
 
@@ -1594,7 +1595,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="27";
+const APP_V="28";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
