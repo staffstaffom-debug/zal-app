@@ -667,7 +667,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v29 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v30 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1262,8 +1262,8 @@ function autoAdjust(){const t=today(),last=S.adjAt||S.start;if((dUTC(t)-dUTC(las
 const FU0=FOODS.map(F=>{const m=String(F[1]).match(/(\d+)\s*(г|мл)/);return{base:m?+m[1]:(parseFloat(F[1])||1)}});
 (function migrate(){try{
   const wk=LS.get("vf_week",{});let ch=false;["0","1","2"].forEach(k=>{if(wk[k]){wk["d"+k]=[...new Set([...(wk["d"+k]||[]),...wk[k]])];delete wk[k];ch=true}});if(ch)LS.set("vf_week",wk);
-  Object.keys(localStorage).filter(k=>k.startsWith("vf_food_")).forEach(k=>{const d=k.slice(8),nk="vf_food2_"+d;if(localStorage.getItem(nk))return;const old=LS.get(k,{}),nw={};
-    Object.entries(old).forEach(([i,n])=>{const u=FU0[i];if(u&&n>0)nw[i]=n*u.base});LS.set(nk,nw);localStorage.removeItem(k)});
+  Object.keys(localStorage).filter(k=>k.startsWith("vf_food_")).forEach(k=>{const d=k.slice(8),nk="vf_food2_"+d;const old=LS.get(k,{}),nw=LS.get(nk,{});
+    Object.entries(old).forEach(([i,n])=>{const u=FU0[i];if(u&&n>0)nw[i]=(nw[i]||0)+n*u.base});LS.set(nk,nw);localStorage.removeItem(k)});
 }catch(e){}})();
 const FU=FOODS.map(F=>{const m=String(F[1]).match(/(\d+)\s*(г|мл)/);return m?{g:1,base:+m[1],step:10,unit:m[2]==="мл"?"мл":"г"}:{g:0,base:parseFloat(F[1])||1,step:1,unit:/скуп/.test(F[1])?"скуп":/ст\.л/.test(F[1])?"ст.л.":/кус/.test(F[1])?"кус.":"шт"}});
 function eaten(){const day=LS.get("vf_food2_"+today(),{});let t=[0,0,0,0];FOODS.forEach((F,i)=>{const n=(day[i]||0)/FU[i].base;for(let j=0;j<4;j++)t[j]+=F[2+j]*n});LS.get("vf_eat_"+today(),[]).forEach(x=>{t[0]+=x.k;t[1]+=x.p;t[2]+=x.f;t[3]+=x.c});return{day,t}}
@@ -1604,7 +1604,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="29";
+const APP_V="30";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
