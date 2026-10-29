@@ -735,8 +735,8 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
   </section>
   <section class="card" style="display:grid;gap:10px">
     <div style="display:flex;justify-content:space-between;align-items:center"><h3>Фото еды → калории</h3><span class="pill" id="gkeyState"></span></div>
-    <p class="small muted">Бесплатно через Google Gemini. Ключ: aistudio.google.com → Get API key. Хранится только на телефоне. Фото отправляется в Google только в момент распознавания.</p>
-    <div class="inrow" style="grid-template-columns:1fr auto"><input class="keyin" id="gKey" type="password" placeholder="AIza…" autocomplete="off" aria-label="Ключ Gemini"><button type="button" id="gSave">OK</button></div>
+    <p class="small muted">Бесплатно через Google Gemini. Ключ: aistudio.google.com → Get API key (начинается с AQ. или AIza). Хранится только на телефоне. Фото отправляется в Google только в момент распознавания.</p>
+    <div class="inrow" style="grid-template-columns:1fr auto"><input class="keyin" id="gKey" type="password" placeholder="AQ.… или AIza…" autocomplete="off" aria-label="Ключ Gemini"><button type="button" id="gSave">OK</button></div>
     <button type="button" class="small muted" id="gDel" hidden style="padding:4px">Удалить ключ</button>
   </section>
   <section class="card" style="display:grid;gap:10px">
@@ -829,7 +829,7 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v44 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v45 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1560,9 +1560,9 @@ async function photoToItems(file){const key=LS.get("vf_gkey","");if(!key)throw O
   const im=await loadImg(file);const c=document.createElement("canvas");const k=Math.min(1,1024/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
   const b64=c.toDataURL("image/jpeg",.82).split(",")[1];
   const prompt=`На фото еда. Определи каждое блюдо/продукт, оцени вес порции в граммах и КБЖУ. Ответь ТОЛЬКО JSON без пояснений: {"items":[{"name":"название по-русски","g":граммы,"k":ккал,"p":белок_г,"f":жиры_г,"c":углеводы_г}]}. Если еды нет — {"items":[]}.`;
-  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+encodeURIComponent(key),{method:"POST",headers:{"Content-Type":"application/json"},
+  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},
     body:JSON.stringify({contents:[{parts:[{text:prompt},{inline_data:{mime_type:"image/jpeg",data:b64}}]}],generationConfig:{temperature:.2,responseMimeType:"application/json"}})});
-  if(r.status===400||r.status===403)throw new Error("Ключ Gemini не подходит");if(r.status===429)throw new Error("Лимит Gemini — подожди минуту");if(!r.ok)throw new Error("Gemini: ошибка "+r.status);
+  if(r.status===400||r.status===401||r.status===403){let d="";try{d=(await r.json()).error?.message||""}catch(e){}throw new Error("Gemini не принял ключ ("+r.status+")"+(d?": "+d.slice(0,120):""))}if(r.status===429)throw new Error("Лимит Gemini — подожди минуту");if(!r.ok)throw new Error("Gemini: ошибка "+r.status);
   const j=await r.json();const txt=(j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||"").join("");const m=txt.match(/\{[\s\S]*\}/);const out=JSON.parse(m?m[0]:txt);
   return (out.items||[]).map(x=>({name:String(x.name||"еда"),g:Math.round(+x.g||0),pc:null,k:Math.round(+x.k||0),p:Math.round((+x.p||0)*10)/10,f:Math.round((+x.f||0)*10)/10,c:Math.round((+x.c||0)*10)/10,why:"по фото"}))}
 let PH=[];
@@ -1863,7 +1863,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="44";
+const APP_V="45";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
