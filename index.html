@@ -498,8 +498,8 @@ body.ios{--bg:#000;--bg2:#1c1c1e;--card:#1c1c1e;--card2:#2c2c2e;--line:#38383a;-
   --display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",system-ui,sans-serif;--body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",system-ui,sans-serif;--mono:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
   color-scheme:dark;background:#000;font-size:17px}
 body.ios .mono,body.ios .chip b,body.ios .stat b,body.ios .set .n,body.ios .sr,body.ios .ring b,body.ios .clock,body.ios .fi .v,body.ios .cd,body.ios .step input,body.ios .sc{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-body.ios h1{font:800 34px/1.1 var(--display);letter-spacing:-.02em;text-shadow:none}
-body.ios h1 em{color:var(--accent);text-shadow:none;animation:none;font-family:"Rubik Wet Paint",var(--display);font-weight:400;font-size:36px}
+body.ios h1{font:900 34px/1.1 var(--display);letter-spacing:-.04em;text-shadow:none}
+body.ios h1 em{color:var(--accent);text-shadow:none;animation:none;font-family:var(--display);font-weight:900;font-size:inherit}
 body.ios h2{font:700 22px/1.2 var(--display);letter-spacing:-.01em;text-transform:none}
 body.ios h3{font:600 17px/1.25 var(--display);text-transform:none;letter-spacing:0}
 body.ios .eyebrow{font:400 13px var(--body);letter-spacing:0;text-transform:uppercase;color:var(--muted)}
@@ -784,7 +784,7 @@ body.ios .fab{box-shadow:0 8px 24px rgba(198,255,26,.3)}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v35 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v36 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1749,7 +1749,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="35";
+const APP_V="36";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
