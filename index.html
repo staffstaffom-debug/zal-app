@@ -829,7 +829,7 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v48 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v49 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1556,13 +1556,23 @@ $("foodRes").addEventListener("click",e=>{const b=e.target.closest("[data-fq]");
 function renderGKey(){const k=LS.get("vf_gkey","");$("gkeyState").textContent=k?"● Gemini":"нет ключа";$("gkeyState").className="pill "+(k?"ok":"");$("gDel").hidden=!k}
 $("gSave").onclick=()=>{const k=$("gKey").value.trim();if(k.length<20)return toast("Похоже, ключ неполный");LS.set("vf_gkey",k);$("gKey").value="";renderGKey();toast("Gemini подключён")};
 $("gDel").onclick=()=>{LS.set("vf_gkey","");renderGKey();toast("Ключ удалён")};
+// выбираем актуальную Flash-модель по списку, доступному ключу; имя кешируем на сутки
+async function geminiModel(key){const c=LS.get("vf_gmodel",null);if(c&&c.t>Date.now()-864e5&&c.name)return c.name;
+  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=200",{headers:{"x-goog-api-key":key}});
+  if(!r.ok)throw new Error("Gemini не принял ключ ("+r.status+")");const j=await r.json();
+  const ms=(j.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent")).map(m=>m.name.replace(/^models\//,""));
+  const ver=n=>{const m=n.match(/gemini-(\d+(?:\.\d+)?)/);return m?parseFloat(m[1]):0};
+  const pick=ms.filter(n=>/flash/.test(n)&&!/lite|8b|image|tts|audio|live|exp|preview|thinking/.test(n)).sort((a,b)=>ver(b)-ver(a))[0]
+    ||ms.filter(n=>/flash/.test(n)&&!/image|tts|audio|live/.test(n)).sort((a,b)=>ver(b)-ver(a))[0]||ms.filter(n=>/gemini/.test(n)&&!/image|tts|audio|live|embedding/.test(n)).sort((a,b)=>ver(b)-ver(a))[0];
+  if(!pick)throw new Error("У ключа нет доступных моделей Gemini");LS.set("vf_gmodel",{name:pick,t:Date.now()});return pick}
 async function photoToItems(file){const key=LS.get("vf_gkey","");if(!key)throw Object.assign(new Error("nokey"),{nokey:1});
   const im=await loadImg(file);const c=document.createElement("canvas");const k=Math.min(1,1024/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
   const b64=c.toDataURL("image/jpeg",.82).split(",")[1];
   const prompt=`На фото еда. Определи каждое блюдо/продукт, оцени вес порции в граммах и КБЖУ. Ответь ТОЛЬКО JSON без пояснений: {"items":[{"name":"название по-русски","g":граммы,"k":ккал,"p":белок_г,"f":жиры_г,"c":углеводы_г}]}. Если еды нет — {"items":[]}.`;
-  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},
+  const model=await geminiModel(key);
+  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+model+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},
     body:JSON.stringify({contents:[{parts:[{text:prompt},{inline_data:{mime_type:"image/jpeg",data:b64}}]}],generationConfig:{temperature:.2,responseMimeType:"application/json"}})});
-  if(r.status===400||r.status===401||r.status===403){let d="";try{d=(await r.json()).error?.message||""}catch(e){}throw new Error("Gemini не принял ключ ("+r.status+")"+(d?": "+d.slice(0,120):""))}if(r.status===429)throw new Error("Лимит Gemini — подожди минуту");if(!r.ok)throw new Error("Gemini: ошибка "+r.status);
+  if(r.status===400||r.status===401||r.status===403){let d="";try{d=(await r.json()).error?.message||""}catch(e){}throw new Error("Gemini не принял ключ ("+r.status+")"+(d?": "+d.slice(0,120):""))}if(r.status===429)throw new Error("Лимит Gemini — подожди минуту");if(r.status===404){LS.set("vf_gmodel",null);throw new Error("Модель устарела — попробуй ещё раз, выберу новую")}if(!r.ok)throw new Error("Gemini: ошибка "+r.status);
   const j=await r.json();const txt=(j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||"").join("");const m=txt.match(/\{[\s\S]*\}/);const out=JSON.parse(m?m[0]:txt);
   return (out.items||[]).map(x=>({name:String(x.name||"еда"),g:Math.round(+x.g||0),pc:null,k:Math.round(+x.k||0),p:Math.round((+x.p||0)*10)/10,f:Math.round((+x.f||0)*10)/10,c:Math.round((+x.c||0)*10)/10,why:"по фото"}))}
 let PH=[];
@@ -1863,7 +1873,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="48";
+const APP_V="49";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
