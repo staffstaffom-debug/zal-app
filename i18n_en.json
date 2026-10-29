@@ -1,0 +1,92 @@
+{
+ "ex": {
+  "bench": {"n":"Barbell bench press","m":"chest · triceps","s":["Pull your shoulder blades back and down, eyes under the bar, feet planted.","Grip slightly wider than shoulders, unrack to straight arms.","Lower for 2 sec to the lower chest, elbows ~45° to the torso.","Touch without bouncing, press up and slightly back toward the rack."],"e":["Elbows flared to 90° — hammers the shoulders.","Hips lifting off the bench.","Bouncing the bar off the chest."],"easy":"Dumbbell bench press or machine chest press.","alt":"Smith machine press, dumbbell bench press.","q":"barbell bench press form"},
+  "incline": {"n":"Incline dumbbell press","m":"upper chest","s":["Bench at 30°, kick the dumbbells up from your knees.","Shoulder blades pinned, dumbbells over the upper chest.","Lower to chest level, elbows at 45°.","Press in an arc — dumbbells come together but don't clank."],"e":["Bench at 45°+ — it all shifts to the shoulders.","Short range of motion.","Clanking the dumbbells at the top."],"easy":"Incline machine press.","alt":"Incline barbell press, Smith machine at 30°.","q":"incline dumbbell press 30 degrees form"},
+  "dip": {"n":"Dips","m":"lower chest · triceps","s":["Support on straight arms, shoulders down away from the ears.","Slight forward lean, legs slightly back.","Lower to 90° at the elbows — no deeper.","Press back up to straight arms."],"e":["Sinking too deep.","Shoulders creeping up to the ears.","Jerking with the torso."],"easy":"Assisted dip machine or bench dips.","alt":"Assisted dip machine, cable press-down.","q":"chest dips form"},
+  "pullup": {"n":"Pull-ups","m":"back width · biceps","s":["Dead hang, grip slightly wider than shoulders, abs and glutes tight.","Start by pulling the shoulder blades down.","Pull your chest to the bar, elbows to the ribs.","Lower for 2–3 sec to straight arms, no swinging."],"e":["Kipping and kicking with the legs.","Half reps.","Reaching for the bar with your neck."],"easy":"Negatives: jump to the top, lower for 5 sec. Or a band / assisted machine.","alt":"Lat pulldown.","q":"pull up proper form"},
+  "chin": {"n":"Chin-ups","m":"lats · biceps","s":["Palms facing you, shoulder-width grip.","Shoulder blades down, body straight.","Chin over the bar, elbows down to your sides.","Lower slowly to straight arms."],"e":["Jerking.","Not lowering to straight arms."],"easy":"5-sec negatives or a band.","alt":"Close-grip underhand lat pulldown.","q":"chin up form"},
+  "bentrow": {"n":"Barbell bent-over row","m":"back thickness","s":["Grip slightly wider than shoulders, knees bent, torso ~45°, back flat.","Brace the abs, bar hangs under the shoulders.","Pull to the lower belly, elbows back along the body.","Lower under control, torso stays down."],"e":["Rounded back.","Standing up as you pull.","Pulling to the chest instead of the belly."],"easy":"Chest-supported dumbbell row on an incline bench.","alt":"T-bar row, seated cable row.","q":"barbell bent over row form"},
+  "dbrow": {"n":"One-arm dumbbell row","m":"lats","s":["Knee and hand on the bench, back parallel to the floor.","Dumbbell hangs under the shoulder.","Pull to the hip — elbow back and up, not out.","Stretch the lat at the bottom without twisting the torso."],"e":["Twisting the torso.","Curling it to the chest with the biceps."],"easy":"Single-arm seated cable row.","alt":"Single-arm machine row.","q":"one arm dumbbell row form"},
+  "ohp": {"n":"Standing barbell overhead press","m":"shoulders · triceps · core","s":["Bar on the upper chest, grip slightly wider than shoulders, glutes and abs tight.","Head slightly back — bar travels straight up.","Once the bar clears the forehead, push the head forward under the bar.","Lower to the chest under control."],"e":["Arching the lower back.","Pressing forward away from you.","Leg drive helping the press."],"easy":"Seated dumbbell press with back support.","alt":"Seated dumbbells, seated Smith machine press.","q":"standing overhead press form"},
+  "lateral": {"n":"Lateral raises","m":"shoulder width","s":["Slight forward lean, arms slightly bent.","Raise out to the sides leading with the elbow, up to shoulder height.","Shoulders away from the ears, pinky no higher than the thumb.","Lower slower than you lift."],"e":["Swinging with the torso.","Traps taking over.","Raising above shoulder height."],"easy":"Single-arm on the cable.","alt":"Cable or machine lateral raise.","q":"dumbbell lateral raise form"},
+  "facepull": {"n":"Face pulls","m":"rear delts · healthy shoulders","s":["Cable at face height, overhand grip on the rope.","Step back, torso upright.","Pull toward the eyes, spreading the rope, elbows high.","Squeeze the shoulder blades at the end, return slowly."],"e":["Going heavy — this is a light exercise.","Leaning back with the torso."],"easy":"Bent-over dumbbell rear delt fly.","alt":"Reverse pec deck.","q":"face pull form"},
+  "inclinecurl": {"n":"Incline dumbbell curl","m":"biceps — long head","s":["Bench at 45–60°, arms hang straight behind the torso.","Curl while turning the palm up, elbows stay put.","Squeeze the biceps at the top.","Lower for 3 sec to straight arms — the stretch is the point."],"e":["Elbows drifting forward.","Cutting the range short at the bottom."],"easy":"Standing curls.","alt":"Low cable curl.","q":"incline dumbbell curl form"},
+  "hammer": {"n":"Hammer curls","m":"biceps · forearms","s":["Dumbbells at your sides, palms facing each other.","Curl without changing grip, elbows tucked.","Pause at the top.","Lower slowly."],"e":["Swinging with the torso.","Elbows drifting."],"easy":"Rope hammer curl on the low cable.","alt":"Rope hammer curl on the low cable.","q":"hammer curl form"},
+  "ohext": {"n":"Overhead triceps extension","m":"triceps — long head","s":["Back to the cable, rope behind the head, step forward.","Elbows point forward and up and don't move.","Extend forward and up to straight arms.","Return slowly into a deep stretch."],"e":["Elbows flaring apart.","Working with the torso."],"easy":"Seated single-dumbbell overhead extension.","alt":"Dumbbell overhead extension.","q":"overhead rope triceps extension form"},
+  "squat": {"n":"Barbell back squat","m":"quads · glutes","s":["Bar on the traps, feet shoulder width, toes slightly out.","Belly breath, brace the abs like a barrel.","Hips back and down, knees tracking the toes, to parallel.","Drive up through the whole foot, exhale at the top."],"e":["Knees caving in.","Heels lifting.","Lower back rounding at the bottom."],"easy":"Goblet squat with a dumbbell.","alt":"Hack squat, Smith machine squat.","q":"barbell back squat form"},
+  "hip": {"n":"Hip thrust","m":"glutes","s":["Shoulder blades on the bench, bar across the hips (with a pad).","Feet set so the shins are vertical at the top.","Drive the hips up to a straight line, chin tucked.","Pause 1 sec squeezing the glutes, lower under control."],"e":["Arching the lower back at the top.","Feet too far out — hamstrings take over."],"easy":"Bodyweight bridge or hip thrust machine.","alt":"Hip thrust machine.","q":"barbell hip thrust form"},
+  "bulgarian": {"n":"Bulgarian split squat","m":"glutes · quads","s":["Rear foot on the bench, front foot a big step forward.","Slight forward lean, dumbbells in hand.","Lower straight down, rear knee almost to the floor.","Drive up through the front heel."],"e":["Front foot too close to the bench.","Knee caving in."],"easy":"Bodyweight or holding on for support.","alt":"Dumbbell reverse lunges.","q":"bulgarian split squat form"},
+  "legcurl": {"n":"Seated leg curl","m":"hamstrings","s":["Pad above the heels, knees aligned with the machine's pivot.","Curl all the way, hips pinned.","Pause 1 sec.","Release for 3 sec."],"e":["Yanking the weight.","Hips lifting."],"easy":"Less weight, more control.","alt":"Lying leg curl.","q":"seated leg curl form"},
+  "calf": {"n":"Calf raises","m":"calves","s":["Toes on the edge of the platform, heels down.","Drop the heels as low as possible — 1-sec stretch.","Rise all the way onto the toes.","Pause 1 sec at the top."],"e":["Bouncing without pauses.","Short range of motion."],"easy":"Bodyweight on a step.","alt":"Calf raises on the leg press.","q":"standing calf raise form"},
+  "dead": {"n":"Deadlift","m":"entire posterior chain","s":["Bar over mid-foot, grip just outside the knees.","Hips down, chest up, back flat, bar against the shins.","Breathe, brace — push the floor away, bar slides along the legs.","Stand tall without leaning back, lower the same way."],"e":["Rounded back.","Bar drifting away from the legs.","Hips shooting up before the shoulders."],"easy":"Block pulls or Romanian deadlift.","alt":"Trap bar deadlift, Romanian deadlift.","q":"conventional deadlift form"},
+  "hanging": {"n":"Hanging leg raise","m":"lower abs","s":["Hang, shoulders active, legs together.","Knees to the chest while curling the pelvis up — that's the key.","Pause at the top.","Lower for 2 sec without swinging."],"e":["Swinging the legs — that's hip flexors.","Swinging the body."],"easy":"Knee raises on the captain's chair or lying down.","alt":"Captain's chair.","q":"hanging leg raise proper form abs"},
+  "crunch": {"n":"Cable crunch","m":"six-pack","s":["Kneel at the cable, rope at your head.","Hips stay still — don't sit back on your heels.","Crunch: ribs toward the pelvis, forehead toward the knees.","Return slowly."],"e":["Pulling with the arms.","Sitting back onto the heels."],"easy":"Floor crunches.","alt":"Ab crunch machine.","q":"kneeling cable crunch form"},
+  "roll": {"n":"Ab wheel rollout","m":"full abs · core","s":["On your knees, wheel under the shoulders, back slightly rounded.","Roll forward with the pelvis tucked — lower back doesn't sag.","Go as far as you can hold straight.","Pull back with the abs."],"e":["Arching the lower back.","Going too far the first time."],"easy":"Short range or roll out to a wall.","alt":"Plank with arm reach.","q":"ab wheel rollout from knees form"},
+  "dbpress": {"n":"Seated dumbbell shoulder press","m":"shoulders","s":["Backrest at 80–90°, dumbbells at ear level.","Abs tight, lower back pressed into the pad.","Press up without clanking the dumbbells.","Lower to ear level over 2 sec."],"e":["Arching the lower back.","Half reps."],"easy":"Seated machine shoulder press.","alt":"Standing barbell overhead press.","q":"seated dumbbell shoulder press form"},
+  "pushdown": {"n":"Cable triceps pushdown","m":"triceps","s":["Rope or straight bar, slight forward lean.","Elbows pinned to the torso and locked in place.","Extend to straight arms, spread the rope ends.","Return up to 90° at the elbow."],"e":["Elbows drifting.","Pushing down with the torso."],"easy":"Less weight.","alt":"Overhead triceps extension.","q":"rope triceps pushdown form"},
+  "rdl": {"n":"Romanian deadlift","m":"hamstrings","s":["Bar at the hips, knees slightly bent — the angle doesn't change.","Hips back, bar slides along the thighs.","Down to a strong stretch just below the knees, back flat.","Stand up by driving the hips forward."],"e":["Rounded back.","Turning it into a squat."],"easy":"With dumbbells.","alt":"Leg curl.","q":"romanian deadlift form"},
+  "cablerow": {"n":"Seated cable row","m":"mid back","s":["Knees slightly bent, back flat.","Pull the handle to the lower belly, elbows along the torso.","Squeeze the shoulder blades for 1 sec.","Release into a stretch without rounding the lower back."],"e":["Swinging with the torso.","Pulling with the arms, not the shoulder blades."],"easy":"Less weight, slower.","alt":"One-arm dumbbell row.","q":"seated cable row form"},
+  "hack": {"n":"Hack squat","m":"quads","s":["Back and hips pressed into the pad, feet shoulder width.","Lower to 90° at the knees or deeper.","Knees track the toes.","Drive up without locking the knees."],"e":["Knees caving in.","Hips lifting off the pad."],"easy":"Leg press.","alt":"Smith machine squat.","q":"hack squat form"},
+  "latpull": {"n":"Lat pulldown","m":"lats","s":["Thighs under the pad, grip slightly wider than shoulders.","First pull the shoulders down away from the ears.","Pull to the upper chest, elbows down and back.","Return under control into a stretch."],"e":["Pulling behind the neck.","Swinging with the torso."],"easy":"Less weight.","alt":"Assisted pull-ups.","q":"lat pulldown form"},
+  "legpress": {"n":"Leg press","m":"quads · glutes","s":["Lower back and hips pressed into the seat, feet shoulder width.","Lower to 90° at the knees.","Hips stay on the seat.","Press without locking the knees."],"e":["Locking the knees.","Hips lifting at the bottom."],"easy":"Less weight.","alt":"Hack squat.","q":"leg press machine form"},
+  "dbbench": {"n":"Dumbbell bench press","m":"chest · triceps","s":["Shoulder blades pinned, dumbbells over the chest.","Lower to chest level, elbows at 45°.","Press in an arc.","Dumbbells don't clank at the top."],"e":["Elbows flared to 90°.","Short range of motion."],"easy":"Machine chest press.","alt":"Barbell bench press.","q":"dumbbell bench press form"},
+  "pushup": {"n":"Push-ups","m":"chest · triceps","s":["Hands slightly wider than shoulders, body straight.","Lower the chest almost to the floor, elbows at 45°.","Abs tight.","Press up to straight arms."],"e":["Hips sagging.","Half reps."],"easy":"From the knees or off a bench.","alt":"Dips.","q":"push up proper form"},
+  "goblet": {"n":"Goblet squat","m":"quads · core","s":["Dumbbell or kettlebell at the chest, elbows down.","Feet shoulder width.","Sit deep, elbows between the knees, torso upright.","Drive up through the heels."],"e":["Torso falling forward.","Heels lifting."],"easy":"Bodyweight.","alt":"Leg press.","q":"goblet squat form"},
+  "rearfly": {"n":"Bent-over rear delt fly","m":"rear delts","s":["Torso at 45°, back flat, dumbbells under the chest.","Raise out to the sides, elbows slightly bent.","Pause at the top.","Lower slowly."],"e":["Swinging.","Going heavy."],"easy":"Face pulls.","alt":"Reverse pec deck.","q":"bent over rear delt fly form"},
+  "chestrow": {"n":"Chest-supported row","m":"back","s":["Chest on the pad, feet braced.","Pull the handles toward you, elbows back.","Squeeze the shoulder blades.","Release under control."],"e":["Jerking.","Chest lifting off the pad."],"easy":"Less weight.","alt":"Seated cable row.","q":"chest supported t-bar row form"},
+  "sideplank": {"n":"Side plank","m":"obliques · waist","s":["On the elbow under the shoulder, feet together.","Hips up — body in one straight line.","Hold for time on each side.","Breathe steadily."],"e":["Hips sagging."],"easy":"From the knees.","alt":"Pallof hold.","q":"side plank form"}
+ },
+ "programs": {
+  "ULF3": {"n":"Upper / Lower / Full Body","desc":"3 days. Bench and squat twice a week, deadlift once","days":[
+   {"t":"Upper","sub":"Bench, pull-ups, shoulders, arms"},
+   {"t":"Lower","sub":"Legs and abs"},
+   {"t":"Full Body","sub":"Deadlift, shoulders, back"}
+  ]},
+  "PPL3": {"n":"Push / Pull / Legs","desc":"3 days. Presses, pulls, legs — the classic for experienced lifters","days":[
+   {"t":"Push","sub":"Chest, shoulders, triceps"},
+   {"t":"Pull","sub":"Back, biceps"},
+   {"t":"Legs","sub":"Legs and abs"}
+  ]},
+  "FB2": {"n":"Full Body × 2","desc":"2 days. Whole body in one session, when time is short","days":[
+   {"t":"Full Body A","sub":"Squat, bench, pull-ups"},
+   {"t":"Full Body B","sub":"Deadlift, overhead press, rows"}
+  ]},
+  "UL4": {"n":"Upper / Lower × 2","desc":"4 days. Strength early in the week, volume at the end","days":[
+   {"t":"Upper A · strength","sub":"Heavy presses and pulls"},
+   {"t":"Lower A · strength","sub":"Squat, Romanian deadlift"},
+   {"t":"Upper B · volume","sub":"Dumbbells, cables, arms"},
+   {"t":"Lower B · volume","sub":"Deadlift, hack squat, hip thrust"}
+  ]}
+ },
+ "weeks": [
+  {"n":"Week 1","txt":"Ramp-up: ~75% of previous weights, 2–3 reps in reserve. Log how it feels — the program will adjust the load."},
+  {"n":"Week 2","txt":"Working week: ~85%, one extra set, 1–2 reps in reserve. Where it felt easy, the weight is already up."},
+  {"n":"Week 3+","txt":"Progression: the program drives the weights from your logs. Every session — a little more."}
+ ],
+ "onboard": [
+  {"q":"How many days a week can you realistically train?","o":["2","3","4"]},
+  {"q":"Time off from training","o":["none","1–3 months","3+ months / beginner"]},
+  {"q":"Main goal","o":["lose fat","build muscle","recomposition (both)"]},
+  {"q":"Minutes per session","o":["45","60","75+"]},
+  {"q":"Anything bothering you","o":["nothing","shoulders","lower back","knees"]},
+  {"q":"Average sleep","o":["under 6 h","6–7 h","7+ h"]},
+  {"q":"Activity outside the gym","o":["desk job","on my feet","physical work"]}
+ ],
+ "foods": [
+  ["Chicken breast","150 g"],["Beef","150 g"],["White fish","150 g"],["Salmon","120 g"],
+  ["Egg","1 pc"],["Cottage cheese 5%","200 g"],["Protein powder","1 scoop"],["Greek yogurt","150 g"],
+  ["Rice / buckwheat","70 g dry"],["Oats","60 g"],["Potatoes","200 g"],["Pasta","80 g dry"],
+  ["Bread","2 slices"],["Banana","1 pc"],["Apple","1 pc"],["Vegetables","300 g"],
+  ["Nuts","30 g"],["Olive oil","1 tbsp"],["Milk","250 ml"],["Cheese","30 g"]
+ ],
+ "meals": [
+  {"n":"Pre-gym","items":["Banana + Greek yogurt 150 g","Toast or 2 crispbreads with honey — mandatory on leg and deadlift days","Black coffee, no sugar","Water 0.5 L"]},
+  {"n":"Training","items":["Bring a 0.7–1 L water bottle"]},
+  {"n":"Post-gym — breakfast","items":["Protein 1 scoop + creatine 5 g","4-egg omelet","Oats 60 g"]},
+  {"n":"Lunch","items":["Chicken 200 g","Rice or buckwheat 80 g dry","Vegetables 300 g + 1 tbsp oil"]},
+  {"n":"Snack","items":["Cottage cheese 5% 200 g","Apple","Nuts 15 g"]},
+  {"n":"Dinner","items":["Fish 150 g","Potatoes 250 g","Vegetables 200 g + 1 tbsp oil"]}
+ ],
+ "quick": ["What's on the plan right now?","When should I go to bed?","How did my last workout go?","What should I still eat today?","Where am I falling behind?","How much more water?","Why has my weight stalled?","My shoulder hurts — what do I do?","What should I do today?"],
+ "groups": {"грудь":"chest","спина":"back","плечи":"shoulders","бицепс":"biceps","трицепс":"triceps","квадрицепс":"quads","ягодицы":"glutes","задняя цепь":"posterior chain","икры":"calves","пресс":"abs"}
+}
