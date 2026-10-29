@@ -215,6 +215,11 @@ body.overlay .timer{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .food .e{width:34px;height:34px;border-radius:10px;background:var(--card2);display:grid;place-items:center;font:700 12px var(--mono);color:var(--accent)}
 .food b{font-size:13px;font-weight:600;display:block;line-height:1.2}
 .food small{font:500 11px var(--mono);color:var(--muted)}
+.food.on{grid-template-columns:auto 1fr;grid-template-rows:auto auto;border-color:var(--accent)}
+.fstep{grid-column:1/-1;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;background:var(--bg2);border-radius:12px}
+.fstep button{height:40px;font:700 20px var(--mono);color:var(--fg)}
+.fstep b{text-align:center;font:700 16px var(--mono)}
+.fstep b small{font-size:11px;color:var(--muted);margin-left:3px}
 .fwrap{position:relative;min-width:0;display:grid}
 .fminus{position:absolute;z-index:2;top:-8px;left:-6px;width:30px;height:30px;border-radius:50%;background:var(--bad);color:#fff;font:700 18px/1 var(--mono);display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.4)}
 .food .plus{font:700 18px var(--mono);color:var(--muted)}
@@ -508,7 +513,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
   </section>
   <section style="display:grid;gap:8px">
     <div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Быстро добавить</h3><button type="button" class="small muted" id="fClear">очистить день</button></div>
-    <p class="small muted">Нажми на продукт — добавится порция. Красный «−» — убрать одну.</p>
+    <p class="small muted">Нажми на продукт — добавится обычная порция. Дальше «−» и «+» меняют вес по 10 г (или по 1 шт).</p>
     <div class="foods" id="foods"></div>
   </section>
   <section style="display:grid;gap:8px"><h3>Пример дня под твою цель</h3><div class="grp" id="meals"></div></section>
@@ -562,7 +567,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
       <tr><td>Ниже диапазона или отказ в первых подходах</td><td style="color:var(--bad)">−5–10%</td></tr>
       <tr><td>Два раза подряд не вышло</td><td style="color:var(--bad)">разгрузка −10%</td></tr>
     </tbody></table>
-    <p class="small muted">Шаг: штанга 2.5 кг (присед и становая 5 кг, если легко), гантели 2 кг.</p>
+    <p class="small muted">Шаг: штанга 2.5 кг (присед и становая 5 кг, если легко), гантели тоже 2.5 кг.</p>
   </section>
   <section class="card" style="display:grid;gap:6px">
     <h3>Отдых между подходами</h3>
@@ -596,7 +601,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v20 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v21 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -752,6 +757,7 @@ let REC=LS.get("vf_rec",{});
 // текущая тренировка: vf_cur = { "<day>_<code>": [{w,r,f,ok}] }
 let CUR=LS.get("vf_cur",{});
 let BODY=LS.get("vf_body",[]);
+Object.values(REC).forEach(r=>{if(r&&r.w!=null)r.w=Math.max(2.5,Math.round(r.w/2.5)*2.5)});
 const saveAll=()=>{LS.set("vf_log",LOG);LS.set("vf_rec",REC);LS.set("vf_cur",CUR);LS.set("vf_body",BODY)};
 
 /* ========= УТИЛИТЫ ========= */
@@ -768,10 +774,10 @@ const ICON={back:`<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>`,ch
 function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2600)}
 function range(raw){const p=String(raw).split("–").map(x=>parseInt(x)).filter(x=>!isNaN(x));if(!p.length)return null;return p.length>1?[p[0],p[1]]:[p[0],p[0]]}
 const rTxt=(lo,hi)=>lo===hi?lo+"":lo+"–"+hi;
-function stepFor(x,big){return x.db?2:(x.big&&big?5:2.5)}
+function stepFor(x,big){return x.db?2.5:(x.big&&big?5:2.5)}
 
 /* ========= ВЕС И ЦЕЛИ ========= */
-function baseWeight(x){if(!x.b)return null;const v=+S[x.b]*x.k*WEEKS[S.w].p;return x.db?rnd(v,2):rnd(v,2.5)}
+function baseWeight(x){if(!x.b)return null;const v=+S[x.b]*x.k*WEEKS[S.w].p;return rnd(v,2.5)}
 function puPlan(){const m=+S.pu||0;
   if(m<3)return{reps:"3–5",lo:3,hi:5,tip:"Пока меньше 3 раз: запрыгни наверх и опускайся 5 сек. В конце — 1 подход с резиной на максимум."};
   const r=Math.max(2,Math.round(m*.6));
@@ -806,8 +812,8 @@ function decide(i,sets){
     if(anyLow)return{w:null,reps:lo+"",why:"Не добрал повторы — держим ту же цель.",dir:"eq",fails};
     return{w:w||null,reps:null,why:"В диапазоне — добавь по повтору.",dir:"eq",fails:0}}
   const st=stepFor(x,avgF<=1.5);
-  if(fails>=2){const nw=x.db?rnd(w*.9,2):rnd(w*.9,2.5);return{w:nw,reps:rTxt(lo,hi),why:"Два раза подряд тяжело — разгрузка −10%, потом снова вверх.",dir:"dn",fails:0}}
-  if(anyLow||earlyFail){const nw=x.db?rnd(w*.95,2):rnd(w*.95,2.5);return{w:nw,reps:rTxt(lo,hi),why:`Повторы ниже ${lo} или отказ — вес чуть ниже.`,dir:"dn",fails}}
+  if(fails>=2){const nw=rnd(w*.9,2.5);return{w:nw,reps:rTxt(lo,hi),why:"Два раза подряд тяжело — разгрузка −10%, потом снова вверх.",dir:"dn",fails:0}}
+  if(anyLow||earlyFail){const nw=rnd(w*.95,2.5);return{w:nw,reps:rTxt(lo,hi),why:`Повторы ниже ${lo} или отказ — вес чуть ниже.`,dir:"dn",fails}}
   if(allTop&&avgF<=1.5)return{w:w+st*2,reps:rTxt(lo,hi),why:`Все подходы на ${hi}+ и легко — сразу +${st*2} кг.`,dir:"up",fails:0};
   if(allTop&&avgF<=3)return{w:w+st,reps:rTxt(lo,hi),why:`Все подходы на ${hi}+ — +${st} кг.`,dir:"up",fails:0};
   if(allTop)return{w,reps:rTxt(lo,hi),why:"Сделал, но на пределе — повтори вес, закрепи.",dir:"eq",fails:0};
@@ -916,7 +922,7 @@ $("sheetW").addEventListener("click",e=>{
   if(t.hasAttribute("data-next")){curE++;tab=0;frame=-1;photo=false;renderEx();$("sheet").scrollTo({top:0,behavior:"smooth"});return}
   if(t.dataset.feel!==undefined){setVal(+t.dataset.feel,"f",t.dataset.f);renderEx();return}
   if(t.dataset.adj){const n=+t.dataset.n,f=t.dataset.adj,inp=$(f+n),i=info(curD,DAYS[curD].list[curE]);
-    const st=f==="w"?(i.x.db?2:2.5):(i.x.t?5:1);let v=(parseFloat(inp.value)||0)+st*(+t.dataset.v);v=Math.max(0,Math.round(v*10)/10);inp.value=v;setVal(n,f,String(v));return}
+    const st=f==="w"?2.5:(i.x.t?5:1);let v=(parseFloat(inp.value)||0)+st*(+t.dataset.v);v=Math.max(0,Math.round(v*10)/10);inp.value=v;setVal(n,f,String(v));return}
   if(t.dataset.ok!==undefined){const n=+t.dataset.ok,it=DAYS[curD].list[curE],i=info(curD,it),k=curKey(curD,i.code),L=CUR[k]||[],s=L[n]||{};
     s.w=$("w"+n).value;s.r=$("r"+n).value;s.ok=!s.ok;if(s.ok&&!s.f)s.f="2";L[n]=s;CUR[k]=L;LS.set("vf_cur",CUR);
     if(s.ok){const last=L.filter(z=>z&&z.ok).length>=i.sets,nx=DAYS[curD].list[curE+1];
@@ -972,7 +978,9 @@ $("addBody").onclick=()=>{const bw=parseFloat($("inBw").value),wa=parseFloat($("
 /* ========= ПИТАНИЕ ========= */
 function targets(){const bw=+S.bw||90,k=+S.kcal||2450,p=Math.round(bw*2),f=Math.round(bw*.9),trainDay=(LS.get("vf_dates",[]).includes(today()))||Object.keys(CUR).length>0;
   const c=Math.max(100,Math.round((k-p*4-f*9)/4));return{k,p,f,c,trainDay}}
-function eaten(){const day=LS.get("vf_food_"+today(),{});let t=[0,0,0,0];FOODS.forEach((F,i)=>{const n=day[i]||0;for(let j=0;j<4;j++)t[j]+=F[2+j]*n});LS.get("vf_eat_"+today(),[]).forEach(x=>{t[0]+=x.k;t[1]+=x.p;t[2]+=x.f;t[3]+=x.c});return{day,t}}
+// порция «150 г» → граммы с шагом 10; «1 шт», «1 скуп» → штуки с шагом 1
+const FU=FOODS.map(F=>{const m=String(F[1]).match(/(\d+)\s*(г|мл)/);return m?{g:1,base:+m[1],step:10,unit:m[2]==="мл"?"мл":"г"}:{g:0,base:parseFloat(F[1])||1,step:1,unit:/скуп/.test(F[1])?"скуп":/ст\.л/.test(F[1])?"ст.л.":/кус/.test(F[1])?"кус.":"шт"}});
+function eaten(){const day=LS.get("vf_food2_"+today(),{});let t=[0,0,0,0];FOODS.forEach((F,i)=>{const n=(day[i]||0)/FU[i].base;for(let j=0;j<4;j++)t[j]+=F[2+j]*n});LS.get("vf_eat_"+today(),[]).forEach(x=>{t[0]+=x.k;t[1]+=x.p;t[2]+=x.f;t[3]+=x.c});return{day,t}}
 function ring(val,max,col,lab,unit){const r=30,C=2*Math.PI*r,pc=Math.min(1,val/max);
   return`<div><div class="ring" style="width:72px;height:72px"><svg viewBox="0 0 72 72"><circle class="bgc" cx="36" cy="36" r="${r}" stroke-width="7"/><circle class="fgc" cx="36" cy="36" r="${r}" stroke-width="7" stroke="${col}" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pc)}"/></svg><b style="font-size:13px">${Math.round(val)}<small>/${max}${unit}</small></b></div><div class="lbl">${lab}</div></div>`}
 function renderFood(){
@@ -984,19 +992,19 @@ function renderFood(){
   const leftP=Math.max(0,T.p-t[1]),leftK=T.k-t[0];
   $("fhint").innerHTML=t[0]===0?`Цель: <b>${T.k} ккал</b> и <b>${T.p} г белка</b>. Отмечай еду ниже — кольца заполнятся.`:leftK<-150?`Перебор на ${-leftK} ккал. Ничего страшного — завтра держи план.`:leftP>0?`Осталось <b>${leftP} г белка</b> и ~${Math.max(0,leftK)} ккал. ${leftP>30?"Например: творог 200 г или протеин + курица.":"Почти закрыл — йогурт или протеин."}`:`Белок закрыт 💪 Осталось ~${Math.max(0,leftK)} ккал.`;
   renderEat();
-  $("foods").innerHTML=FOODS.map((F,i)=>{const n=day[i]||0;return`<div class="fwrap">${n?`<button type="button" class="fminus" data-minus="${i}" aria-label="Убрать ${F[0]}">−</button>`:""}<button type="button" class="food" data-food="${i}"><span class="e">${F[3]>=15?"Б":F[5]>=20?"У":F[4]>=8?"Ж":"•"}</span><span style="min-width:0"><b>${F[0]}</b><small>${F[1]} · ${F[2]} ккал · ${F[3]} г Б</small></span>${n?`<span class="cnt">×${n}</span>`:`<span class="plus">+</span>`}</button></div>`}).join("");
+  $("foods").innerHTML=FOODS.map((F,i)=>{const n=day[i]||0,u=FU[i],k=n/u.base;
+    return n?`<div class="food on"><span class="e">${F[3]>=15?"Б":F[5]>=20?"У":F[4]>=8?"Ж":"•"}</span><span style="min-width:0"><b>${F[0]}</b><small>${Math.round(F[2]*k)} ккал · Б ${Math.round(F[3]*k)} г</small></span>
+      <span class="fstep"><button type="button" data-fd="${i}" data-v="-1" aria-label="Меньше">−</button><b>${n}<small>${u.unit}</small></b><button type="button" data-fd="${i}" data-v="1" aria-label="Больше">+</button></span></div>`
+    :`<button type="button" class="food" data-food="${i}"><span class="e">${F[3]>=15?"Б":F[5]>=20?"У":F[4]>=8?"Ж":"•"}</span><span style="min-width:0"><b>${F[0]}</b><small>${F[1]} · ${F[2]} ккал · ${F[3]} г Б</small></span><span class="plus">+</span></button>`}).join("");
   const tot=MEALS.reduce((a,m)=>a.map((v,j)=>v+m.m[j]),[0,0,0,0]);
   const mn=mealNow();$("meals").innerHTML=MEALS.map((m,mi)=>`<div class="meal${mi===mn.cur?" cur":mi<mn.cur?" past":""}"><div class="h"><h3>${mi===mn.cur?"● ":""}${m.n}</h3><span class="mono muted small">${m.t}</span></div><ul>${m.items.map(x=>`<li>${x}</li>`).join("")}</ul><span class="mac">${m.m[0]?`${m.m[0]} ккал · Б ${m.m[1]} · Ж ${m.m[2]} · У ${m.m[3]}`:"без еды"}</span></div>`).join("")
    +`<div class="callout ok"><b>Итого за день</b><span class="mono">${tot[0]} ккал · белок ${tot[1]} г · жиры ${tot[2]} г · углеводы ${tot[3]} г</span></div>`;
   $("frules").innerHTML=[["Калории",`~${T.k} ккал`],["Белок — главное",`${T.p} г (2 г/кг)`],["Жиры, не меньше 60",`${T.f} г`],["Углеводы",`${T.c} г`],["День тренировки","+50 г углеводов"],["День отдыха","−50 г углеводов"],["Вода",`${(waterTarget()*.25).toFixed(1)} л`],["Креатин","5 г / день"]].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
 }
-let pressT=null,longFired=false;
-$("foods").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-food]");if(!b)return;longFired=false;pressT=setTimeout(()=>{longFired=true;changeFood(+b.dataset.food,-1)},550)});
-["pointerup","pointerleave","pointercancel"].forEach(ev=>$("foods").addEventListener(ev,()=>clearTimeout(pressT)));
-$("foods").addEventListener("click",e=>{const m=e.target.closest("[data-minus]");if(m){changeFood(+m.dataset.minus,-1);return}const b=e.target.closest("[data-food]");if(!b||longFired)return;changeFood(+b.dataset.food,1)});
-$("foods").addEventListener("contextmenu",e=>e.preventDefault());
-function changeFood(i,d){const k="vf_food_"+today(),day=LS.get(k,{});day[i]=Math.max(0,(day[i]||0)+d);LS.set(k,day);toast(d>0?`+ ${FOODS[i][0]} · ${FOODS[i][3]} г белка`:`− ${FOODS[i][0]}`);renderFood()}
-let clrArm=false;$("fClear").onclick=()=>{if(!clrArm){clrArm=true;$("fClear").textContent="нажми ещё раз";setTimeout(()=>{clrArm=false;$("fClear").textContent="очистить день"},2500);return}LS.set("vf_food_"+today(),{});LS.set("vf_eat_"+today(),[]);clrArm=false;$("fClear").textContent="очистить день";renderFood()};
+$("foods").addEventListener("click",e=>{const st=e.target.closest("[data-fd]");if(st){changeFood(+st.dataset.fd,+st.dataset.v);return}const b=e.target.closest("[data-food]");if(b)changeFood(+b.dataset.food,0)});
+// d=0 — первая порция; ±1 — шаг 10 г или 1 шт
+function changeFood(i,d){const k="vf_food2_"+today(),day=LS.get(k,{}),u=FU[i];day[i]=d===0?u.base:Math.max(0,(day[i]||0)+d*u.step);LS.set(k,day);if(d===0)toast(`+ ${FOODS[i][0]} ${u.base} ${u.unit} · дальше ± по ${u.step} ${u.unit}`);renderFood()}
+let clrArm=false;$("fClear").onclick=()=>{if(!clrArm){clrArm=true;$("fClear").textContent="нажми ещё раз";setTimeout(()=>{clrArm=false;$("fClear").textContent="очистить день"},2500);return}LS.set("vf_food2_"+today(),{});LS.set("vf_eat_"+today(),[]);clrArm=false;$("fClear").textContent="очистить день";renderFood()};
 
 /* ========= ЕДА ТЕКСТОМ ========= */
 // [регэксп основы, название, ккал, белок, жиры, углеводы на 100 г, вес 1 шт (г), обычная порция (г)]
@@ -1242,7 +1250,7 @@ $("themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]")
 applyTheme();applyArt();
 S.w=autoWeek();
 go("train");
-const APP_V="20";
+const APP_V="21";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
