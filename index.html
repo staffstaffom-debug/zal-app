@@ -626,7 +626,7 @@ body.ios .target{overflow:visible;position:relative}
 body.ios .target::before{content:"";position:absolute;inset:-8px;border:14px solid transparent;border-image:url("art/el_rect.png") 36 / 14px / 0 stretch;pointer-events:none;opacity:.85}
 body.ios .hero-start .go,body.ios .finish,body.ios .next,body.ios .seg button[aria-pressed="true"],body.ios .tabs button[aria-selected="true"]{font-family:"Caveat",var(--body);font-weight:700;font-size:19px;letter-spacing:.01em}
 body.ios .finish,body.ios .next{font-size:21px}
-body.ios .hero-start .go::after{content:"";width:28px;height:18px;background:url("art/el_arrow.png") center/contain no-repeat;filter:brightness(0);margin-left:4px}
+body.ios .hero-start .go .arr{display:none}body.ios .hero-start .go::after{content:"";width:28px;height:18px;background:url("art/el_arrow.png") center/contain no-repeat;filter:brightness(0);margin-left:4px}
 body.ios .target .big{font-family:"Caveat",var(--display);font-weight:700;font-size:44px;letter-spacing:0}
 body.ios .fi .v,body.ios .row .rt b,body.ios .chip b,body.ios .stat b,body.ios .ring b,body.ios .cd,body.ios .sc{font-family:"Caveat",var(--mono);font-weight:700}
 body.ios .sc{font-size:24px}body.ios .sc small{font-family:var(--body)}
@@ -818,7 +818,7 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v39 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v40 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1158,7 +1158,7 @@ function renderTrain(){
     const st=done?`<span class="st pill ok">✓ Сделано</span>`:a?`<span class="st pill acc">идёт · ${Math.round(a/b*100)}%</span>`:d===nextD?`<span class="st pill acc">следующая</span>`:"";
     return`<button class="day${d===nextD&&!a?" next":""}" type="button" data-day="${d}"><img src="${img(D.img,1)}" alt="">${st}<div class="in"><span class="eyebrow">День ${d+1}</span><h2>${D.t}</h2><span class="muted small">${D.sub}</span><span class="meta">${D.list.length} упражнений · ~60 мин + кардио</span></div></button>`}).join("");
   {const D=nextD!=null?DAYS[nextD]:null,going=nextD!=null&&dayProg(nextD)[0]>0,total=DAYS.length;
-    $("startCard").innerHTML=D?`<button class="hero-start" type="button" data-start="${nextD}"><img src="${img(D.img,1)}" alt=""><div class="in"><span class="eyebrow">${going?"Тренировка идёт":"Следующая"} · День ${nextD+1} из ${total}</span><h2>${D.t}</h2><span class="muted small">${D.sub} · ${D.list.length} упр.</span><span class="go">${going?"Продолжить":"Начать"} →</span></div></button>`
+    $("startCard").innerHTML=D?`<button class="hero-start" type="button" data-start="${nextD}"><img src="${img(D.img,1)}" alt=""><div class="in"><span class="eyebrow">${going?"Тренировка идёт":"Следующая"} · День ${nextD+1} из ${total}</span><h2>${D.t}</h2><span class="muted small">${D.sub} · ${D.list.length} упр.</span><span class="go">${going?"Продолжить":"Начать"}<i class="arr"> →</i></span></div></button>`
       :`<div class="card glow"><h2>Неделя закрыта 🔥</h2><p class="small muted">Все ${total} тренировки сделаны. Отдыхай, ешь белок, спи. Новая неделя откроется сама.</p></div>`;
     $("fabStart").hidden=!D||view!=="train"}
   {const b=LS.get("vf_bak",""),dates=LS.get("vf_dates",[]);const old=!b||(dUTC(today())-dUTC(b))/864e5>7;$("bakNag").hidden=!(old&&dates.length>=2)}
@@ -1818,7 +1818,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="39";
+const APP_V="40";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
