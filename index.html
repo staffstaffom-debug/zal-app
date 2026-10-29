@@ -615,7 +615,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v24 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v25 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -816,7 +816,7 @@ function pickProgram(a){
   const goalAdj=a.goal==="убрать жир"?-150:a.goal==="набрать мышцы"?250:0;
   const act=a.job==="физическая"?1.6:a.job==="на ногах"?1.45:1.35;
   return{prog,vol,startP,swaps,goalAdj,act}}
-function applyProgram(){const P=PROGRAMS[S.prog]||PROGRAMS.ULF3;const sw=S.swaps||{},st=S.swapToday||{};DAYS=P.days.map((D,d)=>({...D,list:D.list.map(it=>{let id=it[1];if(sw[id]&&EX[sw[id]])id=sw[id];if(st[d+"_"+it[0]]&&EX[st[d+"_"+it[0]]])id=st[d+"_"+it[0]];return id===it[1]?it:[it[0],id,...it.slice(2)]})}))}
+function applyProgram(){const P=PROGRAMS[S.prog]||PROGRAMS.ULF3;const sw=S.swaps||{},st=S.swapToday||{};DAYS=P.days.map((D,d)=>{const ids=D.list.map(it=>it[1]);return{...D,list:D.list.map(it=>{let id=it[1];if(sw[id]&&EX[sw[id]]){const cand=[sw[id],...(SUB[id]||[])].find(z=>EX[z]&&!ids.includes(z));if(cand)id=cand}if(st[d+"_"+it[0]]&&EX[st[d+"_"+it[0]]])id=st[d+"_"+it[0]];return id===it[1]?it:[it[0],id,...it.slice(2)]})}})}
 let obStep=0,obAns={};
 function renderOnboard(){const q=ONBOARD[obStep];if(!q){finishOnboard();return}
   $("obW").innerHTML=`<div class="progress" style="margin-bottom:8px"><i style="width:${obStep/ONBOARD.length*100}%"></i></div><span class="eyebrow">Вопрос ${obStep+1} из ${ONBOARD.length}</span><h2 style="margin:8px 0 16px">${q.q}</h2>
@@ -849,7 +849,7 @@ const fmt=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
 const restTxt=s=>s>=120?(s/60).toString().replace(".",",")+" мин":s+" с";
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
 const dUTC=d=>{const[y,m,x]=String(d).split("-").map(Number);return Date.UTC(y,m-1,x)};
-const dShort=d=>{const[y,m,x]=String(d).slice(0,10).split("-").map(Number);return x+"."+String(m).padStart(2,"0")};
+const dShort=d=>{if(d instanceof Date)return d.getDate()+"."+String(d.getMonth()+1).padStart(2,"0");const[y,m,x]=String(d).slice(0,10).split("-").map(Number);return x+"."+String(m).padStart(2,"0")};
 const e1rm=(w,r)=>w*(1+r/30);
 const ICON={back:`<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>`,chk:`<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`,play:`<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`};
 function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2600)}
@@ -1413,7 +1413,7 @@ applyProgram();checkGap();
 S.w=autoWeek();
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="24";
+const APP_V="25";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
