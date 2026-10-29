@@ -636,7 +636,7 @@ body.ios #wpct{font-family:"Caveat";font-size:22px}
 body.ios .fab{background:var(--accent)}body.ios .fab svg{display:none}body.ios .fab::before{content:"";width:34px;height:22px;background:url("art/el_arrow.png") center/contain no-repeat;filter:brightness(0)}
 body.ios .sc.ok::after{content:"";position:absolute;top:-10px;right:-8px;width:34px;height:34px;background:url("art/ic_check.png") center/contain no-repeat}
 body.ios .water button.f{background:url("art/ic_drop.png") center/70% no-repeat,var(--card2);border-color:var(--card2)}
-body.ios .weekcard .ring{background:url("art/el_circle.png") center/112% no-repeat}body.ios .weekcard .ring svg{opacity:.0}
+
 body.ios .pill.ok::before{content:"";width:16px;height:16px;background:url("art/ic_check.png") center/contain no-repeat;display:inline-block;margin-right:4px}
 body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
 @media (prefers-reduced-motion:reduce){body.slawn *{animation:none!important}}
@@ -705,6 +705,8 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <p class="small muted">Например: «3 яйца, гречка 80 г, курица 200, банан, кофе с молоком». Граммы можно не писать — возьму обычную порцию.</p>
     <textarea id="eatIn" rows="2" class="keyin" style="font-family:var(--body);font-size:15px;resize:none" placeholder="что съел…" aria-label="Что съел"></textarea>
     <div id="eatPrev"></div>
+    <input class="keyin" id="foodQ" placeholder="или найди в базе: краб, сметана, перец…" aria-label="Поиск продукта">
+    <div class="foods" id="foodRes"></div>
     <button type="button" class="finish" id="eatAdd" style="padding:13px">Добавить</button>
     <div class="grp" id="eatList"></div>
   </section>
@@ -818,7 +820,7 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v40 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v41 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1452,7 +1454,7 @@ const FDB=[
  [/яйц|яичн|омлет/,"Яйцо",143,12.6,10,.7,55,110],[/белк.*яйц|яичн.*бел/,"Яичный белок",52,11,0,.7,33,99],
  [/курин|куриц|курочк|грудк|филе к/,"Курица грудка",113,23.6,1.9,0,0,150],[/бедр/,"Куриное бедро",185,19,12,0,0,150],[/индейк/,"Индейка",115,24,1.5,0,0,150],
  [/говяд|стейк|телят/,"Говядина",187,26,9,0,0,150],[/фарш/,"Фарш",250,17,20,0,0,150],[/свинин/,"Свинина",242,25,15,0,0,150],[/котлет/,"Котлета",220,15,14,9,90,180],
- [/лосос|сёмг|семг|форел/,"Лосось",208,20,13,0,0,120],[/тунец/,"Тунец",116,26,1,0,0,100],[/минта|треск|хек|рыб/,"Рыба белая",85,18,1,0,0,150],[/кревет/,"Креветки",95,20,1.5,0,0,150],
+ [/лосос|сёмг|семг|форел/,"Лосось",208,20,13,0,0,120],[/тунец/,"Тунец",116,26,1,0,0,100],[/минта|треск|хек|рыб/,"Рыба белая",85,18,1,0,0,150],[/краб/,"Крабовые палочки",95,6,1,10,20,100],[/перец/,"Перец болгарский",27,1.3,.1,5,120,120],[/помидор|томат/,"Помидор",20,.9,.2,3.8,120,120],[/огур/,"Огурец",15,.8,.1,2.5,120,120],[/кревет/,"Креветки",95,20,1.5,0,0,150],
  [/колбас|сосис/,"Колбаса/сосиски",280,12,25,2,50,100],[/ветчин/,"Ветчина",150,18,7,2,0,50],
  [/творог/,"Творог 5%",121,17,5,3,0,200],[/греческ|йогурт/,"Йогурт",66,10,0,4,0,150],[/кефир/,"Кефир",50,3,2.5,4,0,250],[/молок/,"Молоко",52,3,2.5,4.8,0,200],
  [/сыр(?!ок)|сыра|сыром/,"Сыр",360,25,28,0,0,30],[/сырок/,"Сырок",400,8,25,32,45,45],[/сметан/,"Сметана",206,2.5,20,3,0,30],
@@ -1513,8 +1515,12 @@ const FDB=[
 const UNIT=[[/(\d+[.,]?\d*)\s*(кг)/,1000],[/(\d+[.,]?\d*)\s*(г|гр|грамм)/,1],[/(\d+[.,]?\d*)\s*(мл)/,1],[/(\d+[.,]?\d*)\s*(л(?![а-яё])|литр)/,1000],
  [/(\d+[.,]?\d*)\s*(ст\.?\s*л|столов)/,"tbsp"],[/(\d+[.,]?\d*)\s*(ч\.?\s*л|чайн)/,"tsp"],[/(\d+[.,]?\d*)\s*(стакан|кружк|чашк)/,"cup"],[/(\d+[.,]?\d*)\s*(шт|штук|кусоч|куск|ломт)/,"pc"],[/(\d+[.,]?\d*)\s*(скуп|порци|мерн)/,"por"]];
 const WORDN={"один":1,"одн":1,"два":2,"две":2,"три":3,"четыр":4,"пят":5,"шест":6,"пол":.5,"половин":.5};
+const DISHES=LS.get("vf_dishes",{});
 function parseEat(text){
-  return text.toLowerCase().replace(/ё/g,"е").split(/[,;\n+]|\sи\s|\sс\s(?=\d)/).map(x=>x.trim()).filter(Boolean).map(ch=>{
+  return text.toLowerCase().replace(/ё/g,"е").split(/[,;\n+]|\sи\s|\sс\s(?=\d)/).map(x=>x.trim()).filter(Boolean).flatMap(ch=>{
+    const dn=Object.keys(DISHES).find(n=>ch.includes(n));if(dn){const m=ch.match(/(\d+[.,]?\d*)\s*(г|гр|грамм)?/);const parts=DISHES[dn];const tot=parts.reduce((a,x)=>a+x.g,0);const k=m&&+m[1]>20?(+m[1].replace(",","."))/tot:1;
+      return parts.map(x=>({...x,g:Math.round(x.g*k),k:Math.round(x.k*k),p:Math.round(x.p*k*10)/10,f:Math.round(x.f*k*10)/10,c:Math.round(x.c*k*10)/10,dish:dn}))}
+    return [ch]}).map(ch=>{if(typeof ch!=="string")return ch;
     const f=FDB.filter(d=>d[0].test(ch)).sort((a,b)=>((ch.match(b[0])||[""])[0].length-(ch.match(a[0])||[""])[0].length)||(a[0].source.length-b[0].source.length))[0];
     if(!f)return{unk:1,name:ch};
     let g=null,why="";
@@ -1527,7 +1533,14 @@ const eatRow=(x,i,prev)=>x.unk?`<div class="eat unk"><span><b>«${esc(x.name)}»
   :`<div class="eat${prev?" prev":""}"><span style="min-width:0"><b>${x.name}${x.pc&&x.pc<=12&&Number.isInteger(x.pc)?` · ${x.pc} шт`:""}</b><small>${x.g} г · Б ${x.p} · Ж ${x.f} · У ${x.c}${x.why?" · "+x.why:""}</small></span><span class="k">${x.k}</span>${prev?"<span></span>":`<button type="button" data-del="${i}" aria-label="Убрать">×</button>`}</div>`;
 function renderEat(){const L=LS.get("vf_eat_"+today(),[]);$("eatList").innerHTML=L.length?`<span class="eyebrow">Записано сегодня</span>`+L.map((x,i)=>eatRow(x,i,false)).join(""):""}
 $("eatIn").addEventListener("input",()=>{const v=$("eatIn").value.trim();if(!v){$("eatPrev").innerHTML="";return}const P=parseEat(v),ok=P.filter(x=>!x.unk);
-  $("eatPrev").innerHTML=`<div class="grp">${P.map(x=>eatRow(x,0,true)).join("")}${ok.length?`<p class="small mono muted">≈ ${ok.reduce((a,x)=>a+x.k,0)} ккал · белок ${Math.round(ok.reduce((a,x)=>a+x.p,0))} г</p>`:""}</div>`});
+  $("eatPrev").innerHTML=`<div class="grp">${P.map(x=>eatRow(x,0,true)).join("")}${ok.length?`<p class="small mono muted">≈ ${ok.reduce((a,x)=>a+x.k,0)} ккал · белок ${Math.round(ok.reduce((a,x)=>a+x.p,0))} г</p>`:""}</div>
+  ${ok.length>=2&&!ok.some(x=>x.dish)?`<div class="inrow" style="grid-template-columns:1fr auto;margin-top:8px"><input id="dishName" placeholder="название блюда, напр. мой салат" aria-label="Название блюда"><button type="button" id="dishSave">Сохранить блюдо</button></div>`:""}`;
+  const b=$("dishSave");if(b)b.onclick=()=>{const n=$("dishName").value.trim().toLowerCase();if(!n)return toast("Дай блюду имя");DISHES[n]=ok.map(x=>({name:x.name,g:x.g,k:x.k,p:x.p,f:x.f,c:x.c}));LS.set("vf_dishes",DISHES);toast(`«${n}» сохранено — дальше пиши просто его название`)}});
+$("foodQ").addEventListener("input",()=>{const q=$("foodQ").value.trim().toLowerCase().replace(/ё/g,"е");if(q.length<2){$("foodRes").innerHTML="";return}
+  const seen=new Set(),res=[];FDB.forEach(F=>{if(seen.has(F[1]))return;if(F[1].toLowerCase().includes(q)||F[0].test(q)){seen.add(F[1]);res.push(F)}});
+  $("foodRes").innerHTML=res.slice(0,12).map(F=>`<button type="button" class="food" data-fq="${F[1]}"><span class="e">${F[3]>=15?"Б":F[5]>=20?"У":F[4]>=8?"Ж":"•"}</span><span style="min-width:0"><b>${F[1]}</b><small>${F[7]} г · ${Math.round(F[2]*F[7]/100)} ккал · Б ${Math.round(F[3]*F[7]/100)} г</small></span><span class="plus">+</span></button>`).join("")||`<p class="small muted">Нет в базе — напиши название, добавлю</p>`});
+$("foodRes").addEventListener("click",e=>{const b=e.target.closest("[data-fq]");if(!b)return;const F=FDB.find(x=>x[1]===b.dataset.fq);if(!F)return;const k=F[7]/100;const x={name:F[1],g:F[7],pc:null,k:Math.round(F[2]*k),p:Math.round(F[3]*k*10)/10,f:Math.round(F[4]*k*10)/10,c:Math.round(F[5]*k*10)/10,why:""};
+  const key="vf_eat_"+today(),L=LS.get(key,[]);LS.set(key,L.concat([x]));toast(`+ ${x.name} ${x.g} г · ${x.k} ккал`);renderFood()});
 $("eatAdd").onclick=()=>{const P=parseEat($("eatIn").value).filter(x=>!x.unk);if(!P.length)return toast("Не понял, что добавить");
   const k="vf_eat_"+today(),L=LS.get(k,[]);LS.set(k,L.concat(P));$("eatIn").value="";$("eatPrev").innerHTML="";toast(`Добавлено ${P.reduce((a,x)=>a+x.k,0)} ккал`);renderFood()};
 $("eatList").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(!b)return;const k="vf_eat_"+today(),L=LS.get(k,[]);L.splice(+b.dataset.del,1);LS.set(k,L);renderFood()});
@@ -1818,7 +1831,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="40";
+const APP_V="41";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
