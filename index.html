@@ -620,10 +620,10 @@ body.ios .tabbar button[aria-selected="true"] .ti{filter:none}
 body.ios .nowrow .ic{background:transparent;width:40px;height:40px}body.ios .nowrow .ic .ii{width:34px;height:34px}
 body.ios .fi .ic{background:transparent}body.ios .fi .ic .ii{width:30px;height:30px}
 body.ios .hero-start{border-radius:14px;overflow:visible}
-body.ios .hero-start::before{content:"";position:absolute;inset:-10px -12px;background:url("art/el_rect.png") center/100% 100% no-repeat;pointer-events:none;z-index:2;opacity:.95}
+body.ios .hero-start::before{content:"";position:absolute;inset:-8px;border:14px solid transparent;border-image:url("art/el_rect.png") 36 fill / 14px / 0 stretch;pointer-events:none;z-index:2;opacity:.95}
 body.ios .hero-start img{border-radius:14px}body.ios .hero-start::after{border-radius:14px}
 body.ios .target{overflow:visible;position:relative}
-body.ios .target::before{content:"";position:absolute;inset:-10px -12px;background:url("art/el_rect.png") center/100% 100% no-repeat;pointer-events:none;filter:hue-rotate(0) saturate(0) brightness(.9);opacity:.8}
+body.ios .target::before{content:"";position:absolute;inset:-8px;border:14px solid transparent;border-image:url("art/el_rect.png") 36 / 14px / 0 stretch;pointer-events:none;opacity:.85}
 body.ios .hero-start .go,body.ios .finish,body.ios .next,body.ios .seg button[aria-pressed="true"],body.ios .tabs button[aria-selected="true"]{font-family:"Caveat",var(--body);font-weight:700;font-size:19px;letter-spacing:.01em}
 body.ios .finish,body.ios .next{font-size:21px}
 body.ios .hero-start .go::after{content:"";width:28px;height:18px;background:url("art/el_arrow.png") center/contain no-repeat;filter:brightness(0);margin-left:4px}
@@ -818,7 +818,7 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v38 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v39 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1818,7 +1818,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="38";
+const APP_V="39";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
