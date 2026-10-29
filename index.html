@@ -832,7 +832,7 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v50 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v51 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1563,8 +1563,8 @@ const OR_H=k=>({"Content-Type":"application/json","Authorization":"Bearer "+k,"H
 // бесплатная модель OpenRouter: vision=1 → понимает картинки; кеш на сутки
 async function orModel(key,vision){const ck="vf_ormodel"+(vision?"v":"t"),c=LS.get(ck,null);if(c&&c.t>Date.now()-864e5&&c.name)return c.name;
   const r=await fetch("https://openrouter.ai/api/v1/models",{headers:OR_H(key)});if(!r.ok)throw new Error("OpenRouter не принял ключ ("+r.status+")");const j=await r.json();
-  const free=(j.data||[]).filter(m=>m.pricing&&+m.pricing.prompt===0&&+m.pricing.completion===0&&(!vision||((m.architecture||{}).input_modalities||[]).includes("image")));
-  const score=m=>(/gemini/.test(m.id)?40:0)+(/qwen.*vl|qwen3.*vl/.test(m.id)?35:0)+(/llama.*vision|llama-4/.test(m.id)?25:0)+(/deepseek/.test(m.id)?30:0)+(/gpt-oss|mistral|gemma/.test(m.id)?15:0)+Math.min(10,(m.context_length||0)/20000);
+  const free=(j.data||[]).filter(m=>m.pricing&&+m.pricing.prompt===0&&+m.pricing.completion===0&&!/safety|lyria|openrouter\/free|embedding|guard|moderat/.test(m.id)&&((m.architecture||{}).output_modalities||["text"]).includes("text")&&(!vision||((m.architecture||{}).input_modalities||[]).includes("image")));
+  const score=m=>(/gemini/.test(m.id)?40:0)+(/qwen.*vl|qwen3.*vl/.test(m.id)?35:0)+(/llama.*vision|llama-4/.test(m.id)?25:0)+(/deepseek/.test(m.id)?30:0)+(/gemma/.test(m.id)?32:0)+(/nemotron.*vl|nemotron.*omni/.test(m.id)?28:0)+(/gpt-oss|mistral|qwen|llama/.test(m.id)?15:0)+Math.min(10,(m.context_length||0)/20000);
   const pick=free.sort((a,b)=>score(b)-score(a))[0];if(!pick)throw new Error("Бесплатных моделей сейчас нет");LS.set(ck,{name:pick.id,t:Date.now()});return pick.id}
 async function orVision(key,b64,prompt){const model=await orModel(key,1);
   const r=await fetch("https://openrouter.ai/api/v1/chat/completions",{method:"POST",headers:OR_H(key),body:JSON.stringify({model,temperature:.2,max_tokens:600,messages:[{role:"user",content:[{type:"text",text:prompt},{type:"image_url",image_url:{url:"data:image/jpeg;base64,"+b64}}]}]})});
@@ -1896,7 +1896,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="50";
+const APP_V="51";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
