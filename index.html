@@ -615,7 +615,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v23 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v24 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -822,10 +822,6 @@ function renderOnboard(){const q=ONBOARD[obStep];if(!q){finishOnboard();return}
   $("obW").innerHTML=`<div class="progress" style="margin-bottom:8px"><i style="width:${obStep/ONBOARD.length*100}%"></i></div><span class="eyebrow">Вопрос ${obStep+1} из ${ONBOARD.length}</span><h2 style="margin:8px 0 16px">${q.q}</h2>
   <div class="grp">${q.o.map(o=>`<button type="button" class="row" data-o="${o}" style="grid-template-columns:1fr auto;padding:16px"><b>${o}</b><span class="mono muted">${q.multi&&(obAns[q.id]||[]).includes(o)?"✓":"→"}</span></button>`).join("")}</div>
   ${q.multi?`<button type="button" class="finish" data-next style="margin-top:12px">Дальше</button>`:""}${obStep?`<button type="button" class="small muted" data-prev style="padding:10px">← Назад</button>`:""}`}
-$("obW").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const q=ONBOARD[obStep];
-  if(b.dataset.prev!==undefined){obStep--;renderOnboard();return}
-  if(b.dataset.next!==undefined){obStep++;renderOnboard();return}
-  if(b.dataset.o!==undefined){if(q.multi){let a=obAns[q.id]||[];if(b.dataset.o==="ничего")a=["ничего"];else{a=a.filter(x=>x!=="ничего");a=a.includes(b.dataset.o)?a.filter(x=>x!==b.dataset.o):a.concat(b.dataset.o)}obAns[q.id]=a;renderOnboard()}else{obAns[q.id]=b.dataset.o;obStep++;renderOnboard()}}});
 function finishOnboard(){const r=pickProgram(obAns);S.prog=r.prog;S.vol=r.vol;S.startP=r.startP;S.swaps=r.swaps;S.goalAdj=r.goalAdj;S.act=r.act;S.onboarded=1;S.kcal=autoKcal();saveS();applyProgram();hide("obL");toast("Программа: "+PROGRAMS[S.prog].n);renderTrain()}
 function openOnboard(){obStep=0;obAns={};renderOnboard();show("obL")}
 const progDay=()=>Math.floor((dUTC(today())-dUTC(S.start))/864e5);
@@ -1409,11 +1405,15 @@ function applyTheme(){const t=S.theme||"slawn";document.body.classList.toggle("s
   document.querySelector('meta[name="theme-color"]').content=t==="slawn"?"#0f0f10":"#0b0d12"}
 $("themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!b)return;S.theme=b.dataset.th;saveS();applyTheme()});
 applyTheme();applyArt();
+$("obW").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const q=ONBOARD[obStep];
+  if(b.dataset.prev!==undefined){obStep--;renderOnboard();return}
+  if(b.dataset.next!==undefined){obStep++;renderOnboard();return}
+  if(b.dataset.o!==undefined){if(q.multi){let a=obAns[q.id]||[];if(b.dataset.o==="ничего")a=["ничего"];else{a=a.filter(x=>x!=="ничего");a=a.includes(b.dataset.o)?a.filter(x=>x!==b.dataset.o):a.concat(b.dataset.o)}obAns[q.id]=a;renderOnboard()}else{obAns[q.id]=b.dataset.o;obStep++;renderOnboard()}}});
 applyProgram();checkGap();
 S.w=autoWeek();
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="23";
+const APP_V="24";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
