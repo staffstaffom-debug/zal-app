@@ -497,6 +497,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
   <section class="card glow" style="display:grid;gap:14px">
     <div class="rings" id="frings"></div>
     <p class="small muted" id="fhint"></p>
+    <p class="small mono muted" id="fweek"></p>
   </section>
   <section class="card" style="display:grid;gap:10px">
     <div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Вода</h3><span class="mono" id="wTxt"></span></div>
@@ -526,8 +527,14 @@ body.slawn .doodles svg{stroke:#e9e9e9}
 <!-- ТРЕНЕР -->
 <main class="view" id="v-coach"><div class="wrap" style="padding-bottom:calc(var(--tabh) + 150px + env(safe-area-inset-bottom,0px))">
   <div style="display:grid;gap:6px"><span class="eyebrow">Видит твои тренировки, питание и воду</span><h1>Тренер</h1></div>
+  <section class="card" id="keyBox" style="display:grid;gap:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3>ИИ на DeepSeek</h3><span class="pill" id="keyState"></span></div>
+    <p class="small muted">Вставь ключ с platform.deepseek.com → API keys. Он хранится только на этом телефоне. С ключом отвечает настоящий ИИ, который видит все твои данные; без ключа — встроенный тренер.</p>
+    <div class="inrow" style="grid-template-columns:1fr auto"><input class="keyin" id="apiKey" type="password" placeholder="sk-…" autocomplete="off" aria-label="Ключ DeepSeek"><button type="button" id="saveKey">OK</button></div>
+    <button type="button" class="small muted" id="keyDel" hidden style="padding:4px">Удалить ключ</button>
+  </section>
   <section class="card" style="display:grid;gap:10px">
-    <p class="small muted">Тренер бесплатный и работает прямо на телефоне, даже без интернета. Для глубокого разбора отправь свои данные в бесплатный ChatGPT или Claude одной кнопкой.</p>
+    <p class="small muted">Встроенный тренер работает прямо на телефоне, даже без интернета. Для глубокого разбора отправь свои данные в бесплатный ChatGPT или Claude одной кнопкой.</p>
     <div class="btnrow"><button type="button" class="yt dark" id="toGpt" style="justify-content:center">Разобрать в ChatGPT</button><button type="button" class="yt dark" id="toClaude" style="justify-content:center">Разобрать в Claude</button></div>
   </section>
   <div class="quick" id="quick"></div>
@@ -547,7 +554,9 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <label class="field">Жим лёжа × 8–10<input id="bench" inputmode="decimal"></label>
     <label class="field">Присед × 6–7<input id="squat" inputmode="decimal"></label>
     <label class="field">Становая × 5<input id="dead" inputmode="decimal"></label>
-    <label class="field">Калории в день<input id="kcal" inputmode="numeric"></label>
+    <label class="field">Рост, см<input id="h" inputmode="numeric"></label>
+    <label class="field">Возраст<input id="age" inputmode="numeric"></label>
+    <label class="field" style="grid-column:1/-1">Калории, среднее за неделю (считает само)<input id="kcal" inputmode="numeric"></label>
   </div>
   <section class="card" style="display:grid;gap:10px">
     <h3>Оформление</h3>
@@ -601,7 +610,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v21 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v22 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -733,7 +742,7 @@ const FOODS=[
 const MEALS=[
  {n:"До зала",t:"6:45",items:["Банан + греческий йогурт 150 г","Тост или 2 хлебца с мёдом — в дни ног и становой обязательно","Кофе без сахара","Вода 0.5 л"],m:[300,18,1,54]},
  {n:"Тренировка",t:"8:00",items:["С собой бутылка воды 0.7–1 л"],m:[0,0,0,0]},
- {n:"После зала — завтрак",t:"9:30",items:["Протеин 1 скуп + креатин 5 г","Омлет из 4 яиц","Овсянка 40 г"],m:[570,55,25,29]},
+ {n:"После зала — завтрак",t:"9:30",items:["Протеин 1 скуп + креатин 5 г","Омлет из 4 яиц","Овсянка 60 г"],m:[640,58,26,41]},
  {n:"Обед",t:"12:30",items:["Курица 200 г","Рис или гречка 80 г сух.","Овощи 300 г + 1 ст.л. масла"],m:[705,58,19,76]},
  {n:"Перекус",t:"16:00",items:["Творог 5% 200 г","Яблоко","Орехи 15 г"],m:[410,37,18,28]},
  {n:"Ужин",t:"19:30",items:["Рыба 150 г","Картофель 250 г","Овощи 200 г + 1 ст.л. масла"],m:[505,36,16,55]},
@@ -741,14 +750,16 @@ const MEALS=[
 
 /* ========= ХРАНИЛИЩЕ ========= */
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-let S=Object.assign({bw:94,pu:6,bench:75,squat:120,dead:130,kcal:2500,w:0},LS.get("vf_s",{}));
+let S=Object.assign({bw:94,pu:6,bench:75,squat:120,dead:130,kcal:2500,h:180,age:35,adj:0,w:0},LS.get("vf_s",{}));
 if(!S.v5){if(+S.bw===90)S.bw=94;if(+S.kcal===2450)S.kcal=2500;S.v5=1;LS.set("vf_s",S)}
 // норма: ~29 ккал/кг при сидячей работе + 3 тренировки, минус 200 на рекомпозицию
 // старт программы 29.10.2026, недели считаются от него, а не с понедельника
 if(!S.start)S.start="2026-10-29";
-const progDay=()=>Math.floor((new Date(today())-new Date(S.start))/864e5);
+const progDay=()=>Math.floor((dUTC(today())-dUTC(S.start))/864e5);
 const autoWeek=()=>Math.max(0,Math.min(2,Math.floor(progDay()/7)));
-const autoKcal=bw=>Math.round((bw*29-200)/50)*50;
+const BMR=()=>10*(+S.bw||94)+6.25*(+S.h||180)-5*(+S.age||35)+5;   // Миффлин, мужчина
+const TDEE=()=>Math.round(BMR()*1.35+3*280/7);                       // сидячая работа + 3 силовые в неделю
+const autoKcal=()=>Math.round((TDEE()-300+(S.adj||0))/10)*10;      // средняя за неделю
 const saveS=()=>LS.set("vf_s",S);
 // журнал: vf_log = { "<id>": [ {date, w:[кг..], r:[повт..], f:[ощущ..], day, code} ] }
 let LOG=LS.get("vf_log",{});
@@ -767,8 +778,9 @@ const yt=q=>"https://www.youtube.com/results?search_query="+encodeURIComponent(q
 const rnd=(x,st)=>Math.max(st,Math.round(x/st)*st);
 const fmt=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
 const restTxt=s=>s>=120?(s/60).toString().replace(".",",")+" мин":s+" с";
-const today=()=>new Date().toISOString().slice(0,10);
-const dShort=d=>{const x=new Date(d);return x.getDate()+"."+String(x.getMonth()+1).padStart(2,"0")};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const dUTC=d=>{const[y,m,x]=String(d).split("-").map(Number);return Date.UTC(y,m-1,x)};
+const dShort=d=>{const[y,m,x]=String(d).slice(0,10).split("-").map(Number);return x+"."+String(m).padStart(2,"0")};
 const e1rm=(w,r)=>w*(1+r/30);
 const ICON={back:`<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>`,chk:`<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`,play:`<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`};
 function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2600)}
@@ -796,7 +808,8 @@ const curKey=(d,code)=>d+"_"+code;
 function curSets(d,code){return CUR[curKey(d,code)]||[]}
 function doneCount(d,item){const i=info(d,item);return Math.min(i.sets,curSets(d,i.code).filter(s=>s&&s.ok).length)}
 function dayProg(d){let a=0,b=0;DAYS[d].list.forEach(it=>{a+=doneCount(d,it);b+=info(d,it).sets});return[a,b]}
-function weekDone(){const wk=LS.get("vf_week",{});return wk[S.w]||[]}
+const wkOfDate=d=>Math.floor((dUTC(d)-dUTC(S.start))/864e5/7);
+function weekDone(){const wk=LS.get("vf_week",{});return wk["d"+wkOfDate(today())]||[]}
 
 /* ========= ДВИЖОК ПРОГРЕССИИ ========= */
 // Решает, что делать в следующий раз, по повторам и ощущениям
@@ -828,7 +841,7 @@ function finishDay(d){
     const dec=decide(i,done);if(dec){REC[i.id]=dec;feed.push({id:i.id,...dec,date})}
     delete CUR[curKey(d,i.code)]});
   if(!any){toast("Отметь хотя бы один подход");return false}
-  const wk=LS.get("vf_week",{});wk[S.w]=[...new Set([...(wk[S.w]||[]),d])];LS.set("vf_week",wk);
+  const wk=LS.get("vf_week",{}),wkk="d"+wkOfDate(date);wk[wkk]=[...new Set([...(wk[wkk]||[]),d])];LS.set("vf_week",wk);
   const all=LS.get("vf_feed",[]);LS.set("vf_feed",[...feed,...all].slice(0,30));
   const dates=LS.get("vf_dates",[]);if(!dates.includes(date))dates.push(date);LS.set("vf_dates",dates);
   saveAll();toast(`Тренировка сохранена · обновлено ${feed.length} упражнений`);return true}
@@ -912,7 +925,7 @@ function renderEx(){
   <a class="yt dark" href="${yt(x.q)}" target="_blank" rel="noopener">${ICON.play}<span>Подробный разбор на YouTube</span></a>
   ${nx?`<button class="next" type="button" data-next><span>Дальше: ${EX[nx[1]].n}</span><span>→</span></button>`:`<button class="next" type="button" data-close="sheet"><span>Последнее. Кардио и «Завершить»</span><span>✓</span></button>`}`;
 }
-function setVal(n,f,v){const k=curKey(curD,DAYS[curD].list[curE][0]),L=CUR[k]||[];L[n]=Object.assign(L[n]||{},{[f]:v});CUR[k]=L;LS.set("vf_cur",CUR)}
+function setVal(n,f,v){LS.set("vf_cur_date",today());const k=curKey(curD,DAYS[curD].list[curE][0]),L=CUR[k]||[];L[n]=Object.assign(L[n]||{},{[f]:v});CUR[k]=L;LS.set("vf_cur",CUR)}
 $("sheetW").addEventListener("input",e=>{const t=e.target;if(t.dataset.f)setVal(+t.dataset.n,t.dataset.f,t.value)});
 $("sheetW").addEventListener("click",e=>{
   const t=e.target.closest("button");if(!t)return;
@@ -922,7 +935,7 @@ $("sheetW").addEventListener("click",e=>{
   if(t.hasAttribute("data-next")){curE++;tab=0;frame=-1;photo=false;renderEx();$("sheet").scrollTo({top:0,behavior:"smooth"});return}
   if(t.dataset.feel!==undefined){setVal(+t.dataset.feel,"f",t.dataset.f);renderEx();return}
   if(t.dataset.adj){const n=+t.dataset.n,f=t.dataset.adj,inp=$(f+n),i=info(curD,DAYS[curD].list[curE]);
-    const st=f==="w"?2.5:(i.x.t?5:1);let v=(parseFloat(inp.value)||0)+st*(+t.dataset.v);v=Math.max(0,Math.round(v*10)/10);inp.value=v;setVal(n,f,String(v));return}
+    const st=f==="w"?2.5:(i.x.t?5:1);let v=(parseFloat(String(inp.value).replace(",","."))||0)+st*(+t.dataset.v);v=Math.max(0,Math.round(v*10)/10);inp.value=v;setVal(n,f,String(v));return}
   if(t.dataset.ok!==undefined){const n=+t.dataset.ok,it=DAYS[curD].list[curE],i=info(curD,it),k=curKey(curD,i.code),L=CUR[k]||[],s=L[n]||{};
     s.w=$("w"+n).value;s.r=$("r"+n).value;s.ok=!s.ok;if(s.ok&&!s.f)s.f="2";L[n]=s;CUR[k]=L;LS.set("vf_cur",CUR);
     if(s.ok){const last=L.filter(z=>z&&z.ok).length>=i.sets,nx=DAYS[curD].list[curE+1];
@@ -952,7 +965,7 @@ function renderProg(){
   Object.values(LOG).forEach(L=>L.forEach(s=>{s.w.forEach((w,k)=>{ton+=w*(s.r[k]||0);sets++})}));
   $("pstats").innerHTML=`<div class="stat"><b>${dates.length}</b><span>тренировок</span></div><div class="stat"><b>${sets}</b><span>подходов</span></div><div class="stat"><b>${(ton/1000).toFixed(1)}т</b><span>поднято всего</span></div>`;
   $("bodyChart").innerHTML=bodyChart();
-  const wkOf=d=>Math.floor((new Date(d)-new Date(S.start))/864e5/7),rep={};
+  const wkOf=wkOfDate,rep={};
   Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{const k=wkOf(x.date);if(k<0)return;const r=rep[k]=rep[k]||{d:new Set(),sets:0,ton:0,ex:new Set()};
     r.d.add(x.date);r.sets+=x.w.length;r.ex.add(id);x.w.forEach((w,j)=>r.ton+=w*(x.r[j]||0))}));
   const fd=LS.get("vf_feed",[]),keys=Object.keys(rep).map(Number).sort((a,b)=>b-a);
@@ -973,11 +986,26 @@ function renderProg(){
 }
 $("addBody").onclick=()=>{const bw=parseFloat($("inBw").value),wa=parseFloat($("inWaist").value);if(!(bw>0)&&!(wa>0))return toast("Впиши вес или талию");
   const d=today(),ex=BODY.find(x=>x.d===d);if(ex){if(bw>0)ex.bw=bw;if(wa>0)ex.waist=wa}else BODY.push({d,bw:bw>0?bw:null,waist:wa>0?wa:null});
-  if(bw>0){S.bw=bw;S.kcal=autoKcal(bw);saveS()}LS.set("vf_body",BODY);$("inBw").value="";$("inWaist").value="";toast("Записано");renderProg()};
+  if(bw>0){S.bw=bw;saveS();autoAdjust()}LS.set("vf_body",BODY);$("inBw").value="";$("inWaist").value="";toast("Записано");renderProg()};
 
 /* ========= ПИТАНИЕ ========= */
-function targets(){const bw=+S.bw||90,k=+S.kcal||2450,p=Math.round(bw*2),f=Math.round(bw*.9),trainDay=(LS.get("vf_dates",[]).includes(today()))||Object.keys(CUR).length>0;
-  const c=Math.max(100,Math.round((k-p*4-f*9)/4));return{k,p,f,c,trainDay}}
+function isTrainDay(){const t=today();if(LS.get("vf_dates",[]).includes(t))return true;if(Object.keys(CUR).length&&LS.get("vf_cur_date","")===t)return true;
+  const wd=weekDone();return wd.length<3&&[1,3,5].includes(new Date().getDay())}
+function targets(){const bw=+S.bw||94,trainDay=isTrainDay();
+  const k=Math.round((TDEE()+(trainDay?-150:-450)+(S.adj||0))/10)*10,p=Math.round(bw*2),f=Math.round(bw*(trainDay?.8:1));
+  const c=Math.max(trainDay?Math.round(bw*2.5):100,Math.round((k-p*4-f*9)/4));return{k,p,f,c,trainDay,why:(trainDay?"день зала: −150":"день отдыха: −450")+(S.adj?` ${S.adj>0?"+":""}${S.adj} авто`:"")}}
+function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:null}
+// авто-коррекция калорий по тренду веса и талии: раз в 14 дней, шаг 100
+function autoAdjust(){const t=today(),last=S.adjAt||S.start;if((dUTC(t)-dUTC(last))/864e5<14)return;
+  const ago=b=>(dUTC(t)-dUTC(b.d))/864e5;
+  const w=(a,z)=>BODY.filter(b=>b.bw&&ago(b)>=a&&ago(b)<z).map(b=>+b.bw),ws=(a,z)=>BODY.filter(b=>b.waist&&ago(b)>=a&&ago(b)<z).map(b=>+b.waist);
+  const w0=w(0,7),w1=w(7,14),wa0=ws(0,14),wa1=ws(14,28);if(w0.length<3||w1.length<3)return;
+  const dW=avg(w0)-avg(w1),dWa=(wa0.length&&wa1.length)?avg(wa0)-avg(wa1):null;let d=0,why="";
+  if(dW<-0.7){d=100;why="вес уходит быстрее 0.7 кг/нед — рискуешь мышцами, +100 ккал"}
+  else if(dW>-0.2&&(dWa==null||dWa>-0.5)){d=-100;why="вес и талия стоят 2 недели — −100 ккал"}
+  else why="вес −"+(-dW).toFixed(1)+" кг/нед"+(dWa!=null?", талия "+dWa.toFixed(1)+" см":"")+" — рекомпозиция идёт, ничего не меняю";
+  const floor=Math.round(BMR()*1.15);if(d<0&&TDEE()-450+(S.adj||0)+d<floor){d=0;why="калории на минимуме — неделя на поддержании, потом снова"}
+  S.adj=(S.adj||0)+d;S.adjAt=t;S.adjWhy=why;S.kcal=autoKcal();saveS();if(d)toast("Калории: "+why)}
 // порция «150 г» → граммы с шагом 10; «1 шт», «1 скуп» → штуки с шагом 1
 const FU=FOODS.map(F=>{const m=String(F[1]).match(/(\d+)\s*(г|мл)/);return m?{g:1,base:+m[1],step:10,unit:m[2]==="мл"?"мл":"г"}:{g:0,base:parseFloat(F[1])||1,step:1,unit:/скуп/.test(F[1])?"скуп":/ст\.л/.test(F[1])?"ст.л.":/кус/.test(F[1])?"кус.":"шт"}});
 function eaten(){const day=LS.get("vf_food2_"+today(),{});let t=[0,0,0,0];FOODS.forEach((F,i)=>{const n=(day[i]||0)/FU[i].base;for(let j=0;j<4;j++)t[j]+=F[2+j]*n});LS.get("vf_eat_"+today(),[]).forEach(x=>{t[0]+=x.k;t[1]+=x.p;t[2]+=x.f;t[3]+=x.c});return{day,t}}
@@ -987,11 +1015,14 @@ function renderFood(){
   const T=targets(),{day,t}=eaten();
   $("fdate").textContent=new Date().toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});
   $("dayType").textContent=T.trainDay?"день тренировки":"день отдыха";
-  const cAdj=T.trainDay?T.c+25:T.c-25;
+  const cAdj=T.c;
   $("frings").innerHTML=ring(t[0],T.k,"var(--accent)","Калории","")+ring(t[1],T.p,"var(--ok)","Белок","г")+ring(t[2],T.f,"var(--pink)","Жиры","г")+ring(t[3],cAdj,"var(--cool)","Углеводы","г");
   const leftP=Math.max(0,T.p-t[1]),leftK=T.k-t[0];
-  $("fhint").innerHTML=t[0]===0?`Цель: <b>${T.k} ккал</b> и <b>${T.p} г белка</b>. Отмечай еду ниже — кольца заполнятся.`:leftK<-150?`Перебор на ${-leftK} ккал. Ничего страшного — завтра держи план.`:leftP>0?`Осталось <b>${leftP} г белка</b> и ~${Math.max(0,leftK)} ккал. ${leftP>30?"Например: творог 200 г или протеин + курица.":"Почти закрыл — йогурт или протеин."}`:`Белок закрыт 💪 Осталось ~${Math.max(0,leftK)} ккал.`;
+  $("fhint").innerHTML=`<span class="pill cool">${T.why}</span><br>`+(t[0]===0?`Цель: <b>${T.k} ккал</b> и <b>${T.p} г белка</b>. Отмечай еду ниже — кольца заполнятся.`:leftK<-150?`Перебор на ${-leftK} ккал. Ничего страшного — завтра держи план.`:leftP>0?`Осталось <b>${leftP} г белка</b> и ~${Math.max(0,leftK)} ккал. ${leftP>30?"Например: творог 200 г или протеин + курица.":"Почти закрыл — йогурт или протеин."}`:`Белок закрыт 💪 Осталось ~${Math.max(0,leftK)} ккал.`);
   renderEat();
+  {const days=[];for(let i=1;i<=7;i++){const d=new Date();d.setDate(d.getDate()-i);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+      let kc=0,pr=0;const q=LS.get("vf_food2_"+k,{});FOODS.forEach((F,j)=>{const n=(q[j]||0)/FU[j].base;kc+=F[2]*n;pr+=F[3]*n});LS.get("vf_eat_"+k,[]).forEach(x=>{kc+=x.k;pr+=x.p});if(kc>0)days.push([kc,pr])}
+    $("fweek").textContent=days.length>=2?`Среднее за ${days.length} дн.: ${Math.round(avg(days.map(x=>x[0])))} ккал · белок ${Math.round(avg(days.map(x=>x[1])))} г — важнее дневной цифры`:"Веди неделю — покажу среднее: один перебор не ломает план."}
   $("foods").innerHTML=FOODS.map((F,i)=>{const n=day[i]||0,u=FU[i],k=n/u.base;
     return n?`<div class="food on"><span class="e">${F[3]>=15?"Б":F[5]>=20?"У":F[4]>=8?"Ж":"•"}</span><span style="min-width:0"><b>${F[0]}</b><small>${Math.round(F[2]*k)} ккал · Б ${Math.round(F[3]*k)} г</small></span>
       <span class="fstep"><button type="button" data-fd="${i}" data-v="-1" aria-label="Меньше">−</button><b>${n}<small>${u.unit}</small></b><button type="button" data-fd="${i}" data-v="1" aria-label="Больше">+</button></span></div>`
@@ -1025,8 +1056,20 @@ const FDB=[
  [/банан/,"Банан",95,1.5,.2,22,120,120],[/яблок/,"Яблоко",52,.3,.2,14,180,180],[/апельсин|мандарин/,"Цитрусы",43,.9,.2,9,150,150],[/груш/,"Груша",57,.4,.1,15,170,170],[/ягод|клубник|черник/,"Ягоды",45,.8,.4,9,0,150],[/виноград/,"Виноград",70,.6,.2,17,0,150],
  [/овощ|салат(?! с)|огур|помидор|томат|капуст|брокол|перец/,"Овощи",25,1.3,.2,4.5,0,250],[/авокад/,"Авокадо",160,2,15,9,150,150],
  [/орех|миндал|кешью|арахис/,"Орехи",600,20,52,13,0,30],[/арахисов.*паст|паста арах/,"Арахисовая паста",590,25,50,15,0,20],
- [/масл/,"Масло",899,0,99.9,0,0,10],[/майонез/,"Майонез",630,1,67,3,0,15],
- [/мёд|мед(?!в)/,"Мёд",320,.4,0,82,0,15],[/сахар/,"Сахар",400,0,0,100,5,10],[/шоколад/,"Шоколад",540,6,32,55,0,25],[/печень/,"Печенье",450,6,18,68,10,40],[/батончик/,"Батончик",380,20,12,45,50,50],
+ [/сливочн.*масл|масл.*сливочн/,"Масло сливочное",748,.5,82,.8,0,10],[/масл/,"Масло",899,0,99.9,0,0,10],[/майонез/,"Майонез",630,1,67,3,0,15],
+ [/мёд|мед(?!в)/,"Мёд",320,.4,0,82,0,15],[/сахар/,"Сахар",400,0,0,100,5,10],[/шоколад/,"Шоколад",540,6,32,55,0,25],[/печен[ьк]\b|печ[её]нк/,"Печень",127,20,4,1.5,0,150],[/печенье|печеньк/,"Печенье",450,6,18,68,10,40],[/батончик/,"Батончик",380,20,12,45,50,50],
+ [/драник/,"Драники",230,3,13,26,60,180],[/\bсал[оа]\b/,"Сало",800,2,89,0,0,30],[/сел[её]д/,"Сельдь",250,17,19,0,0,80],[/скумбр/,"Скумбрия",190,18,13,0,0,120],
+ [/горбуш|сайр|консерв.*рыб/,"Рыба консерв.",140,21,6,0,0,120],[/кальмар/,"Кальмар",100,18,2,2,0,150],[/\bикр/,"Икра",250,30,13,0,0,30],[/баран/,"Баранина",290,17,24,0,0,150],
+ [/холодец/,"Холодец",180,15,13,0,0,150],[/голубц/,"Голубцы",125,7,5,13,120,240],[/плов/,"Плов",190,7,8,24,0,300],[/вареник/,"Вареники",220,7,6,36,25,250],
+ [/перлов/,"Перловка",320,9,1,67,0,70],[/пшен(?!ич)/,"Пшено",348,11,3,69,0,70],[/манн/,"Манка",330,10,1,70,0,50],[/фасол/,"Фасоль варёная",123,8,.5,22,0,150],
+ [/чечевиц/,"Чечевица варёная",116,9,.4,20,0,150],[/горох|горошек/,"Горох варёный",118,7,.5,20,0,150],[/\bнут|хумус/,"Нут/хумус",164,9,3,27,0,150],
+ [/кабач|цукин/,"Кабачок",24,.6,.3,4.6,0,200],[/свекл/,"Свёкла",43,1.5,.1,9,0,150],[/морков/,"Морковь",35,1.3,.1,7,80,100],[/\bлук/,"Лук",40,1.4,0,9,80,50],
+ [/гриб|шампиньон/,"Грибы",27,3,.5,2,0,150],[/тыкв/,"Тыква",28,1,.1,6,0,200],[/кукуруз/,"Кукуруза",96,3.3,1.3,19,0,150],[/олад/,"Оладьи",230,6,10,30,40,120],
+ [/пирог|пирож[ок]|булк|булочк|круассан|слойк/,"Выпечка",330,8,12,50,80,80],[/торт|пирожн/,"Торт",380,5,20,45,0,120],[/пряник|вафл/,"Пряники/вафли",400,5,8,78,30,60],
+ [/варень|джем|повидл/,"Варенье",250,0,0,65,0,20],[/морожен/,"Мороженое",210,3.5,11,24,70,70],[/сухофрукт|курага|изюм|финик|чернослив/,"Сухофрукты",280,3,.5,65,8,40],
+ [/сгущ/,"Сгущёнка",320,7,8,56,0,30],[/семечк/,"Семечки",580,21,50,11,0,30],[/чипс/,"Чипсы",530,6,33,52,0,80],[/сухарик|крекер/,"Сухарики",400,10,8,70,0,50],
+ [/мюсли|гранол|хлопья/,"Мюсли/хлопья",400,8,8,72,0,50],[/кетчуп|соус/,"Соус",100,1,0,24,0,20],[/ряженк|простокваш/,"Ряженка",57,3,2.5,4,0,250],[/сливк/,"Сливки",200,2.8,20,3.5,0,30],
+ [/квас/,"Квас",30,0,0,6,0,500],[/компот|\bморс\b/,"Компот/морс",60,0,0,15,0,250],[/водк|виски|коньяк|настойк/,"Крепкий алкоголь",235,0,0,0,0,50],[/энергет|редбул/,"Энергетик",45,0,0,11,0,250],
  [/кофе с молок|капучин|латте/,"Кофе с молоком",45,2.5,2,4,0,250],[/кофе|чай|американ|эспрес/,"Кофе/чай",2,0,0,0,0,200],
  [/сок/,"Сок",45,.5,0,10,0,250],[/кол[аы]|газиров|лимонад/,"Газировка",42,0,0,10.6,0,330],[/пив/,"Пиво",43,.5,0,3.6,0,500],[/вин[оа]/,"Вино",85,0,0,2.6,0,150],
 ];
@@ -1165,13 +1208,34 @@ function coachContext(){
     история:hist,план_дальше:recs,замеры:BODY.slice(-8),питание_сегодня:{ккал:Math.round(t[0]),белок:Math.round(t[1])},
     цели:{ккал:T.k,белок:T.p,жиры:T.f,углеводы:T.c},вода_л:LS.get("vf_water_"+today(),0)*.25,вода_норма_л:waterTarget()*.25},null,1)}
 function esc(t){return t.replace(/[<&]/g,c=>c==="<"?"&lt;":"&amp;")}
-function renderCoach(){
+function renderCoach(){renderKey();
   $("quick").innerHTML=QUICK.map(q=>`<button type="button" data-q="${q}">${q}</button>`).join("");
   $("chat").innerHTML=(CHAT.length?CHAT:[{role:"assistant",content:"Привет, Володя 👋 Я вижу твои тренировки, веса, питание и воду. Нажми быстрый вопрос сверху или напиши свой."}]).map(m=>`<div class="msg ${m.role==="user"?"me":"ai"}">${esc(m.content)}</div>`).join("");
   $("chatClear").hidden=!CHAT.length;$("composer").hidden=false;
   setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),30)}
-function sendChat(text){text=(text||"").trim();if(!text)return;
-  CHAT.push({role:"user",content:text});CHAT.push({role:"assistant",content:route(text)});LS.set("vf_chat",CHAT.slice(-40));renderCoach()}
+const COACH_SYS=`Ты — личный тренер Володи с 25-летним стажем в силовом спорте и спортивной нутрициологии. Говоришь прямо, уверенно, по делу, как опытный мужик, который видел тысячи людей в зале: без воды, без «возможно» и «попробуйте», без смайликов. Короткие фразы. Всегда конкретные цифры: кг, повторы, граммы, часы. Опираешься только на данные ниже, ничего не выдумываешь. Если данных нет — так и говоришь и задаёшь один точный вопрос. Принципы: прогрессия нагрузки, база первой, 1–3 повтора в запасе, белок 2 г/кг, сон 7.5–8 ч, рекомпозиция = тренд веса и талии, а не цифра на весах. При боли в суставе — стоп, замена, врач. Ответ 2–6 предложений или короткий список. Русский язык.`;
+async function askDeepSeek(messages,context,onToken){const key=LS.get("vf_key","");
+  const r=await fetch("https://api.deepseek.com/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+key},
+    body:JSON.stringify({model:"deepseek-chat",stream:true,temperature:.6,max_tokens:700,messages:[{role:"system",content:COACH_SYS+"\n\nДАННЫЕ ВОЛОДИ (JSON):\n"+context},...messages.slice(-10)]})});
+  if(r.status===401)throw Object.assign(new Error("Ключ DeepSeek не подходит — проверь его в разделе выше."),{fatal:1});
+  if(r.status===402)throw Object.assign(new Error("На DeepSeek закончился баланс."),{fatal:1});
+  if(!r.ok)throw new Error("DeepSeek занят ("+r.status+")");
+  const rd=r.body.getReader(),dec=new TextDecoder();let buf="",text="";
+  for(;;){const{value,done}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});const lines=buf.split("\n");buf=lines.pop();
+    for(const l of lines){if(!l.startsWith("data:"))continue;const d=l.slice(5).trim();if(d==="[DONE]")break;try{const tok=JSON.parse(d).choices?.[0]?.delta?.content||"";if(tok){text+=tok;onToken&&onToken(text)}}catch(e){}}}
+  return text.trim()}
+let busy=false;
+async function sendChat(text){text=(text||"").trim();if(!text||busy)return;
+  CHAT.push({role:"user",content:text});const key=LS.get("vf_key","");
+  if(!key||!navigator.onLine){CHAT.push({role:"assistant",content:route(text)});LS.set("vf_chat",CHAT.slice(-40));renderCoach();return}
+  busy=true;CHAT.push({role:"assistant",content:"…"});renderCoach();const idx=CHAT.length-1;
+  const paint=t=>{CHAT[idx].content=t;const els=document.querySelectorAll("#chat .msg");const el=els[els.length-1];if(el)el.textContent=t;window.scrollTo(0,document.body.scrollHeight)};
+  try{const out=await askDeepSeek(CHAT.slice(0,-1).map(m=>({role:m.role,content:m.content})),coachContext(),paint);CHAT[idx].content=out||route(text)}
+  catch(e){CHAT[idx].content=route(text)+"\n\n("+(e.fatal?e.message:"ИИ недоступен — ответил встроенный тренер")+")"}
+  busy=false;LS.set("vf_chat",CHAT.slice(-40));renderCoach()}
+function renderKey(){const k=LS.get("vf_key","");$("keyState").textContent=k?"● DeepSeek":"встроенный";$("keyState").className="pill "+(k?"ok":"");$("keyDel").hidden=!k}
+$("saveKey").onclick=()=>{const k=$("apiKey").value.trim();if(!/^sk-/.test(k))return toast("Ключ начинается с sk-");LS.set("vf_key",k);$("apiKey").value="";renderKey();toast("DeepSeek подключён")};
+$("keyDel").onclick=()=>{LS.set("vf_key","");renderKey();toast("Ключ удалён")};
 $("chatSend").onclick=()=>{const v=$("chatIn").value;$("chatIn").value="";sendChat(v)};
 $("chatIn").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("chatSend").click()}});
 $("quick").addEventListener("click",e=>{const b=e.target.closest("[data-q]");if(b)sendChat(b.dataset.q)});
@@ -1182,14 +1246,17 @@ async function copyFor(app){const txt=coachPrompt();let ok=false;try{await navig
 $("toGpt").onclick=()=>copyFor("gpt");$("toClaude").onclick=()=>copyFor("claude");
 
 /* ========= ПРОФИЛЬ ========= */
-const PF=["bw","pu","bench","squat","dead","kcal"];
+const PF=["bw","pu","bench","squat","dead","h","age","kcal"];
 function renderProf(){PF.forEach(id=>{if(document.activeElement!==$(id))$(id).value=S[id]})}
-PF.forEach(id=>$(id).addEventListener("change",e=>{const v=parseFloat(e.target.value);if(v>=0){S[id]=v;if(id==="bw"){S.kcal=autoKcal(v);$("kcal").value=S.kcal}saveS();toast("Сохранено — веса пересчитаны")}}));
+PF.forEach(id=>$(id).addEventListener("change",e=>{const v=parseFloat(e.target.value);if(v>=0){S[id]=v;if(id==="bw"||id==="h"||id==="age"){S.kcal=autoKcal();$("kcal").value=S.kcal}saveS();toast("Сохранено — веса пересчитаны")}}));
 $("exportBtn").onclick=async()=>{const data={};try{Object.keys(localStorage).filter(k=>k.startsWith("vf_")&&k!=="vf_key"&&k!=="vf_art"&&k!=="vf_icon").forEach(k=>data[k]=localStorage.getItem(k))}catch(e){}
   const txt=btoa(unescape(encodeURIComponent(JSON.stringify(data))));const box=$("ioBox");box.hidden=false;box.value=txt;
   try{await navigator.clipboard.writeText(txt);toast("Копия в буфере. Сохрани в Заметки")}catch(e){box.select();toast("Выдели текст в поле и скопируй")}};
 $("importBtn").onclick=()=>{const box=$("ioBox");box.hidden=false;box.value="";box.placeholder="Вставь сюда скопированную копию";$("ioApply").hidden=false;box.focus()};
-$("ioApply").onclick=()=>{try{const data=JSON.parse(decodeURIComponent(escape(atob($("ioBox").value.trim()))));Object.entries(data).forEach(([k,v])=>{if(k.startsWith("vf_"))localStorage.setItem(k,v)});toast("Данные загружены");setTimeout(()=>location.reload(),700)}catch(e){toast("Не получилось прочитать копию")}};
+$("ioApply").onclick=()=>{try{const raw=$("ioBox").value.trim();const data=JSON.parse(raw.startsWith("{")?raw:decodeURIComponent(escape(atob(raw))));
+  const ok=Object.entries(data).filter(([k,v])=>k.startsWith("vf_")&&!/^vf_(key|art|icon)$/.test(k)&&typeof v==="string"&&v.length<400000);
+  if(!ok.length)throw 0;ok.forEach(([k])=>{try{JSON.parse(data[k])}catch(e){throw 0}});
+  ok.forEach(([k,v])=>localStorage.setItem(k,v));toast(`Загружено ${ok.length} записей`);setTimeout(()=>location.reload(),700)}catch(e){toast("Не получилось прочитать копию")}};
 let resetArm=false;$("reset").onclick=()=>{if(!resetArm){resetArm=true;$("reset").textContent="Точно? Нажми ещё раз";return}
   try{Object.keys(localStorage).filter(k=>k.startsWith("vf_")&&k!=="vf_s").forEach(k=>localStorage.removeItem(k))}catch(e){}
   LOG={};REC={};CUR={};BODY=[];resetArm=false;$("reset").textContent="Сбросить все тренировки";toast("Тренировки сброшены");renderTrain()};
@@ -1250,12 +1317,15 @@ $("themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]")
 applyTheme();applyArt();
 S.w=autoWeek();
 go("train");
-const APP_V="21";
+const APP_V="22";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
-  if(v&&v!==APP_V&&sessionStorage.getItem("vf_upd")!==v){sessionStorage.setItem("vf_upd",v);for(const k of await caches.keys())await caches.delete(k);
-    for(const g of await navigator.serviceWorker.getRegistrations())await g.update();location.reload()}}catch(e){}}
+  if(sessionStorage.getItem("vf_upd")===v)return;sessionStorage.setItem("vf_upd",v);
+  const regs=navigator.serviceWorker?await navigator.serviceWorker.getRegistrations():[];
+  if(!regs.length){location.reload();return}
+  let done=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!done){done=true;location.reload()}});
+  for(const g of regs)await g.update();setTimeout(()=>{if(!done){done=true;location.reload()}},4000)}catch(e){}}
 checkUpdate();document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdate()});
 </script>
 </body>
