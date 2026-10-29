@@ -820,7 +820,7 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v41 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v42 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1428,7 +1428,7 @@ function renderFood(){
   $("dayType").textContent=T.trainDay?"день тренировки":"день отдыха";
   const cAdj=T.c;
   $("frings").innerHTML=ring(t[0],T.k,"var(--accent)","Калории","")+ring(t[1],T.p,"var(--ok)","Белок","г")+ring(t[2],T.f,"var(--pink)","Жиры","г")+ring(t[3],cAdj,"var(--cool)","Углеводы","г");
-  const leftP=Math.max(0,T.p-t[1]),leftK=T.k-t[0];
+  const leftP=Math.round(Math.max(0,T.p-t[1])),leftK=Math.round(T.k-t[0]);
   $("fhint").innerHTML=`<span class="pill cool">${T.why}</span><br>`+(t[0]===0?`Цель: <b>${T.k} ккал</b> и <b>${T.p} г белка</b>. Отмечай еду ниже — кольца заполнятся.`:leftK<-150?`Перебор на ${-leftK} ккал. Ничего страшного — завтра держи план.`:leftP>0?`Осталось <b>${leftP} г белка</b> и ~${Math.max(0,leftK)} ккал. ${leftP>30?"Например: творог 200 г или протеин + курица.":"Почти закрыл — йогурт или протеин."}`:`Белок закрыт 💪 Осталось ~${Math.max(0,leftK)} ккал.`);
   renderEat();
   {const days=[];for(let i=1;i<=7;i++){const d=new Date();d.setDate(d.getDate()-i);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
@@ -1831,7 +1831,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="41";
+const APP_V="42";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
