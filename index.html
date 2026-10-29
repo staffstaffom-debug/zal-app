@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="fk-180.png">
 <link rel="icon" href="fk-192.png">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Rubik+Spray+Paint&family=Rubik+Wet+Paint&family=Oswald:wght@400;500;600;700&family=Rubik:wght@500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Caveat:wght@700&family=Rubik+Spray+Paint&family=Rubik+Wet+Paint&family=Oswald:wght@400;500;600;700&family=Rubik:wght@500;700;900&display=swap">
 <style>
 /* VolodyaFit — тёмное приложение-тренер. Нижние вкладки: Тренировка / Прогресс / Питание / Профиль.
    Поверх — экран дня и лист упражнения, плавающий таймер отдыха над таб-баром. */
@@ -609,6 +609,36 @@ body.ios .water button.f{background:var(--accent);border-color:var(--accent)}bod
 body.ios .msg.me{background:var(--accent);color:#000}
 body.ios .rings .ring b{font-weight:700}
 body.ios .fab{box-shadow:0 8px 24px rgba(198,255,26,.3)}
+
+/* ===== МЕЛОК: нарисованные иконки и рамки поверх тёмной темы ===== */
+.imglogo{display:none}
+body.ios .txtlogo{display:none}body.ios .imglogo{display:block;height:64px;width:auto;margin:-6px 0 -4px -4px}
+.ii{width:28px;height:28px;object-fit:contain;display:inline-block;vertical-align:middle}.ii.s{width:20px;height:20px;margin:-3px 2px 0 0}
+.ti{display:none}
+body.ios .tabbar svg{display:none}body.ios .ti{display:block;width:30px;height:30px;object-fit:contain;margin:0 auto 3px;filter:grayscale(1) brightness(.75);transition:filter .2s}
+body.ios .tabbar button[aria-selected="true"] .ti{filter:none}
+body.ios .nowrow .ic{background:transparent;width:40px;height:40px}body.ios .nowrow .ic .ii{width:34px;height:34px}
+body.ios .fi .ic{background:transparent}body.ios .fi .ic .ii{width:30px;height:30px}
+body.ios .hero-start{border-radius:14px;overflow:visible}
+body.ios .hero-start::before{content:"";position:absolute;inset:-10px -12px;background:url("art/el_rect.png") center/100% 100% no-repeat;pointer-events:none;z-index:2;opacity:.95}
+body.ios .hero-start img{border-radius:14px}body.ios .hero-start::after{border-radius:14px}
+body.ios .target{overflow:visible;position:relative}
+body.ios .target::before{content:"";position:absolute;inset:-10px -12px;background:url("art/el_rect.png") center/100% 100% no-repeat;pointer-events:none;filter:hue-rotate(0) saturate(0) brightness(.9);opacity:.8}
+body.ios .hero-start .go,body.ios .finish,body.ios .next,body.ios .seg button[aria-pressed="true"],body.ios .tabs button[aria-selected="true"]{font-family:"Caveat",var(--body);font-weight:700;font-size:19px;letter-spacing:.01em}
+body.ios .finish,body.ios .next{font-size:21px}
+body.ios .hero-start .go::after{content:"";width:28px;height:18px;background:url("art/el_arrow.png") center/contain no-repeat;filter:brightness(0);margin-left:4px}
+body.ios .target .big{font-family:"Caveat",var(--display);font-weight:700;font-size:44px;letter-spacing:0}
+body.ios .fi .v,body.ios .row .rt b,body.ios .chip b,body.ios .stat b,body.ios .ring b,body.ios .cd,body.ios .sc{font-family:"Caveat",var(--mono);font-weight:700}
+body.ios .sc{font-size:24px}body.ios .sc small{font-family:var(--body)}
+body.ios .row .rt b{font-size:20px}body.ios .fi .v{font-size:20px}body.ios .cd{font-size:18px}body.ios .stat b{font-size:28px}body.ios .chip b{font-size:22px}
+body.ios .steps li::before{background:transparent;color:var(--accent);font-family:"Caveat";font-size:24px;font-weight:700}
+body.ios #wpct{font-family:"Caveat";font-size:22px}
+body.ios .fab{background:var(--accent)}body.ios .fab svg{display:none}body.ios .fab::before{content:"";width:34px;height:22px;background:url("art/el_arrow.png") center/contain no-repeat;filter:brightness(0)}
+body.ios .sc.ok::after{content:"";position:absolute;top:-10px;right:-8px;width:34px;height:34px;background:url("art/ic_check.png") center/contain no-repeat}
+body.ios .water button.f{background:url("art/ic_drop.png") center/70% no-repeat,var(--card2);border-color:var(--card2)}
+body.ios .weekcard .ring{background:url("art/el_circle.png") center/112% no-repeat}body.ios .weekcard .ring svg{opacity:.0}
+body.ios .pill.ok::before{content:"";width:16px;height:16px;background:url("art/ic_check.png") center/contain no-repeat;display:inline-block;margin-right:4px}
+body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
 @media (prefers-reduced-motion:reduce){body.slawn *{animation:none!important}}
 </style>
 </head>
@@ -623,7 +653,7 @@ body.ios .fab{box-shadow:0 8px 24px rgba(198,255,26,.3)}
 <!-- ТРЕНИРОВКА -->
 <main class="view on" id="v-train"><div class="wrap">
   <div class="top">
-    <div style="display:grid;gap:6px"><span class="eyebrow" id="hello"></span><h1>FITO<em>KILL</em></h1></div>
+    <div style="display:grid;gap:6px"><span class="eyebrow" id="hello"></span><h1 class="txtlogo">FITO<em>KILL</em></h1><img class="imglogo" src="art/logo1.png" alt="FITOKILL"></div>
     <div style="display:flex;gap:8px;align-items:center"><span class="pill acc mono" id="streak"></span><button class="iconbtn" type="button" data-v="prof" aria-label="Профиль"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button></div>
   </div>
   <section id="startCard"></section>
@@ -788,7 +818,7 @@ body.ios .fab{box-shadow:0 8px 24px rgba(198,255,26,.3)}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v37 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v38 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -800,10 +830,10 @@ body.ios .fab{box-shadow:0 8px 24px rgba(198,255,26,.3)}
 <section class="layer" id="sheet" aria-label="Упражнение"><div class="wrap" id="sheetW"></div></section>
 
 <nav class="tabbar" role="tablist" id="tabbar">
-  <button type="button" role="tab" data-v="train" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/></svg>Тренировка</button>
-  <button type="button" role="tab" data-v="prog" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 19h16M6 15l4-4 3 3 5-6"/></svg>Прогресс</button>
-  <button type="button" role="tab" data-v="food" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M7 3v8a2 2 0 0 0 2 2v8M11 3v8M7 7h4M17 3c-2 2-2 6 0 8v10"/></svg>Питание</button>
-  <button type="button" role="tab" data-v="coach" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>Тренер</button>
+  <button type="button" role="tab" data-v="train" aria-selected="true"><img class="ti" src="art/ic_dumbbell.png" alt=""><svg viewBox="0 0 24 24"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/></svg>Тренировка</button>
+  <button type="button" role="tab" data-v="prog" aria-selected="false"><img class="ti" src="art/ic_bars.png" alt=""><svg viewBox="0 0 24 24"><path d="M4 19h16M6 15l4-4 3 3 5-6"/></svg>Прогресс</button>
+  <button type="button" role="tab" data-v="food" aria-selected="false"><img class="ti" src="art/ic_fork.png" alt=""><svg viewBox="0 0 24 24"><path d="M7 3v8a2 2 0 0 0 2 2v8M11 3v8M7 7h4M17 3c-2 2-2 6 0 8v10"/></svg>Питание</button>
+  <button type="button" role="tab" data-v="coach" aria-selected="false"><img class="ti" src="art/ic_chat.png" alt=""><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>Тренер</button>
 </nav>
 <button class="fab" type="button" id="fabStart" aria-label="Начать тренировку" hidden><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
 <div class="bsbg" id="bsbg"></div>
@@ -1133,10 +1163,10 @@ function renderTrain(){
     $("fabStart").hidden=!D||view!=="train"}
   {const b=LS.get("vf_bak",""),dates=LS.get("vf_dates",[]);const old=!b||(dUTC(today())-dUTC(b))/864e5>7;$("bakNag").hidden=!(old&&dates.length>=2)}
   {const t=today(),items=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{if(x.date===t)items.push({id,x})}));
-    $("todayDone").innerHTML=items.length?`<div class="card" style="display:grid;gap:8px"><div class="sub-h"><h3>Сегодня сделано</h3><span class="pill ok">✓ ${DAYS[items[0].x.day]?DAYS[items[0].x.day].t:""}</span></div>${items.map(({id,x})=>{const r=REC[id];return`<div class="fi" style="grid-template-columns:1fr auto"><span style="min-width:0"><b>${EX[id]?EX[id].n:id}</b><small>${x.w.map((w,k)=>(w?w+"×":"")+x.r[k]).join(" · ")}</small></span><span class="v" style="color:${r&&r.dir==="up"?"var(--ok)":r&&r.dir==="dn"?"var(--bad)":"var(--muted)"}">${r?(r.dir==="up"?"↑":r.dir==="dn"?"↓":"=")+(r.w!=null?" "+r.w+" кг":""):""}</span></div>`}).join("")}</div>`:""}
+    $("todayDone").innerHTML=items.length?`<div class="card" style="display:grid;gap:8px"><div class="sub-h"><h3><img class="ii s" src="art/ic_crown.png" alt=""> Сегодня сделано</h3><span class="pill ok">✓ ${DAYS[items[0].x.day]?DAYS[items[0].x.day].t:""}</span></div>${items.map(({id,x})=>{const r=REC[id];return`<div class="fi" style="grid-template-columns:1fr auto"><span style="min-width:0"><b>${EX[id]?EX[id].n:id}</b><small>${x.w.map((w,k)=>(w?w+"×":"")+x.r[k]).join(" · ")}</small></span><span class="v" style="color:${r&&r.dir==="up"?"var(--ok)":r&&r.dir==="dn"?"var(--bad)":"var(--muted)"}">${r?(r.dir==="up"?"↑":r.dir==="dn"?"↓":"=")+(r.w!=null?" "+r.w+" кг":""):""}</span></div>`}).join("")}</div>`:""}
   $("wpct").innerHTML=`${wd.length}/${DAYS.length}<small>за неделю</small>`;$("wring").style.strokeDashoffset=264-264*wd.length/DAYS.length;
   const feed=LS.get("vf_feed",[]);
-  $("feed").innerHTML=feed.length?feed.slice(0,6).map(f=>`<div class="fi"><span class="ic ${f.dir}">${f.dir==="up"?"↑":f.dir==="dn"?"↓":"="}</span><span style="min-width:0"><b>${EX[f.id].n}</b><small>${f.why}</small></span><span class="v">${f.w!=null?f.w+" кг":""}${f.reps?`<br><small>${f.reps}</small>`:""}</span></div>`).join(""):`<div class="empty">Здесь появятся подсказки после первой тренировки: где добавить вес, где задержаться.</div>`;
+  $("feed").innerHTML=feed.length?feed.slice(0,6).map(f=>`<div class="fi"><span class="ic ${f.dir}">${f.dir==="up"?'<img class="ii" src="art/ic_up.png" alt="">':f.dir==="dn"?'<img class="ii" src="art/ic_down.png" alt="">':"="}</span><span style="min-width:0"><b>${EX[f.id].n}</b><small>${f.why}</small></span><span class="v">${f.w!=null?f.w+" кг":""}${f.reps?`<br><small>${f.reps}</small>`:""}</span></div>`).join(""):`<div class="empty">Здесь появятся подсказки после первой тренировки: где добавить вес, где задержаться.</div>`;
 }
 $("days").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(b)openDay(+b.dataset.day)});
 function startNext(){const wd=weekDone(),d=[0,1,2,3].slice(0,DAYS.length).find(x=>!wd.includes(x));if(d==null)return go("train");if(!readyMode()&&dayProg(d)[0]===0){openReady(()=>startNext());return}curD=d;renderDay();show("dayL");
@@ -1531,18 +1561,18 @@ function renderNow(){const el=$("nowCard");if(!el||!$("v-train").classList.conta
   const d=new Date(),ph=phase(),{cur,list,nxt}=mealNow(),m=nowMin(),w=LS.get("vf_water_"+today(),0),wp=waterPace(),wt=waterTarget(),{t}=eaten(),T=targets();
   const gym=hm("8:00"),wd=weekDone(),nextD=[0,1,2,3].slice(0,DAYS.length).find(x=>!wd.includes(x)),trainedToday=LS.get("vf_dates",[]).includes(today());
   const rows=[];
-  if(!trainedToday&&nextD!=null&&m<gym)rows.push(`<div class="nowrow"><span class="ic">🏋️</span><span><b>Зал в 8:00 · День ${nextD+1} ${DAYS[nextD].t}</b><small>${DAYS[nextD].sub}</small></span><span class="cd">через ${dur(gym-m)}</span></div>`);
-  if(!trainedToday&&nextD!=null&&m>=gym&&m<hm("9:45"))rows.push(`<button type="button" class="nowrow" data-day="${nextD}" style="text-align:left;width:100%"><span class="ic">▶</span><span><b>Начать: День ${nextD+1} ${DAYS[nextD].t}</b><small>открыть тренировку</small></span><span class="cd">→</span></button>`);
-  if(trainedToday)rows.push(`<div class="nowrow"><span class="ic">✅</span><span><b>Тренировка сегодня сделана</b><small>теперь еда, вода и сон</small></span><span class="cd"></span></div>`);
+  if(!trainedToday&&nextD!=null&&m<gym)rows.push(`<div class="nowrow"><span class="ic"><img class="ii" src="art/ic_dumbbell.png" alt=""></span><span><b>Зал в 8:00 · День ${nextD+1} ${DAYS[nextD].t}</b><small>${DAYS[nextD].sub}</small></span><span class="cd">через ${dur(gym-m)}</span></div>`);
+  if(!trainedToday&&nextD!=null&&m>=gym&&m<hm("9:45"))rows.push(`<button type="button" class="nowrow" data-day="${nextD}" style="text-align:left;width:100%"><span class="ic"><img class="ii" src="art/el_arrow.png" alt=""></span><span><b>Начать: День ${nextD+1} ${DAYS[nextD].t}</b><small>открыть тренировку</small></span><span class="cd">→</span></button>`);
+  if(trainedToday)rows.push(`<div class="nowrow"><span class="ic"><img class="ii" src="art/ic_check.png" alt=""></span><span><b>Тренировка сегодня сделана</b><small>теперь еда, вода и сон</small></span><span class="cd"></span></div>`);
   const cm=cur>=0?list[cur]:null;
-  if(cm&&cm.m[0])rows.push(`<button type="button" class="nowrow" data-go="food" style="text-align:left;width:100%"><span class="ic">🍽</span><span><b>Сейчас: ${cm.n}</b><small>${cm.items.slice(0,2).join(" · ")}</small></span><span class="cd">${cm.t}</span></button>`);
-  if(nxt)rows.push(`<div class="nowrow"><span class="ic">⏭</span><span><b>Дальше: ${nxt.n}</b><small>${nxt.items[0]}</small></span><span class="cd">через ${dur(nxt.s-m)}</span></div>`);
+  if(cm&&cm.m[0])rows.push(`<button type="button" class="nowrow" data-go="food" style="text-align:left;width:100%"><span class="ic"><img class="ii" src="art/ic_fork.png" alt=""></span><span><b>Сейчас: ${cm.n}</b><small>${cm.items.slice(0,2).join(" · ")}</small></span><span class="cd">${cm.t}</span></button>`);
+  if(nxt)rows.push(`<div class="nowrow"><span class="ic"><img class="ii" src="art/ic_clock.png" alt=""></span><span><b>Дальше: ${nxt.n}</b><small>${nxt.items[0]}</small></span><span class="cd">через ${dur(nxt.s-m)}</span></div>`);
   const bed=hm("22:30");
-  if(m>=hm("20:00")&&m<bed)rows.push(`<div class="nowrow"><span class="ic">😴</span><span><b>Отбой в 22:30</b><small>подъём 6:30 → 8 часов сна</small></span><span class="cd">через ${dur(bed-m)}</span></div>`);
-  else if(m>=bed||m<hm("5:00"))rows.push(`<div class="nowrow"><span class="ic">😴</span><span><b>Пора спать</b><small>${m>=hm("23:00")||m<hm("5:00")?"уже меньше 7.5 ч до подъёма":"ляг до 23:00"}</small></span><span class="cd">подъём 6:30</span></div>`);
+  if(m>=hm("20:00")&&m<bed)rows.push(`<div class="nowrow"><span class="ic"><img class="ii" src="art/ic_bed.png" alt=""></span><span><b>Отбой в 22:30</b><small>подъём 6:30 → 8 часов сна</small></span><span class="cd">через ${dur(bed-m)}</span></div>`);
+  else if(m>=bed||m<hm("5:00"))rows.push(`<div class="nowrow"><span class="ic"><img class="ii" src="art/ic_bed.png" alt=""></span><span><b>Пора спать</b><small>${m>=hm("23:00")||m<hm("5:00")?"уже меньше 7.5 ч до подъёма":"ляг до 23:00"}</small></span><span class="cd">подъём 6:30</span></div>`);
   const behind=wp-w;
-  rows.push(`<div style="display:grid;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>💧 Вода ${w} из ${wt} стаканов</span><span class="mono" style="color:${behind>1?"var(--accent)":"var(--ok)"}">${behind>1?"отстаёшь на "+behind:"в графике"}</span></div><div class="pace"><i style="width:${Math.min(100,w/wt*100)}%"></i><u style="left:${wp/wt*100}%"></u></div></div>`);
-  rows.push(`<div style="display:flex;justify-content:space-between;font-size:13px"><span>🥩 Белок ${Math.round(t[1])} из ${T.p} г</span><span class="mono muted">${Math.round(t[0])} / ${T.k} ккал</span></div>`);
+  rows.push(`<div style="display:grid;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span><img class="ii s" src="art/ic_drop.png" alt=""> Вода ${w} из ${wt} стаканов</span><span class="mono" style="color:${behind>1?"var(--accent)":"var(--ok)"}">${behind>1?"отстаёшь на "+behind:"в графике"}</span></div><div class="pace"><i style="width:${Math.min(100,w/wt*100)}%"></i><u style="left:${wp/wt*100}%"></u></div></div>`);
+  rows.push(`<div style="display:flex;justify-content:space-between;font-size:13px"><span><img class="ii s" src="art/ic_fork.png" alt=""> Белок ${Math.round(t[1])} из ${T.p} г</span><span class="mono muted">${Math.round(t[0])} / ${T.k} ккал</span></div>`);
   el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><div class="clock">${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}<small>${d.toLocaleDateString(LANG==="en"?"en-US":"ru-RU",{weekday:"short",day:"numeric",month:"short"})}</small></div><span class="pill acc">${ph.ic} ${ph.n}</span></div>
   <p class="small muted">${ph.tip}</p>${rows.join("")}`}
 $("nowCard").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(b)return openDay(+b.dataset.day);if(e.target.closest("[data-go]"))go("food")});
@@ -1788,7 +1818,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="37";
+const APP_V="38";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
