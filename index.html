@@ -492,6 +492,90 @@ body.slawn .callout.bad{background:#2a0f28} body.slawn .callout.cool{background:
 body.slawn .ring .bgc{stroke:#2e2e33}
 body.slawn .spark path{stroke:#c6ff1a} body.slawn .spark .area{fill:rgba(198,255,26,.12)} body.slawn .spark circle{fill:#ff3df2}
 body.slawn .doodles svg{stroke:#e9e9e9}
+
+/* ===== ТЕМА iOS: системный шрифт, крупные заголовки, сгруппированные списки, плоские карточки ===== */
+body.ios{--bg:#000;--bg2:#1c1c1e;--card:#1c1c1e;--card2:#2c2c2e;--line:#38383a;--fg:#fff;--muted:#8e8e93;--accent:#c6ff1a;--accent-ink:#000;--cool:#0a84ff;--ok:#30d158;--bad:#ff453a;--pink:#ff375f;
+  --display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",system-ui,sans-serif;--body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",system-ui,sans-serif;--mono:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+  color-scheme:dark;background:#000;font-size:17px}
+body.ios .mono,body.ios .chip b,body.ios .stat b,body.ios .set .n,body.ios .sr,body.ios .ring b,body.ios .clock,body.ios .fi .v,body.ios .cd,body.ios .step input,body.ios .sc{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+body.ios h1{font:800 34px/1.1 var(--display);letter-spacing:-.02em;text-shadow:none}
+body.ios h1 em{color:var(--accent);text-shadow:none;animation:none;font-family:"Rubik Wet Paint",var(--display);font-weight:400;font-size:36px}
+body.ios h2{font:700 22px/1.2 var(--display);letter-spacing:-.01em;text-transform:none}
+body.ios h3{font:600 17px/1.25 var(--display);text-transform:none;letter-spacing:0}
+body.ios .eyebrow{font:400 13px var(--body);letter-spacing:0;text-transform:uppercase;color:var(--muted)}
+body.ios :is(.card,.day,.row,.fi,.set,.chip,.stat,.lift,.meal,.food,.eat,.field,.callout,.tabs,.cardio,.iconbtn,.next,.finish,.yt,.hero,.tip,.empty,.sc,.hero-start,.ed){border:0!important;border-radius:12px;box-shadow:none;background:var(--card)}
+body.ios :is(.card,.meal,.cardio){border-radius:14px}
+body.ios .glow{background:var(--card)}
+body.ios .card.now{background:var(--card);animation:none;border-radius:14px}
+body.ios .now .clock{font:700 40px/1 var(--display);letter-spacing:-.03em}
+body.ios .day,body.ios .hero-start{border-radius:16px;transform:none;animation:none}
+body.ios .day:nth-child(n){box-shadow:none}
+body.ios .day::after{background:linear-gradient(90deg,rgba(28,28,30,.96) 0%,rgba(28,28,30,.8) 48%,rgba(28,28,30,.15) 100%)}
+body.ios .hero-start::after{background:linear-gradient(90deg,rgba(28,28,30,.96),rgba(28,28,30,.72) 55%,rgba(28,28,30,.1))}
+body.ios .hero-start .go{border-radius:12px;font-weight:600}
+body.ios .pill{background:var(--card2);color:var(--fg);border:0;font-weight:600;border-radius:999px}
+body.ios .pill.acc{background:var(--accent);color:#000}body.ios .pill.ok{background:rgba(48,209,88,.18);color:var(--ok)}body.ios .pill.cool{background:rgba(10,132,255,.18);color:var(--cool)}
+body.ios .seg{background:var(--card2);padding:3px;border-radius:9px;gap:2px;display:inline-flex}
+body.ios .seg button{border:0;border-radius:7px;padding:7px 12px;font:600 13px var(--body);color:var(--fg);background:transparent}
+body.ios .seg button[aria-pressed="true"]{background:#636366;color:#fff}
+body.ios .tabs{background:var(--card2);border:0;border-radius:9px;padding:3px}
+body.ios .tabs button{border-radius:7px;font:600 13px var(--body)}body.ios .tabs button[aria-selected="true"]{background:#636366;color:#fff}
+body.ios .finish,body.ios .next{background:var(--accent);color:#000;border-radius:12px;font-weight:600}
+body.ios .yt{background:var(--cool);color:#fff;border-radius:12px}body.ios .yt.dark{background:var(--card2);color:var(--fg)}
+body.ios .iconbtn{background:var(--card2);width:36px;height:36px;border-radius:50%}
+body.ios .iconbtn svg{width:16px;height:16px;stroke-width:2.6;stroke:var(--accent)}
+body.ios .callout{border-left:0;background:var(--card);padding:12px 14px}
+body.ios .callout.bad{background:rgba(255,69,58,.12)}body.ios .callout.cool{background:rgba(10,132,255,.12)}body.ios .callout.ok{background:rgba(48,209,88,.12)}
+body.ios .grp{gap:0;background:var(--card);border-radius:12px;overflow:hidden}
+body.ios .grp>.row,body.ios .grp>.fi,body.ios .grp>.lift,body.ios .grp>.ed,body.ios .grp>.eat,body.ios .grp>.meal{border-radius:0;border-bottom:1px solid var(--line)!important;background:transparent}
+body.ios .grp>:last-child{border-bottom:0!important}
+body.ios .grp>.meal{padding:14px 16px}
+body.ios .row{padding:10px 12px}body.ios .row img{border-radius:8px;width:56px;height:56px}
+body.ios .row .code{color:var(--muted)}body.ios .row.done .code{color:var(--ok)}
+body.ios .ss{color:var(--muted);text-transform:none;letter-spacing:0;font-size:13px;padding:10px 4px 4px}
+body.ios .step{background:var(--card2);border:0;border-radius:10px}
+body.ios .sc{background:var(--card2);border:0;height:64px}body.ios .sc.ok{background:var(--ok);color:#000}body.ios .sc.ok small{color:#000}
+body.ios .feel button{background:var(--card2);border:0;border-radius:10px}
+body.ios .feel button[aria-pressed="true"][data-f="1"]{background:rgba(48,209,88,.22);color:var(--ok)}
+body.ios .chips{gap:8px}body.ios .chip{background:var(--card)}
+body.ios .progress,body.ios .pace{height:6px;border:0;background:var(--card2)}
+body.ios .progress i{background:var(--accent)}body.ios .pace i{background:var(--cool)}
+body.ios .water button{border:2px solid var(--card2);background:var(--card2);border-radius:6px 6px 10px 10px}body.ios .water button.f{background:var(--cool);border-color:var(--cool)}
+body.ios .tabbar{background:rgba(22,22,24,.9);border-top:1px solid var(--line);padding-top:4px}
+body.ios .tabbar button{font:500 10px var(--body);color:var(--muted);gap:2px}
+body.ios .tabbar button[aria-selected="true"]{color:var(--accent)}body.ios .tabbar button[aria-selected="true"] svg{fill:none;animation:none}
+body.ios .tabbar svg{width:26px;height:26px;stroke-width:1.8}
+body.ios .timer{background:rgba(44,44,46,.96);border:0;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+body.ios .timer .tb button{background:#636366;border:0;color:#fff;border-radius:10px}
+body.ios .toast{background:#636366;color:#fff;border:0;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+body.ios .composer{background:rgba(22,22,24,.95);border-top:1px solid var(--line)}
+body.ios .composer textarea,body.ios .keyin,body.ios .inrow input,body.ios .field input{background:var(--card2);border:0;color:var(--fg);border-radius:10px}
+body.ios .field{background:var(--card);border:0}body.ios .field input{background:none;font:600 22px var(--display)}
+body.ios .composer button,body.ios .inrow button{background:var(--accent);color:#000;border:0}
+body.ios .msg.ai{background:var(--card2);border:0;border-radius:18px 18px 18px 4px}body.ios .msg.me{background:var(--accent);color:#000;border:0;border-radius:18px 18px 4px 18px}
+body.ios .quick button{background:var(--card2);border:0;border-radius:999px;color:var(--fg)}
+body.ios .food{background:var(--card);border:0}body.ios .food .e{background:var(--card2);color:var(--accent);border:0}body.ios .fstep{background:var(--card2)}
+body.ios .fminus{background:var(--bad);border:0}
+body.ios .steps li::before{background:var(--card2);color:var(--accent);border:0}
+body.ios .hero{border-radius:14px}body.ios .hero .tag,body.ios .hero .ctr button{background:rgba(0,0,0,.6);border:0;color:#fff;backdrop-filter:blur(10px)}
+body.ios .hero .ctr button[aria-pressed="true"]{background:var(--accent);color:#000}
+body.ios .fab{box-shadow:0 8px 24px rgba(198,255,26,.3)}
+body.ios .ring .bgc{stroke:var(--card2)}
+body.ios .spark path{stroke:var(--accent)}body.ios .spark circle{fill:var(--accent)}body.ios .chart .grid{stroke:var(--line)}
+body.ios .doodles{display:none}
+body.ios .lib button{background:var(--card);border:0;border-radius:0;border-bottom:1px solid var(--line)}body.ios .lib{background:var(--card);border-radius:12px;overflow:hidden;gap:0}
+body.ios .bs{background:var(--card);border:0;border-radius:20px 20px 0 0}
+body.ios .layer{background:#000}
+body.ios .wrap{gap:16px}
+body.ios .sub-h h3{font-size:20px;font-weight:700;letter-spacing:-.01em}
+body.ios details.fold>summary .muted{color:var(--accent);font-weight:500}
+body.ios .credit{font-size:12px}
+body.ios .tip{background:var(--card)}
+body.ios button:active,body.ios .row:active,body.ios .day:active{transform:none;opacity:.6;transition:opacity .08s}
+body.ios .view{animation:none}
+body.ios .ed{border-bottom:1px solid var(--line)!important;border-radius:0}
+body.ios .rdy .opts button{background:var(--card2);border-radius:10px}body.ios .rdy .opts button[aria-pressed="true"]{background:var(--accent);color:#000}
+body.ios ::selection{background:rgba(198,255,26,.3)}
 @media (prefers-reduced-motion:reduce){body.slawn *{animation:none!important}}
 </style>
 </head>
@@ -618,7 +702,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <label class="yt dark" style="justify-content:center;cursor:pointer">Выбрать картинку из фото<input type="file" id="artIn" accept="image/*" hidden></label>
     <div id="artPrev" style="display:flex;gap:10px;align-items:center"></div>
     <button type="button" class="small muted" id="artDel" hidden style="padding:6px">Убрать свою картинку</button>
-    <div class="seg" id="themeSeg"><button type="button" data-th="slawn">Уголь + кислота</button><button type="button" data-th="dark">Тёмная</button></div>
+    <div class="seg" id="themeSeg"><button type="button" data-th="ios">iOS</button><button type="button" data-th="slawn">Граффити</button><button type="button" data-th="dark">Тёмная</button></div>
   </section>
   <section class="card" style="display:grid;gap:6px">
     <h3>Как программа думает</h3>
@@ -667,7 +751,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v32 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v33 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1618,9 +1702,9 @@ $("artIn").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)r
     if(!localStorage.getItem("vf_art"))return toast("Картинка слишком большая, выбери поменьше");
     applyArt();toast("Фон и иконка обновлены")}catch(err){toast("Не получилось открыть картинку")}e.target.value=""});
 $("artDel").onclick=()=>{LS.set("vf_art","");LS.set("vf_icon","");applyArt();toast("Своя картинка убрана")};
-function applyTheme(){const t=S.theme||"slawn";document.body.classList.toggle("slawn",t==="slawn");
+function applyTheme(){if(!S.themeV2){S.theme="ios";S.themeV2=1;saveS()}const t=S.theme||"ios";document.body.classList.toggle("slawn",t==="slawn");document.body.classList.toggle("ios",t==="ios");
   document.querySelectorAll("#themeSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.th===t));
-  document.querySelector('meta[name="theme-color"]').content=t==="slawn"?"#0f0f10":"#0b0d12"}
+  document.querySelector('meta[name="theme-color"]').content=t==="slawn"?"#0f0f10":t==="ios"?"#000000":"#0b0d12"}
 $("themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!b)return;S.theme=b.dataset.th;saveS();applyTheme()});
 applyTheme();applyArt();
 $("obW").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const q=ONBOARD[obStep];
@@ -1632,7 +1716,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="32";
+const APP_V="33";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
