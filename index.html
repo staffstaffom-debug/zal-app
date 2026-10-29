@@ -510,6 +510,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <div style="display:flex;gap:8px;align-items:center"><span class="pill acc mono" id="streak"></span><button class="iconbtn" type="button" data-v="prof" aria-label="Профиль"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button></div>
   </div>
   <section id="startCard"></section>
+  <section id="todayDone"></section>
   <button type="button" class="callout cool" id="bakNag" data-v="prof" hidden style="text-align:left;width:100%"><b>Сохрани копию</b>Записи только на телефоне. Раз в неделю — файл в Файлы или iCloud, одна кнопка в Профиле.</button>
   <section class="card now" id="nowCard"></section>
   <section class="card glow weekcard">
@@ -666,7 +667,7 @@ body.slawn .doodles svg{stroke:#e9e9e9}
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v28 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v29 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1010,6 +1011,8 @@ function renderTrain(){
       :`<div class="card glow"><h2>Неделя закрыта 🔥</h2><p class="small muted">Все ${total} тренировки сделаны. Отдыхай, ешь белок, спи. Новая неделя откроется сама.</p></div>`;
     $("fabStart").hidden=!D||view!=="train"}
   {const b=LS.get("vf_bak",""),dates=LS.get("vf_dates",[]);const old=!b||(dUTC(today())-dUTC(b))/864e5>7;$("bakNag").hidden=!(old&&dates.length>=2)}
+  {const t=today(),items=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{if(x.date===t)items.push({id,x})}));
+    $("todayDone").innerHTML=items.length?`<div class="card" style="display:grid;gap:8px"><div class="sub-h"><h3>Сегодня сделано</h3><span class="pill ok">✓ ${DAYS[items[0].x.day]?DAYS[items[0].x.day].t:""}</span></div>${items.map(({id,x})=>{const r=REC[id];return`<div class="fi" style="grid-template-columns:1fr auto"><span style="min-width:0"><b>${EX[id]?EX[id].n:id}</b><small>${x.w.map((w,k)=>(w?w+"×":"")+x.r[k]).join(" · ")}</small></span><span class="v" style="color:${r&&r.dir==="up"?"var(--ok)":r&&r.dir==="dn"?"var(--bad)":"var(--muted)"}">${r?(r.dir==="up"?"↑":r.dir==="dn"?"↓":"=")+(r.w!=null?" "+r.w+" кг":""):""}</span></div>`}).join("")}</div>`:""}
   $("wpct").innerHTML=`${wd.length}/${DAYS.length}<small>за неделю</small>`;$("wring").style.strokeDashoffset=264-264*wd.length/DAYS.length;
   const feed=LS.get("vf_feed",[]);
   $("feed").innerHTML=feed.length?feed.slice(0,6).map(f=>`<div class="fi"><span class="ic ${f.dir}">${f.dir==="up"?"↑":f.dir==="dn"?"↓":"="}</span><span style="min-width:0"><b>${EX[f.id].n}</b><small>${f.why}</small></span><span class="v">${f.w!=null?f.w+" кг":""}${f.reps?`<br><small>${f.reps}</small>`:""}</span></div>`).join(""):`<div class="empty">Здесь появятся подсказки после первой тренировки: где добавить вес, где задержаться.</div>`;
@@ -1256,6 +1259,12 @@ function autoAdjust(){const t=today(),last=S.adjAt||S.start;if((dUTC(t)-dUTC(las
   const floor=Math.round(BMR()*1.15);if(d<0&&TDEE()-450+(S.adj||0)+d<floor){d=0;why="калории на минимуме — неделя на поддержании, потом снова"}
   S.adj=(S.adj||0)+d;S.adjAt=t;S.adjWhy=why;S.kcal=autoKcal();saveS();if(d)toast("Калории: "+why)}
 // порция «150 г» → граммы с шагом 10; «1 шт», «1 скуп» → штуки с шагом 1
+const FU0=FOODS.map(F=>{const m=String(F[1]).match(/(\d+)\s*(г|мл)/);return{base:m?+m[1]:(parseFloat(F[1])||1)}});
+(function migrate(){try{
+  const wk=LS.get("vf_week",{});let ch=false;["0","1","2"].forEach(k=>{if(wk[k]){wk["d"+k]=[...new Set([...(wk["d"+k]||[]),...wk[k]])];delete wk[k];ch=true}});if(ch)LS.set("vf_week",wk);
+  Object.keys(localStorage).filter(k=>k.startsWith("vf_food_")).forEach(k=>{const d=k.slice(8),nk="vf_food2_"+d;if(localStorage.getItem(nk))return;const old=LS.get(k,{}),nw={};
+    Object.entries(old).forEach(([i,n])=>{const u=FU0[i];if(u&&n>0)nw[i]=n*u.base});LS.set(nk,nw);localStorage.removeItem(k)});
+}catch(e){}})();
 const FU=FOODS.map(F=>{const m=String(F[1]).match(/(\d+)\s*(г|мл)/);return m?{g:1,base:+m[1],step:10,unit:m[2]==="мл"?"мл":"г"}:{g:0,base:parseFloat(F[1])||1,step:1,unit:/скуп/.test(F[1])?"скуп":/ст\.л/.test(F[1])?"ст.л.":/кус/.test(F[1])?"кус.":"шт"}});
 function eaten(){const day=LS.get("vf_food2_"+today(),{});let t=[0,0,0,0];FOODS.forEach((F,i)=>{const n=(day[i]||0)/FU[i].base;for(let j=0;j<4;j++)t[j]+=F[2+j]*n});LS.get("vf_eat_"+today(),[]).forEach(x=>{t[0]+=x.k;t[1]+=x.p;t[2]+=x.f;t[3]+=x.c});return{day,t}}
 function ring(val,max,col,lab,unit){const r=30,C=2*Math.PI*r,pc=Math.min(1,val/max);
@@ -1595,7 +1604,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="28";
+const APP_V="29";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
