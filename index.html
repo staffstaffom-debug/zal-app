@@ -577,45 +577,38 @@ body.ios .ed{border-bottom:1px solid var(--line)!important;border-radius:0}
 body.ios .rdy .opts button{background:var(--card2);border-radius:10px}body.ios .rdy .opts button[aria-pressed="true"]{background:var(--accent);color:#000}
 body.ios ::selection{background:rgba(198,255,26,.3)}
 
-/* ===== НАКЛЕЙКИ И КОНТУРЫ (Pouch): белая обводка, жёсткая тень, лёгкий наклон, каракули ===== */
-body.ios{--stk:#fff}
-body.ios .pill.acc,body.ios .day .st,body.ios .hero-start .go,body.ios #streak,body.ios .toast,body.ios .fi .ic,body.ios .sc.ok,body.ios .set.ok .chk,body.ios .fab{border:2.5px solid var(--stk)!important;box-shadow:3px 3px 0 var(--stk)}
-body.ios .pill.acc{transform:rotate(-2deg);font-weight:800;letter-spacing:.01em}
-body.ios .day .st{transform:rotate(3deg);background:var(--accent);color:#000;font-weight:800}
-body.ios .day .st.ok{background:var(--ok);color:#000}
-body.ios .hero-start .go{transform:rotate(-1.5deg);box-shadow:4px 4px 0 var(--stk);font-weight:800;font-size:17px;padding:14px 22px}
-body.ios .hero-start:active .go{transform:rotate(-1.5deg) translate(2px,2px);box-shadow:2px 2px 0 var(--stk)}
-body.ios .fab{box-shadow:4px 4px 0 var(--stk)}
-body.ios .fi .ic{border-radius:10px;font-weight:900}
-body.ios .fi .ic.up{background:var(--accent);color:#000}body.ios .fi .ic.dn{background:var(--pink);color:#fff}body.ios .fi .ic.eq{background:var(--card2);color:#fff}
-body.ios .sc.ok{box-shadow:3px 3px 0 var(--stk);transform:rotate(-1deg)}
-body.ios .sc.ok::after{content:"✓";font-weight:900}
-body.ios .finish,body.ios .next{border:2.5px solid var(--stk);box-shadow:4px 4px 0 var(--stk);font-weight:800}
-body.ios .finish:active,body.ios .next:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--stk);opacity:1}
-body.ios .toast{background:var(--accent);color:#000;font-weight:800;transform:translate(-50%,-160%) rotate(-1deg)}body.ios .toast.on{transform:translate(-50%,0) rotate(-1deg)}
-body.ios h1{position:relative;display:inline-block}
-body.ios h1::after{content:"";position:absolute;left:0;right:-6px;bottom:-6px;height:10px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6c30-6 60 4 90-1s60-5 106 2' fill='none' stroke='%23c6ff1a' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat;background-size:100% 100%}
-body.ios .glow{position:relative;overflow:visible}
-body.ios .card.now::before{content:"★";position:absolute;top:-12px;right:14px;font-size:26px;color:var(--accent);-webkit-text-stroke:2px #000;transform:rotate(12deg);z-index:1}
-body.ios #todayDone .card{position:relative}
-body.ios #todayDone .card::before{content:"DONE";position:absolute;top:-10px;right:16px;padding:3px 10px;background:var(--ok);color:#000;border:2.5px solid var(--stk);box-shadow:3px 3px 0 var(--stk);border-radius:8px;font:900 12px var(--display);transform:rotate(4deg);letter-spacing:.04em}
-body.ios .empty{background:var(--card);border:2px dashed var(--line)!important;position:relative}
-body.ios .empty::after{content:"✎";position:absolute;right:12px;bottom:6px;font-size:22px;color:var(--muted);transform:rotate(-15deg)}
-body.ios .chip{position:relative}body.ios .chip b{font-size:17px;font-weight:800}
-body.ios .target .big{font-weight:900;letter-spacing:-.03em}
-body.ios .target .pill{border:2px solid var(--stk);box-shadow:2px 2px 0 var(--stk);transform:rotate(3deg)}
-body.ios .hero .tag{border:2px solid var(--stk);box-shadow:2px 2px 0 var(--stk);background:#000;transform:rotate(-2deg);font-weight:700}
-body.ios .rings .ring b{font-weight:800}
-body.ios .stat b{font-weight:900;font-size:22px}
-body.ios .stat:nth-child(1){background:var(--accent);color:#000}body.ios .stat:nth-child(1) span{color:#000;opacity:.8}
-body.ios .row.done{background:rgba(48,209,88,.08)}
-body.ios .ss{display:inline-block;padding:3px 10px;background:var(--card2);border-radius:999px;font-weight:700;color:var(--fg);transform:rotate(-1deg);margin:6px 0 2px}
-body.ios .weekcard .ring .fgc{stroke:var(--accent)}
-body.ios .tabbar button[aria-selected="true"] svg{stroke-width:2.4;filter:drop-shadow(0 0 6px rgba(198,255,26,.5))}
-body.ios .quick button{border:1.5px solid var(--line)}
-body.ios .msg.me{border:2px solid var(--stk);box-shadow:2px 2px 0 var(--stk);font-weight:600}
-body.ios .water button.f{border-color:var(--stk);box-shadow:2px 2px 0 var(--stk)}
-body.ios .callout.ok,body.ios .hint{border:2px solid var(--ok);background:rgba(48,209,88,.1);font-weight:600}
+/* ===== Акценты поверх чистой тёмной темы: без наклонов и обводок, только кислота и фактура ===== */
+body.ios .day img,body.ios .hero-start img,body.ios .row img{filter:grayscale(.35) brightness(.72) contrast(1.1)}
+body.ios .day::after,body.ios .hero-start::after{background:linear-gradient(90deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.7) 50%,rgba(0,0,0,.25) 100%)}
+body.ios .hero-start{min-height:168px;background:#0a0a0a}
+body.ios .hero-start .go{background:var(--accent);color:#000;font-weight:700;font-size:16px;padding:13px 20px;border-radius:14px;box-shadow:0 6px 20px rgba(198,255,26,.25)}
+body.ios .hero-start .eyebrow{color:var(--accent)}
+body.ios .pill.acc{background:var(--accent);color:#000;font-weight:700}
+body.ios .day .st{background:var(--accent);color:#000;font-weight:700}body.ios .day .st.ok{background:var(--ok);color:#000}
+body.ios .fi .ic{border-radius:10px;font-weight:800}
+body.ios .fi .ic.up{background:rgba(198,255,26,.18);color:var(--accent)}body.ios .fi .ic.dn{background:rgba(255,69,58,.18);color:var(--bad)}body.ios .fi .ic.eq{background:var(--card2);color:var(--muted)}
+body.ios .finish,body.ios .next{box-shadow:0 6px 20px rgba(198,255,26,.2)}
+body.ios .toast{background:#2c2c2e;color:#fff}
+body.ios h1{letter-spacing:-.03em}
+body.ios .card.now{background:linear-gradient(160deg,#1f1f22,#141416)}
+body.ios .weekcard{background:linear-gradient(160deg,#1a2410,#141416)}
+body.ios .weekcard .ring .fgc{stroke:var(--accent);filter:drop-shadow(0 0 6px rgba(198,255,26,.5))}
+body.ios #todayDone .card{border-left:3px solid var(--ok)!important;border-radius:14px}
+body.ios .stat:nth-child(1){background:var(--accent);color:#000}body.ios .stat:nth-child(1) span{color:#000;opacity:.75}
+body.ios .stat b{font-weight:800;font-size:22px}
+body.ios .chip b{font-weight:700;font-size:17px}
+body.ios .target .big{font-weight:800;letter-spacing:-.03em;font-size:34px}
+body.ios .hero .tag{background:rgba(0,0,0,.65);backdrop-filter:blur(10px)}
+body.ios .row.done{background:rgba(48,209,88,.06)}
+body.ios .ss{display:block;padding:10px 4px 2px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+body.ios .tabbar button[aria-selected="true"] svg{filter:drop-shadow(0 0 6px rgba(198,255,26,.45))}
+body.ios .empty{background:var(--card);border:1px dashed var(--line)!important}
+body.ios .callout.ok,body.ios .hint{background:rgba(48,209,88,.1);color:var(--fg)}
+body.ios .sc{height:66px;border-radius:14px}body.ios .sc.ok{background:var(--accent);color:#000;box-shadow:0 4px 14px rgba(198,255,26,.25)}body.ios .sc.ok small{color:#000;opacity:.7}
+body.ios .water button.f{background:var(--accent);border-color:var(--accent)}body.ios .pace i{background:var(--accent)}
+body.ios .msg.me{background:var(--accent);color:#000}
+body.ios .rings .ring b{font-weight:700}
+body.ios .fab{box-shadow:0 8px 24px rgba(198,255,26,.3)}
 @media (prefers-reduced-motion:reduce){body.slawn *{animation:none!important}}
 </style>
 </head>
@@ -742,7 +735,7 @@ body.ios .callout.ok,body.ios .hint{border:2px solid var(--ok);background:rgba(4
     <label class="yt dark" style="justify-content:center;cursor:pointer">Выбрать картинку из фото<input type="file" id="artIn" accept="image/*" hidden></label>
     <div id="artPrev" style="display:flex;gap:10px;align-items:center"></div>
     <button type="button" class="small muted" id="artDel" hidden style="padding:6px">Убрать свою картинку</button>
-    <div class="seg" id="themeSeg"><button type="button" data-th="ios">FitKill</button><button type="button" data-th="slawn">Граффити</button><button type="button" data-th="dark">Тёмная</button></div>
+    <div class="seg" id="themeSeg"><button type="button" data-th="ios">Тёмная</button><button type="button" data-th="slawn">Граффити</button><button type="button" data-th="dark">Тёмная</button></div>
   </section>
   <section class="card" style="display:grid;gap:6px">
     <h3>Как программа думает</h3>
@@ -791,7 +784,7 @@ body.ios .callout.ok,body.ios .hint{border:2px solid var(--ok);background:rgba(4
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v34 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v35 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1756,7 +1749,7 @@ S.w=autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="34";
+const APP_V="35";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
