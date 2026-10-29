@@ -1,0 +1,1015 @@
+{
+ "exact": {
+  "Тренировка": "Workout",
+  "Прогресс": "Progress",
+  "Питание": "Nutrition",
+  "Тренер": "Coach",
+  "Профиль": "Profile",
+  "Назад": "Back",
+  "← Назад": "← Back",
+  "Дальше": "Next",
+  "Готов": "Done",
+  "Отдых": "Rest",
+  "+15": "+15",
+  "Без отдыха": "No rest",
+  "Пора. Следующий подход": "Time. Next set",
+  "Доброе утро": "Good morning",
+  "Добрый день": "Good afternoon",
+  "Добрый вечер": "Good evening",
+  "Доброе утро, Володя": "Good morning, Volodya",
+  "Добрый день, Володя": "Good afternoon, Volodya",
+  "Добрый вечер, Володя": "Good evening, Volodya",
+  "Володя": "Volodya",
+  "старт": "start",
+  "Сохрани копию": "Save a backup",
+  "Записи только на телефоне. Раз в неделю — файл в Файлы или iCloud, одна кнопка в Профиле.": "Your records live only on this phone. Once a week, save a file to Files or iCloud — one button in Profile.",
+  "за неделю": "this week",
+  "Неделя": "Week",
+  "Неделя 1": "Week 1",
+  "Неделя 2": "Week 2",
+  "Неделя 3+": "Week 3+",
+  "Разгрузка": "Deload",
+  "План недели": "Week plan",
+  "показать": "show",
+  "Что изменилось": "What changed",
+  "✓ Сделано": "✓ Done",
+  "следующая": "next",
+  "Следующая": "Next",
+  "Тренировка идёт": "Workout in progress",
+  "Продолжить": "Continue",
+  "Начать": "Start",
+  "Продолжить →": "Continue →",
+  "Начать →": "Start →",
+  "Неделя закрыта 🔥": "Week complete 🔥",
+  "Сегодня сделано": "Done today",
+  "Здесь появятся подсказки после первой тренировки: где добавить вес, где задержаться.": "Tips will appear here after your first workout: where to add weight, where to hold.",
+  "Начать тренировку": "Start workout",
+  "Подход": "Set",
+  "Подходы": "Sets",
+  "Твой рост": "Your growth",
+  "Вес тела и талия": "Body weight and waist",
+  "раз в неделю, утром": "once a week, in the morning",
+  "вес, кг": "weight, kg",
+  "талия, см": "waist, cm",
+  "Вес тела": "Body weight",
+  "Талия": "Waist",
+  "Восстановление мышц": "Muscle recovery",
+  "по твоему журналу": "from your log",
+  "Отчёт по неделям": "Weekly report",
+  "Сила по упражнениям": "Strength by exercise",
+  "Расчётный максимум на 1 повтор. Растёт — значит мышцы на месте и прибавляют.": "Estimated 1-rep max. If it grows, your muscles are intact and gaining.",
+  "тренировок": "workouts",
+  "подходов": "sets",
+  "поднято всего": "total lifted",
+  "Добавь вес и талию — здесь появится график.": "Add weight and waist — a chart will appear here.",
+  "нет данных": "no data",
+  "свежие": "fresh",
+  "готовы": "ready",
+  "веса держим": "holding weights",
+  "План недели выполнен 🔥": "Week plan complete 🔥",
+  "2 из 3 — нормально, главное регулярность.": "2 of 3 — fine, consistency matters most.",
+  "1 тренировка — постарайся добавить ещё.": "1 workout — try to add another.",
+  "Талия уходит — жир сгорает. Продолжай.": "Waist is shrinking — fat is burning. Keep going.",
+  "Талия стоит 2+ недели — убери ~150 ккал или добавь 2–3 тыс. шагов.": "Waist flat for 2+ weeks — cut ~150 kcal or add 2–3k steps.",
+  "Взвешивайся утром натощак, талию меряй на уровне пупка.": "Weigh in the morning on an empty stomach, measure waist at navel level.",
+  "Заверши первую тренировку — здесь появятся графики силы.": "Finish your first workout — strength charts will appear here.",
+  "Впиши вес или талию": "Enter weight or waist",
+  "Записано": "Saved",
+  "повторов: ": "reps: ",
+  "≈1ПМ ": "≈1RM ",
+  "грудь": "chest",
+  "спина": "back",
+  "плечи": "shoulders",
+  "бицепс": "biceps",
+  "трицепс": "triceps",
+  "квадрицепс": "quads",
+  "ягодицы": "glutes",
+  "задняя цепь": "posterior chain",
+  "икры": "calves",
+  "пресс": "abs",
+  "другое": "other",
+  "день тренировки": "training day",
+  "день отдыха": "rest day",
+  "день зала: −150": "gym day: −150",
+  "день отдыха: −450": "rest day: −450",
+  "Калории": "Calories",
+  "Белок": "Protein",
+  "Жиры": "Fat",
+  "Углеводы": "Carbs",
+  "Вода": "Water",
+  "Напиши, что съел": "Type what you ate",
+  "Например: «3 яйца, гречка 80 г, курица 200, банан, кофе с молоком». Граммы можно не писать — возьму обычную порцию.": "For example: \"3 eggs, buckwheat 80 g, chicken 200, banana, coffee with milk\". Grams are optional — I'll assume a normal portion.",
+  "что съел…": "what you ate…",
+  "Что съел": "What you ate",
+  "Добавить": "Add",
+  "Быстро добавить": "Quick add",
+  "очистить день": "clear day",
+  "нажми ещё раз": "tap again",
+  "Нажми на продукт — добавится обычная порция. Дальше «−» и «+» меняют вес по 10 г (или по 1 шт).": "Tap a food to add a normal portion. Then \"−\" and \"+\" change the amount by 10 g (or 1 pc).",
+  "Пример дня под твою цель": "Sample day for your goal",
+  "Правила рекомпозиции": "Recomposition rules",
+  "Белок — главное": "Protein — the priority",
+  "Жиры, не меньше 60": "Fat, at least 60",
+  "День тренировки": "Training day",
+  "День отдыха": "Rest day",
+  "+50 г углеводов": "+50 g carbs",
+  "−50 г углеводов": "−50 g carbs",
+  "Креатин": "Creatine",
+  "5 г / день": "5 g / day",
+  "Итого за день": "Daily total",
+  "без еды": "no food",
+  "Записано сегодня": "Logged today",
+  "не узнал — напиши проще, например «курица 150 г»": "didn't recognize — write it simpler, e.g. \"chicken 150 g\"",
+  "обычная порция": "normal portion",
+  "Не понял, что добавить": "Didn't understand what to add",
+  "Веди неделю — покажу среднее: один перебор не ломает план.": "Log a full week — I'll show the average: one overshoot doesn't break the plan.",
+  "Меньше": "Less",
+  "Больше": "More",
+  "Убрать": "Remove",
+  "Б": "P",
+  "У": "C",
+  "Ж": "F",
+  "г": "g",
+  "мл": "mL",
+  "шт": "pcs",
+  "скуп": "scoop",
+  "ст.л.": "tbsp",
+  "кус.": "slice",
+  "Видит твои тренировки, питание и воду": "Sees your workouts, nutrition and water",
+  "ИИ на DeepSeek": "AI on DeepSeek",
+  "Вставь ключ с platform.deepseek.com → API keys. Он хранится только на этом телефоне. С ключом отвечает настоящий ИИ, который видит все твои данные; без ключа — встроенный тренер.": "Paste a key from platform.deepseek.com → API keys. It is stored only on this phone. With a key, a real AI that sees all your data answers; without it, the built-in coach does.",
+  "Ключ DeepSeek": "DeepSeek key",
+  "OK": "OK",
+  "Удалить ключ": "Delete key",
+  "встроенный": "built-in",
+  "● DeepSeek": "● DeepSeek",
+  "Ключ начинается с sk-": "The key starts with sk-",
+  "DeepSeek подключён": "DeepSeek connected",
+  "Ключ удалён": "Key deleted",
+  "ИИ недоступен — ответил встроенный тренер": "AI unavailable — the built-in coach answered",
+  "Встроенный тренер работает прямо на телефоне, даже без интернета. Для глубокого разбора отправь свои данные в бесплатный ChatGPT или Claude одной кнопкой.": "The built-in coach runs right on your phone, even offline. For a deep analysis, send your data to free ChatGPT or Claude with one tap.",
+  "Разобрать в ChatGPT": "Analyze in ChatGPT",
+  "Разобрать в Claude": "Analyze in Claude",
+  "Очистить переписку": "Clear chat",
+  "Нажми ещё раз": "Tap again",
+  "Спроси тренера…": "Ask the coach…",
+  "Сообщение тренеру": "Message to coach",
+  "Отправить": "Send",
+  "Привет, Володя 👋 Я вижу твои тренировки, веса, питание и воду. Нажми быстрый вопрос сверху или напиши свой.": "Hi, Volodya 👋 I see your workouts, weights, nutrition and water. Tap a quick question above or type your own.",
+  "Скопируй текст в Профиле → Данные": "Copy the text in Profile → Data",
+  "Данные скопированы — вставь в чат": "Data copied — paste it into the chat",
+  "Что сейчас по плану?": "What's on the plan right now?",
+  "Во сколько ложиться?": "When should I go to bed?",
+  "Как прошла последняя тренировка?": "How did my last workout go?",
+  "Что мне сегодня доесть?": "What should I still eat today?",
+  "Где я отстаю?": "Where am I lagging?",
+  "Сколько воды ещё?": "How much more water?",
+  "Почему стоит вес?": "Why is my weight stuck?",
+  "Болит плечо — что делать?": "My shoulder hurts — what to do?",
+  "Что делать сегодня?": "What should I do today?",
+  "Ты ещё не завершил ни одной тренировки. Открой день, отмечай подходы и ощущения, в конце нажми «Завершить» — и я разберу.": "You haven't finished a workout yet. Open a day, log your sets and how they felt, tap \"Finish\" at the end — and I'll review it.",
+  "Было в целом легко — веса подняты смелее.": "Overall it was easy — weights bumped up more boldly.",
+  "Было тяжело. Высыпайся 7–8 часов и добери углеводов перед залом.": "It was hard. Get 7–8 hours of sleep and add carbs before the gym.",
+  "Хороший рабочий уровень, так и держи.": "Good working level, keep it up.",
+  "творог 5% 200 г (34 г белка, 240 ккал)": "cottage cheese 5% 200 g (34 g protein, 240 kcal)",
+  "курица 150 г (35 г, 165 ккал)": "chicken 150 g (35 g, 165 kcal)",
+  "протеин 1 скуп (24 г, 120 ккал)": "protein 1 scoop (24 g, 120 kcal)",
+  "греческий йогурт 150 г (15 г, 100 ккал)": "Greek yogurt 150 g (15 g, 100 kcal)",
+  "Пока нет данных. После 2–3 тренировок я покажу, где ты растёшь, а где стоишь.": "No data yet. After 2–3 workouts I'll show where you're growing and where you're stuck.",
+  "Нужно хотя бы 2 тренировки по каждому упражнению, чтобы увидеть динамику.": "You need at least 2 sessions per exercise to see a trend.",
+  "Вписывай вес и талию раз в неделю во вкладке «Прогресс». Через 2–3 замера скажу точно.\n\nНа рекомпозиции вес может стоять, пока уходит жир и растут мышцы. Главный ориентир — талия и рост рабочих весов.": "Log weight and waist once a week in the Progress tab. After 2–3 measurements I'll tell you exactly.\n\nDuring recomposition weight can stay flat while fat goes and muscle grows. The key markers are your waist and rising working weights.",
+  "Если боль острая, стреляющая или в суставе — прекрати упражнение и покажись врачу/физиотерапевту.\n\nЕсли просто ноет плечо:\n• Жим лёжа → жим гантелей с нейтральным хватом, локти ближе к корпусу\n• Жим стоя → жим гантелей сидя или уменьши вес на 20%\n• Брусья → убрать, вместо них трицепс на блоке\n• Махи → лёгкие в кроссовере\n• Тягу к лицу оставь — она полезна для плеч\n\nВ упражнении есть вкладка «Замена» с вариантами.": "If the pain is sharp, shooting, or in the joint — stop the exercise and see a doctor/physio.\n\nIf the shoulder is just aching:\n• Bench press → neutral-grip dumbbell press, elbows closer to the body\n• Overhead press → seated dumbbell press or drop the weight 20%\n• Dips → remove, do cable triceps instead\n• Lateral raises → light ones on the cable\n• Keep face pulls — they're good for the shoulders\n\nEach exercise has a \"Swap\" tab with alternatives.",
+  "Я встроенный тренер: смотрю твои тренировки, веса, питание, воду и замеры. Спроси про тренировку, еду, воду, вес, боль или что делать сегодня.\n\nНа сложный вопрос нажми «Разобрать в ChatGPT / Claude» — я скопирую все твои данные, а ты вставишь их в бесплатный чат.": "I'm the built-in coach: I look at your workouts, weights, nutrition, water and measurements. Ask about training, food, water, weight, pain or what to do today.\n\nFor a complex question tap \"Analyze in ChatGPT / Claude\" — I'll copy all your data and you paste it into a free chat.",
+  "Спать нужно 7.5–8 часов. Зал в 8:00, значит подъём 6:30 и отбой в 22:30, крайний срок 23:00.\n\nЕсли не высыпаешься: кофе не позже 14:00, за час до сна без телефона, в комнате темно и прохладно. При недосыпе меньше 6 часов делай тренировку на 10% легче.": "You need 7.5–8 hours of sleep. Gym at 8:00 means wake-up at 6:30 and lights out at 22:30, 23:00 at the latest.\n\nIf you're not sleeping enough: no coffee after 14:00, no phone an hour before bed, room dark and cool. With under 6 hours of sleep, train 10% lighter.",
+  "Ночь": "Night",
+  "Раннее утро": "Early morning",
+  "Перед залом": "Before the gym",
+  "Время зала": "Gym time",
+  "Утро после зала": "Morning after the gym",
+  "День": "Day",
+  "Вечер": "Evening",
+  "Время сна": "Bedtime",
+  "Спи. Сон 7–8 часов — половина результата.": "Sleep. 7–8 hours of sleep is half the result.",
+  "Скоро подъём к залу. Стакан воды сразу, как встал.": "Gym wake-up soon. A glass of water as soon as you're up.",
+  "Лёгкий перекус и 0.5 л воды. Тяжёлое не ешь.": "A light snack and 0.5 L of water. Nothing heavy.",
+  "Отмечай подходы и ощущения, таймер сам считает отдых.": "Log your sets and how they felt; the timer counts rest for you.",
+  "Главное сейчас — белок и вода. Мышцы растут после зала.": "Protein and water matter most now. Muscles grow after the gym.",
+  "Сидячая работа: вставай и ходи 5 минут каждый час.": "Desk job: stand up and walk 5 minutes every hour.",
+  "Добери белок и шаги. Ужин без перебора.": "Top up protein and steps. Dinner without overdoing it.",
+  "Отбой в 22:30: телефон в сторону, свет приглуши. Спать нужно 7.5–8 часов.": "Lights out at 22:30: phone away, dim the lights. You need 7.5–8 hours of sleep.",
+  "Пора спать, чтобы встать к залу отдохнувшим.": "Time to sleep so you're rested for the gym.",
+  "открыть тренировку": "open workout",
+  "Тренировка сегодня сделана": "Today's workout is done",
+  "теперь еда, вода и сон": "now food, water and sleep",
+  "Отбой в 22:30": "Lights out at 22:30",
+  "подъём 6:30 → 8 часов сна": "wake-up 6:30 → 8 hours of sleep",
+  "Пора спать": "Time to sleep",
+  "уже меньше 7.5 ч до подъёма": "less than 7.5 h until wake-up",
+  "ляг до 23:00": "be in bed by 23:00",
+  "подъём 6:30": "wake-up 6:30",
+  "в графике": "on track",
+  "Мои цифры": "My numbers",
+  "Прошлые рабочие веса. От них считается старт, дальше программа подстраивается по твоим записям.": "Your previous working weights. The start is calculated from them; then the program adjusts to your logs.",
+  "Вес тела, кг": "Body weight, kg",
+  "Подтягиваюсь, раз": "Pull-ups, reps",
+  "Жим лёжа × 8–10": "Bench press × 8–10",
+  "Присед × 6–7": "Squat × 6–7",
+  "Становая × 5": "Deadlift × 5",
+  "Рост, см": "Height, cm",
+  "Возраст": "Age",
+  "Калории, среднее за неделю (считает само)": "Calories, weekly average (auto-calculated)",
+  "Сохранено — веса пересчитаны": "Saved — weights recalculated",
+  "Программа": "Program",
+  "Опросник заново": "Redo questionnaire",
+  "Собрать свою": "Build your own",
+  "Оформление": "Appearance",
+  "Свою картинку можно поставить фоном и на иконку. Она хранится только на этом телефоне и никуда не выкладывается.": "You can set your own picture as the background and icon. It is stored only on this phone and never uploaded anywhere.",
+  "Выбрать картинку из фото": "Choose a picture from Photos",
+  "Убрать свою картинку": "Remove my picture",
+  "Иконка": "Icon",
+  "Иконка готова. Чтобы она появилась на экране, удали старую и снова «На экран Домой».": "Icon is ready. To see it on your screen, delete the old one and \"Add to Home Screen\" again.",
+  "Обрабатываю картинку…": "Processing picture…",
+  "Картинка слишком большая, выбери поменьше": "Picture too large, choose a smaller one",
+  "Фон и иконка обновлены": "Background and icon updated",
+  "Не получилось открыть картинку": "Couldn't open the picture",
+  "Своя картинка убрана": "Custom picture removed",
+  "FitKill": "FitKill",
+  "Граффити": "Graffiti",
+  "Тёмная": "Dark",
+  "Как программа думает": "How the program thinks",
+  "После каждого подхода отмечаешь повторы и ощущение:": "After each set you log reps and how it felt:",
+  "легко": "easy",
+  "норм": "ok",
+  "тяжело": "hard",
+  "отказ": "failure",
+  "Легко": "Easy",
+  "Норм": "OK",
+  "Тяжело": "Hard",
+  "Отказ": "Failure",
+  "3+ в запасе": "3+ in reserve",
+  "1–2 в запасе": "1–2 in reserve",
+  "на пределе": "at the limit",
+  "не доделал": "didn't finish",
+  "В следующий раз:": "Next time:",
+  "Все подходы на верх диапазона, было легко": "All sets at the top of the range, felt easy",
+  "+2 шага веса": "+2 weight steps",
+  "Все подходы на верх диапазона": "All sets at the top of the range",
+  "+1 шаг веса": "+1 weight step",
+  "В диапазоне": "In range",
+  "тот же вес, +1 повтор": "same weight, +1 rep",
+  "Ниже диапазона или отказ в первых подходах": "Below range or failure in early sets",
+  "−5–10%": "−5–10%",
+  "Два раза подряд не вышло": "Failed twice in a row",
+  "разгрузка −10%": "deload −10%",
+  "Шаг: штанга 2.5 кг (присед и становая 5 кг, если легко), гантели тоже 2.5 кг.": "Step: barbell 2.5 kg (squat and deadlift 5 kg if easy), dumbbells also 2.5 kg.",
+  "Отдых между подходами": "Rest between sets",
+  "Тяжёлая база: присед, жим, становая, тяга штанги": "Heavy compounds: squat, bench, deadlift, barbell row",
+  "2.5–3 мин": "2.5–3 min",
+  "Вторые базовые: гантели, выпады, брусья, турник": "Secondary compounds: dumbbells, lunges, dips, pull-ups",
+  "1.5–2 мин": "1.5–2 min",
+  "Изоляция: махи, руки, тренажёры": "Isolation: raises, arms, machines",
+  "60–90 с": "60–90 s",
+  "Пресс": "Abs",
+  "45–60 с": "45–60 s",
+  "Суперсет: А → сразу Б, отдых после пары": "Superset: A → straight to B, rest after the pair",
+  "Сон и восстановление": "Sleep and recovery",
+  "Сколько спать": "How much to sleep",
+  "7.5–8 ч": "7.5–8 h",
+  "Лечь": "Bedtime",
+  "Крайний срок": "Latest",
+  "Подъём (зал в 8:00)": "Wake-up (gym at 8:00)",
+  "Меньше 7 часов — хуже растут веса, сильнее голод и тяга к сладкому, медленнее уходит жир. Ложись и вставай в одно время, даже в выходные ±1 час. За час до сна — без экранов и плотной еды, кофе не позже 14:00. В спальне темно и прохладно, 18–20°.": "Under 7 hours — weights grow slower, hunger and sugar cravings are stronger, fat goes slower. Go to bed and wake up at the same time, even on weekends ±1 hour. No screens or heavy food an hour before bed, no coffee after 14:00. Keep the bedroom dark and cool, 18–20°.",
+  "Добавки": "Supplements",
+  "Креатин моногидрат": "Creatine monohydrate",
+  "каждый день, в любое время. Воды 2.5–3 л. Вес может вырасти на 1–2 кг за счёт воды в мышцах — это нормально.": "every day, any time. Water 2.5–3 L. Weight may rise 1–2 kg from water in the muscles — that's normal.",
+  "5 г": "5 g",
+  "Данные": "Data",
+  "Всё хранится только на этом телефоне. Сохрани копию, чтобы не потерять при смене телефона.": "Everything is stored only on this phone. Save a backup so you don't lose it when switching phones.",
+  "Сохранить файл копии": "Save backup file",
+  "Загрузить файл": "Load file",
+  "Копии ещё не было. Сохрани в Файлы или iCloud.": "No backup yet. Save to Files or iCloud.",
+  "— пора обновить": "— time to update",
+  "Копия сохранена": "Backup saved",
+  "Скопировать текстом": "Copy as text",
+  "Вставить копию": "Paste backup",
+  "Копия данных": "Data backup",
+  "Загрузить из поля": "Load from field",
+  "Вставь сюда скопированную копию": "Paste the copied backup here",
+  "Копия в буфере. Сохрани в Заметки": "Backup copied to clipboard. Save it in Notes",
+  "Выдели текст в поле и скопируй": "Select the text in the field and copy it",
+  "Не получилось прочитать копию": "Couldn't read the backup",
+  "Импорт контента (JSON с упражнениями/программами)": "Import content (JSON with exercises/programs)",
+  "Загрузить контент": "Load content",
+  "Не читается JSON": "Invalid JSON",
+  "Сбросить все тренировки": "Reset all workouts",
+  "Точно? Нажми ещё раз": "Sure? Tap again",
+  "Тренировки сброшены": "Workouts reset",
+  "Конструктор": "Builder",
+  "Библиотека упражнений": "Exercise library",
+  "Готовность": "Readiness",
+  "Опросник": "Questionnaire",
+  "Упражнение": "Exercise",
+  "Название программы": "Program name",
+  "Моя программа": "My program",
+  "собрана вручную": "built manually",
+  "Сохранить": "Save",
+  "+ день": "+ day",
+  "Название дня": "Day name",
+  "Подзаголовок": "Subtitle",
+  "Удалить этот день": "Delete this day",
+  "Подходы × повторы на неделю 1 / 2 / 3+. «А/Б» в коде = суперсет. Стрелки меняют порядок.": "Sets × reps for week 1 / 2 / 3+. \"A/B\" in the code = superset. Arrows change the order.",
+  "код": "code",
+  "подходы": "sets",
+  "повторы": "reps",
+  "+ Добавить упражнение": "+ Add exercise",
+  "Создать своё упражнение": "Create your own exercise",
+  "Программа сохранена и включена": "Program saved and activated",
+  "поиск: грудь, тяга, гантел…": "search: chest, row, dumbbell…",
+  "Поиск": "Search",
+  "· видео": "· video",
+  "· своё": "· custom",
+  "Своё упражнение": "Custom exercise",
+  "Название": "Name",
+  "Жим в хаммере": "Hammer press",
+  "Мышцы": "Muscles",
+  "Отдых, сек": "Rest, s",
+  "Считать вес от": "Base weight on",
+  "не считать": "don't calculate",
+  "жима": "bench",
+  "приседа": "squat",
+  "становой": "deadlift",
+  "Доля, напр. 0.5": "Ratio, e.g. 0.5",
+  "Ссылка на видео YouTube (необязательно)": "YouTube video link (optional)",
+  "Техника, каждый шаг с новой строки": "Technique, one step per line",
+  "Сохранить упражнение": "Save exercise",
+  "Напиши название": "Enter a name",
+  "Перед тренировкой · 10 секунд": "Before the workout · 10 seconds",
+  "Как ты сегодня?": "How are you today?",
+  "Сон этой ночью": "Sleep last night",
+  "меньше 6 ч": "under 6 h",
+  "6–7 ч": "6–7 h",
+  "7+ ч": "7+ h",
+  "Стресс / усталость": "Stress / fatigue",
+  "высокий": "high",
+  "средний": "medium",
+  "низкий": "low",
+  "Боль в суставах": "Joint pain",
+  "есть": "yes",
+  "ноет": "aching",
+  "нет": "no",
+  "Поехали": "Let's go",
+  "По ответам программа решит: полная, −10% или лёгкая техника.": "Based on your answers the program decides: full, −10%, or light technique.",
+  "Полная тренировка 💪": "Full workout 💪",
+  "Режим −10%: на подход меньше, вес −5%": "−10% mode: one set less, weight −5%",
+  "Лёгкий день: техника, 60% веса": "Light day: technique, 60% weight",
+  "Суперсет · без отдыха между": "Superset · no rest between",
+  "Кардио 10–15 мин": "Cardio 10–15 min",
+  "Дорожка в горку 8–12% на 5–6 км/ч или велотренажёр. Пульс 120–140.": "Treadmill incline 8–12% at 5–6 km/h or stationary bike. Heart rate 120–140.",
+  "Завершить тренировку": "Finish workout",
+  "Программа разберёт твои подходы и выставит веса на следующий раз.": "The program will review your sets and set weights for next time.",
+  "Отметь хотя бы один подход": "Log at least one set",
+  "Разгрузка закончена — возвращаемся к рабочим весам": "Deload over — back to working weights",
+  "3 упражнения вниз за неделю — следующая неделя разгрузочная": "3 exercises down this week — next week is a deload",
+  "5 недель отработано — следующая неделя разгрузочная (60% веса, половина подходов)": "5 weeks done — next week is a deload (60% weight, half the sets)",
+  "Пропуск 3+ недели: веса −20%, неделя 1 заново.": "3+ weeks missed: weights −20%, week 1 again.",
+  "Пропуск 2 недели: веса −10%.": "2 weeks missed: weights −10%.",
+  "Пропуск неделя: веса −5%, дальше по плану.": "1 week missed: weights −5%, then back on plan.",
+  "Не добрал повторы — держим ту же цель.": "Missed reps — keeping the same target.",
+  "В диапазоне — добавь по повтору.": "In range — add a rep.",
+  "Два раза подряд тяжело — разгрузка −10%, потом снова вверх.": "Hard twice in a row — deload −10%, then back up.",
+  "Сделал, но на пределе — повтори вес, закрепи.": "Done, but at the limit — repeat the weight, lock it in.",
+  "Твой план турника": "Your pull-up plan",
+  "Пока меньше 3 раз: запрыгни наверх и опускайся 5 сек. В конце — 1 подход с резиной на максимум.": "Under 3 reps for now: jump to the top and lower for 5 s. Finish with 1 band-assisted set to max.",
+  "Так делать нельзя": "Don't do this",
+  "Видео с ошибками": "Mistakes video",
+  "откроется YouTube": "opens YouTube",
+  "Не получается": "Can't do it",
+  "Снаряд занят": "Equipment taken",
+  "Заменить сегодня на": "Swap today for",
+  "пересчитано": "recalculated",
+  "Вернуть основное упражнение": "Restore main exercise",
+  "Заменено на сегодня": "Swapped for today",
+  "Вернул основное": "Main exercise restored",
+  "Видео техники": "Technique video",
+  "Видео техники · похожее: выпады": "Technique video · similar: lunges",
+  "Фото старт / конец": "Photo start / end",
+  "Старт ⇄ конец": "Start ⇄ end",
+  "▶ Видео": "▶ Video",
+  "Старт": "Start",
+  "Конец": "End",
+  "Цель сегодня": "Today's target",
+  "свой вес": "bodyweight",
+  "подбери": "pick a weight",
+  "гантель": "dumbbell",
+  "каждая гантель": "each dumbbell",
+  "штанга": "barbell",
+  "вес": "weight",
+  "сек": "s",
+  "повт": "reps",
+  "Свой вес. Программа будет двигать повторы.": "Bodyweight. The program will progress reps.",
+  "Подбери вес: последние 2 повтора даются с трудом.": "Pick a weight where the last 2 reps are a struggle.",
+  "↑ вверх": "↑ up",
+  "↓ ниже": "↓ down",
+  "= держим": "= hold",
+  "Тап — подход сделан как в цели. Долгий тап или тап по сделанному — поправить вес, повторы, ощущение.": "Tap — set done as targeted. Long-press or tap a done set to adjust weight, reps, feel.",
+  "Техника": "Technique",
+  "Ошибки": "Mistakes",
+  "Замена": "Swap",
+  "Твоё видео техники": "Your technique video",
+  "Подробный разбор на YouTube": "Detailed breakdown on YouTube",
+  "Последнее. Кардио и «Завершить»": "Last one. Cardio and \"Finish\"",
+  "Суперсет": "Superset",
+  "Делаешь это и сразу следующее упражнение пары. Отдых — после обоих.": "Do this and immediately the next exercise of the pair. Rest after both.",
+  "Отметь, как было: легко / норм / тяжело": "Log how it felt: easy / ok / hard",
+  "не сделан": "not done",
+  "Вес, кг": "Weight, kg",
+  "Секунды": "Seconds",
+  "Повторы": "Reps",
+  "Как было": "How was it",
+  "Сохранить подход": "Save set",
+  "Вопрос": "Question",
+  "из": "of",
+  "ничего": "none",
+  "FITOKILL v35 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0": "FITOKILL v35 · photos: free-exercise-db (free license) · video: wger.de, by Goulart, CC BY-SA 4.0",
+  "Ты — личный тренер Володи с 25-летним стажем в силовом спорте и спортивной нутрициологии. Говоришь прямо, уверенно, по делу, как опытный мужик, который видел тысячи людей в зале: без воды, без «возможно» и «попробуйте», без смайликов. Короткие фразы. Всегда конкретные цифры: кг, повторы, граммы, часы. Опираешься только на данные ниже, ничего не выдумываешь. Если данных нет — так и говоришь и задаёшь один точный вопрос. Принципы: прогрессия нагрузки, база первой, 1–3 повтора в запасе, белок 2 г/кг, сон 7.5–8 ч, рекомпозиция = тренд веса и талии, а не цифра на весах. При боли в суставе — стоп, замена, врач. Ответ 2–6 предложений или короткий список. Русский язык.": "You are Volodya's personal coach with 25 years in strength sports and sports nutrition. You speak directly, confidently, to the point, like an experienced guy who has seen thousands of people in the gym: no filler, no \"maybe\" or \"try\", no emojis. Short sentences. Always concrete numbers: kg, reps, grams, hours. You rely only on the data below and never make anything up. If there is no data, say so and ask one precise question. Principles: progressive overload, compounds first, 1–3 reps in reserve, protein 2 g/kg, sleep 7.5–8 h, recomposition = weight and waist trend, not the number on the scale. Joint pain means stop, swap, doctor. Answer in 2–6 sentences or a short list. English language.",
+  "ДАННЫЕ ВОЛОДИ (JSON):": "VOLODYA'S DATA (JSON):",
+  "Ты мой персональный тренер и нутрициолог. Вот мои данные из приложения FITOKILL (JSON). Проанализируй прогресс, питание и воду, скажи что улучшить и что делать на следующей тренировке. Отвечай по-русски, конкретно, с цифрами.": "You are my personal coach and nutritionist. Here is my data from the FITOKILL app (JSON). Analyze my progress, nutrition and water, tell me what to improve and what to do at the next workout. Answer in English, concretely, with numbers.",
+  "рекомпозиция: убрать жир, нарастить мышцы; перерыв был 3 месяца; сидячая работа": "recomposition: lose fat, build muscle; 3-month break; desk job",
+  "Сразу →": "Straight to →",
+  "Дальше:": "Next:",
+  "Сейчас:": "Now:",
+  "Прошлый раз": "Last time",
+  "Разминка перед рабочими": "Warm-up before working sets",
+  "трен.": "sessions",
+  "упр.": "ex.",
+  "упражнений": "exercises",
+  "дн": "d",
+  "дн.": "d",
+  "т": "t",
+  "ч": "h",
+  "мин": "min",
+  "с": "s",
+  "кг": "kg",
+  "см": "cm",
+  "ккал": "kcal",
+  "л": "L"
+ },
+ "patterns": [
+  {
+   "re": "^(Доброе утро|Добрый день|Добрый вечер), Володя$",
+   "to": "$1, Volodya"
+  },
+  {
+   "re": "^(\\d+) трен\\.$",
+   "to": "$1 sessions"
+  },
+  {
+   "re": "^Старт (\\d{1,2}\\.\\d{2})$",
+   "to": "Start $1"
+  },
+  {
+   "re": "^Разгрузка · (.+)$",
+   "to": "Deload · $1"
+  },
+  {
+   "re": "^(\\d{1,2}\\.\\d{2})–(\\d{1,2}\\.\\d{2}) · день (\\d+)$",
+   "to": "$1–$2 · day $3"
+  },
+  {
+   "re": "^идёт · (\\d+)%$",
+   "to": "in progress · $1%"
+  },
+  {
+   "re": "^День (\\d+)$",
+   "to": "Day $1"
+  },
+  {
+   "re": "^(\\d+) упражнений · ~60 мин \\+ кардио$",
+   "to": "$1 exercises · ~60 min + cardio"
+  },
+  {
+   "re": "^(Тренировка идёт|Следующая) · День (\\d+) из (\\d+)$",
+   "to": "$1 · Day $2 of $3"
+  },
+  {
+   "re": "^Тренировка идёт · День (\\d+) из (\\d+)$",
+   "to": "Workout in progress · Day $1 of $2"
+  },
+  {
+   "re": "^Следующая · День (\\d+) из (\\d+)$",
+   "to": "Next · Day $1 of $2"
+  },
+  {
+   "re": "^(.+) · (\\d+) упр\\.$",
+   "to": "$1 · $2 ex."
+  },
+  {
+   "re": "^Все (\\d+) тренировки сделаны\\. Отдыхай, ешь белок, спи\\. Новая неделя откроется сама\\.$",
+   "to": "All $1 workouts done. Rest, eat protein, sleep. The new week opens on its own."
+  },
+  {
+   "re": "^(\\d+)/(\\d+)за неделю$",
+   "to": "$1/$2this week"
+  },
+  {
+   "re": "^(↑|↓|=) (\\d+(?:\\.\\d+)?) кг$",
+   "to": "$1 $2 kg"
+  },
+  {
+   "re": "^(\\d+(?:\\.\\d+)?) кг$",
+   "to": "$1 kg"
+  },
+  {
+   "re": "^(\\d+(?:\\.\\d+)?) см$",
+   "to": "$1 cm"
+  },
+  {
+   "re": "^(\\d+(?:\\.\\d+)?) г$",
+   "to": "$1 g"
+  },
+  {
+   "re": "^(\\d+) ккал$",
+   "to": "$1 kcal"
+  },
+  {
+   "re": "^(\\d+(?:[.,]\\d+)?) мин$",
+   "to": "$1 min"
+  },
+  {
+   "re": "^(\\d+) с$",
+   "to": "$1 s"
+  },
+  {
+   "re": "^(\\d+) ч$",
+   "to": "$1 h"
+  },
+  {
+   "re": "^(\\d+) ч (\\d+) мин$",
+   "to": "$1 h $2 min"
+  },
+  {
+   "re": "^через (\\d+) ч (\\d+) мин$",
+   "to": "in $1 h $2 min"
+  },
+  {
+   "re": "^через (\\d+) мин$",
+   "to": "in $1 min"
+  },
+  {
+   "re": "^Отдых (\\d+(?:,\\d+)?) мин$",
+   "to": "Rest $1 min"
+  },
+  {
+   "re": "^Отдых (\\d+) с$",
+   "to": "Rest $1 s"
+  },
+  {
+   "re": "^Сразу → (.+)$",
+   "to": "Straight to → $1"
+  },
+  {
+   "re": "^Дальше: (.+)$",
+   "to": "Next: $1"
+  },
+  {
+   "re": "^Сейчас: (.+)$",
+   "to": "Now: $1"
+  },
+  {
+   "re": "^Зал в 8:00 · День (\\d+) (.+)$",
+   "to": "Gym at 8:00 · Day $1 $2"
+  },
+  {
+   "re": "^Начать: День (\\d+) (.+)$",
+   "to": "Start: Day $1 $2"
+  },
+  {
+   "re": "^💧 Вода (\\d+) из (\\d+) стаканов$",
+   "to": "💧 Water $1 of $2 glasses"
+  },
+  {
+   "re": "^отстаёшь на (\\d+)$",
+   "to": "$1 behind"
+  },
+  {
+   "re": "^🥩 Белок (\\d+) из (\\d+) г$",
+   "to": "🥩 Protein $1 of $2 g"
+  },
+  {
+   "re": "^(\\d+) / (\\d+) ккал$",
+   "to": "$1 / $2 kcal"
+  },
+  {
+   "re": "^Вопрос (\\d+) из (\\d+)$",
+   "to": "Question $1 of $2"
+  },
+  {
+   "re": "^Программа: (.+)$",
+   "to": "Program: $1"
+  },
+  {
+   "re": "^Тренировка сохранена · обновлено (\\d+) упражнений$",
+   "to": "Workout saved · $1 exercises updated"
+  },
+  {
+   "re": "^Все подходы на (\\d+)\\+ — цель выше\\.$",
+   "to": "All sets at $1+ — raising the target."
+  },
+  {
+   "re": "^Повторы ниже (\\d+) или отказ — вес чуть ниже\\.$",
+   "to": "Reps below $1 or failure — weight slightly lower."
+  },
+  {
+   "re": "^Все подходы на (\\d+)\\+ и легко — сразу \\+(\\d+(?:\\.\\d+)?) кг\\.$",
+   "to": "All sets at $1+ and easy — straight +$2 kg."
+  },
+  {
+   "re": "^Все подходы на (\\d+)\\+ — \\+(\\d+(?:\\.\\d+)?) кг\\.$",
+   "to": "All sets at $1+ — +$2 kg."
+  },
+  {
+   "re": "^В диапазоне — тот же вес, цель (\\d+) повторов\\.$",
+   "to": "In range — same weight, target $1 reps."
+  },
+  {
+   "re": "^Максимум (\\d+)\\. По (\\d+) чистых без отказа, в последнем подходе \\+2 негатива по 5 сек\\. Программа добавит повтор, когда будет легко\\.$",
+   "to": "Max $1. Do $2 clean reps without failure, +2 negatives of 5 s in the last set. The program adds a rep when it gets easy."
+  },
+  {
+   "re": "^Максимум (\\d+)\\. По (\\d+) чистых\\. Когда во всех подходах легко 10\\+ — 5 кг на пояс\\.$",
+   "to": "Max $1. Do $2 clean reps. When all sets are an easy 10+, add 5 kg on a belt."
+  },
+  {
+   "re": "^Старт от твоих прошлых весов \\((\\d+)%\\)\\.$",
+   "to": "Starting from your previous weights ($1%)."
+  },
+  {
+   "re": "^Подход (\\d+) · (.+)$",
+   "to": "Set $1 · $2"
+  },
+  {
+   "re": "^Подход (\\d+)$",
+   "to": "Set $1"
+  },
+  {
+   "re": "^Стакан (\\d+)$",
+   "to": "Glass $1"
+  },
+  {
+   "re": "^Прошлый раз (\\d{1,2}\\.\\d{2}): (.+)$",
+   "to": "Last time $1: $2"
+  },
+  {
+   "re": "^Разминка перед рабочими · (\\d+) подх\\.$",
+   "to": "Warm-up before working sets · $1 sets"
+  },
+  {
+   "re": "^(\\d+(?:\\.\\d+)?) кг × (\\d+)$",
+   "to": "$1 kg × $2"
+  },
+  {
+   "re": "^(.+): старт$",
+   "to": "$1: start"
+  },
+  {
+   "re": "^(.+): конец$",
+   "to": "$1: end"
+  },
+  {
+   "re": "^(\\d+)×(.+?)с$",
+   "to": "$1×$2s"
+  },
+  {
+   "re": "^Упражнения · (\\d+)$",
+   "to": "Exercises · $1"
+  },
+  {
+   "re": "^Добавлено: (.+)$",
+   "to": "Added: $1"
+  },
+  {
+   "re": "^Загружено: (\\d+)$",
+   "to": "Loaded: $1"
+  },
+  {
+   "re": "^Загружено (\\d+) записей$",
+   "to": "$1 records loaded"
+  },
+  {
+   "re": "^Последняя копия: (\\d{1,2}\\.\\d{2}) — пора обновить$",
+   "to": "Last backup: $1 — time to update"
+  },
+  {
+   "re": "^Последняя копия: (\\d{1,2}\\.\\d{2})$",
+   "to": "Last backup: $1"
+  },
+  {
+   "re": "^(\\d+) дн$",
+   "to": "$1 d"
+  },
+  {
+   "re": "^(\\d+(?:\\.\\d+)?)т$",
+   "to": "$1t"
+  },
+  {
+   "re": "^Неделя (\\d+)$",
+   "to": "Week $1"
+  },
+  {
+   "re": "^(\\d+) трен\\. · (\\d+) подходов · (\\d+(?:\\.\\d+)?) т$",
+   "to": "$1 sessions · $2 sets · $3 t"
+  },
+  {
+   "re": "^↑ (\\d+)$",
+   "to": "↑ $1"
+  },
+  {
+   "re": "^↓ (\\d+)$",
+   "to": "↓ $1"
+  },
+  {
+   "re": "^· вес (.+) кг, талия (.+) см$",
+   "to": "· weight $1 kg, waist $2 cm"
+  },
+  {
+   "re": "^вес (.+) кг$",
+   "to": "weight $1 kg"
+  },
+  {
+   "re": "^талия (.+) см$",
+   "to": "waist $1 cm"
+  },
+  {
+   "re": "^([+−-]?\\d+(?:\\.\\d+)?) см$",
+   "to": "$1 cm"
+  },
+  {
+   "re": "^Отчёт появится после первой тренировки с (\\d{1,2}\\.\\d{2})\\.$",
+   "to": "The report will appear after your first workout from $1."
+  },
+  {
+   "re": "^(повторов: |≈1ПМ )(\\d+)( кг)?(.*) · (\\d+) трен\\.$",
+   "to": "$1$2$3$4 · $5 sessions"
+  },
+  {
+   "re": "^(.*) (\\+|-)?(\\d+) авто$",
+   "to": "$1 $2$3 auto"
+  },
+  {
+   "re": "^Цель: (\\d+) ккал и (\\d+) г белка\\. Отмечай еду ниже — кольца заполнятся\\.$",
+   "to": "Target: $1 kcal and $2 g protein. Log food below — the rings will fill up."
+  },
+  {
+   "re": "^Перебор на (\\d+) ккал\\. Ничего страшного — завтра держи план\\.$",
+   "to": "Over by $1 kcal. No big deal — stick to the plan tomorrow."
+  },
+  {
+   "re": "^Осталось (\\d+) г белка и ~(\\d+) ккал\\. (.*)$",
+   "to": "$1 g protein and ~$2 kcal left. $3"
+  },
+  {
+   "re": "^Например: творог 200 г или протеин \\+ курица\\.$",
+   "to": "For example: cottage cheese 200 g or protein + chicken."
+  },
+  {
+   "re": "^Почти закрыл — йогурт или протеин\\.$",
+   "to": "Almost there — yogurt or protein."
+  },
+  {
+   "re": "^Белок закрыт 💪 Осталось ~(\\d+) ккал\\.$",
+   "to": "Protein done 💪 ~$1 kcal left."
+  },
+  {
+   "re": "^Среднее за (\\d+) дн\\.: (\\d+) ккал · белок (\\d+) г — важнее дневной цифры$",
+   "to": "Average over $1 days: $2 kcal · protein $3 g — matters more than any single day"
+  },
+  {
+   "re": "^(\\d+) ккал · Б (\\d+) г$",
+   "to": "$1 kcal · P $2 g"
+  },
+  {
+   "re": "^(.+) · (\\d+) ккал · (\\d+) г Б$",
+   "to": "$1 · $2 kcal · $3 g P"
+  },
+  {
+   "re": "^(\\d+) ккал · Б (\\d+) · Ж (\\d+) · У (\\d+)$",
+   "to": "$1 kcal · P $2 · F $3 · C $4"
+  },
+  {
+   "re": "^(\\d+) ккал · белок (\\d+) г · жиры (\\d+) г · углеводы (\\d+) г$",
+   "to": "$1 kcal · protein $2 g · fat $3 g · carbs $4 g"
+  },
+  {
+   "re": "^~(\\d+) ккал$",
+   "to": "~$1 kcal"
+  },
+  {
+   "re": "^(\\d+) г \\(2 г/кг\\)$",
+   "to": "$1 g (2 g/kg)"
+  },
+  {
+   "re": "^(\\d+(?:\\.\\d+)?) л$",
+   "to": "$1 L"
+  },
+  {
+   "re": "^\\+ (.+) (\\d+) г · дальше ± по (\\d+) г$",
+   "to": "+ $1 $2 g · then ± by $3 g"
+  },
+  {
+   "re": "^\\+ (.+) (\\d+) мл · дальше ± по (\\d+) мл$",
+   "to": "+ $1 $2 mL · then ± by $3 mL"
+  },
+  {
+   "re": "^\\+ (.+) (\\d+) шт · дальше ± по (\\d+) шт$",
+   "to": "+ $1 $2 pcs · then ± by $3 pcs"
+  },
+  {
+   "re": "^\\+ (.+) (\\d+) скуп · дальше ± по (\\d+) скуп$",
+   "to": "+ $1 $2 scoop · then ± by $3 scoop"
+  },
+  {
+   "re": "^\\+ (.+) (\\d+) ст\\.л\\. · дальше ± по (\\d+) ст\\.л\\.$",
+   "to": "+ $1 $2 tbsp · then ± by $3 tbsp"
+  },
+  {
+   "re": "^\\+ (.+) (\\d+) кус\\. · дальше ± по (\\d+) кус\\.$",
+   "to": "+ $1 $2 slice · then ± by $3 slice"
+  },
+  {
+   "re": "^(\\d+) г · Б (\\d+(?:\\.\\d+)?) · Ж (\\d+(?:\\.\\d+)?) · У (\\d+(?:\\.\\d+)?)( · обычная порция)?$",
+   "to": "$1 g · P $2 · F $3 · C $4$5"
+  },
+  {
+   "re": "^(.+) · (\\d+(?:\\.\\d+)?) шт$",
+   "to": "$1 · $2 pcs"
+  },
+  {
+   "re": "^≈ (\\d+) ккал · белок (\\d+) г$",
+   "to": "≈ $1 kcal · protein $2 g"
+  },
+  {
+   "re": "^Добавлено (\\d+) ккал$",
+   "to": "Added $1 kcal"
+  },
+  {
+   "re": "^(\\d+(?:\\.\\d+)?) / (\\d+(?:\\.\\d+)?) л$",
+   "to": "$1 / $2 L"
+  },
+  {
+   "re": "^К этому часу стоит выпить (\\d+) из (\\d+)\\. Норма (\\d+(?:\\.\\d+)?) л: 35 мл на кг( \\+ 0\\.5 л в день тренировки)?\\. Один стакан = 250 мл\\. С креатином пей не меньше\\.$",
+   "to": "By this hour you should have had $1 of $2. Target $3 L: 35 mL per kg$4. One glass = 250 mL. With creatine, drink no less."
+  },
+  {
+   "re": "^ \\+ 0\\.5 л в день тренировки$",
+   "to": " + 0.5 L on a training day"
+  },
+  {
+   "re": "^Калории: (.+)$",
+   "to": "Calories: $1"
+  },
+  {
+   "re": "^вес уходит быстрее 0\\.7 кг/нед — рискуешь мышцами, \\+100 ккал$",
+   "to": "weight dropping faster than 0.7 kg/week — you risk muscle, +100 kcal"
+  },
+  {
+   "re": "^вес и талия стоят 2 недели — −100 ккал$",
+   "to": "weight and waist flat for 2 weeks — −100 kcal"
+  },
+  {
+   "re": "^вес −(\\d+(?:\\.\\d+)?) кг/нед(, талия (-?\\d+(?:\\.\\d+)?) см)? — рекомпозиция идёт, ничего не меняю$",
+   "to": "weight −$1 kg/week$2 — recomposition is working, changing nothing"
+  },
+  {
+   "re": "^, талия (-?\\d+(?:\\.\\d+)?) см$",
+   "to": ", waist $1 cm"
+  },
+  {
+   "re": "^калории на минимуме — неделя на поддержании, потом снова$",
+   "to": "calories at the minimum — a week at maintenance, then again"
+  },
+  {
+   "re": "^Сейчас (\\d{1,2}:\\d{2}) · (.+?)\\. (.*)$",
+   "to": "It's $1 now · $2. $3"
+  },
+  {
+   "re": "^Дальше: (.+) в (\\d{1,2}:\\d{2})\\.$",
+   "to": "Next: $1 at $2."
+  },
+  {
+   "re": "^Тренировка (\\d{1,2}\\.\\d{2}) · (.+)$",
+   "to": "Workout $1 · $2"
+  },
+  {
+   "re": "^(↑|↓|=) (.+?): (.+) → дальше (.+)$",
+   "to": "$1 $2: $3 → next $4"
+  },
+  {
+   "re": "^(\\d+(?:\\.\\d+)?) кг × (.+)$",
+   "to": "$1 kg × $2"
+  },
+  {
+   "re": "^свой вес × (.+)$",
+   "to": "bodyweight × $1"
+  },
+  {
+   "re": "^Итог: вверх (\\d+), держим (\\d+), вниз (\\d+)\\. (.*)$",
+   "to": "Summary: up $1, hold $2, down $3. $4"
+  },
+  {
+   "re": "^Сегодня ещё ничего не отмечено\\. Цель: (\\d+) ккал, белок (\\d+) г, жиры (\\d+) г, углеводы (\\d+) г\\.\\n\\nПростой план: 4 яйца \\+ овсянка утром, курица с рисом в обед, йогурт перед залом, протеин \\+ мясо с картошкой после, творог на ночь\\. Это закрывает всё\\. Готовый рацион — во вкладке «Питание»\\.$",
+   "to": "Nothing logged today yet. Target: $1 kcal, protein $2 g, fat $3 g, carbs $4 g.\n\nSimple plan: 4 eggs + oatmeal in the morning, chicken with rice at lunch, yogurt before the gym, protein + meat with potatoes after, cottage cheese at night. That covers everything. The ready-made menu is in the Nutrition tab."
+  },
+  {
+   "re": "^Калорий уже на (\\d+) больше цели\\. Сегодня больше не ешь калорийного — если голодно, овощи или йогурт\\. Один перебор не страшен, завтра по плану\\.$",
+   "to": "Already $1 kcal over target. No more calorie-dense food today — if hungry, vegetables or yogurt. One overshoot is fine, back on plan tomorrow."
+  },
+  {
+   "re": "^Белок закрыт 💪 Осталось ~(\\d+) ккал(, в основном углеводы \\(~(\\d+) г\\): рис, гречка, картошка, фрукты)?\\.$",
+   "to": "Protein done 💪 ~$1 kcal left$2."
+  },
+  {
+   "re": "^, в основном углеводы \\(~(\\d+) г\\): рис, гречка, картошка, фрукты$",
+   "to": ", mostly carbs (~$1 g): rice, buckwheat, potatoes, fruit"
+  },
+  {
+   "re": "^Осталось: белок (\\d+) г, ~(\\d+) ккал, жиры (\\d+) г\\.\\n\\nДобери так:\\n• ([\\s\\S]*?)(\\n\\nИ углеводы ~(\\d+) г — гарнир 70–80 г сухого риса или гречки\\.)?$",
+   "to": "Left: protein $1 g, ~$2 kcal, fat $3 g.\n\nTop up like this:\n• $4$5"
+  },
+  {
+   "re": "^\\n\\nИ углеводы ~(\\d+) г — гарнир 70–80 г сухого риса или гречки\\.$",
+   "to": "\n\nPlus carbs ~$1 g — a side of 70–80 g dry rice or buckwheat."
+  },
+  {
+   "re": "^Растёт: (.+)\\.$",
+   "to": "Growing: $1."
+  },
+  {
+   "re": "^Стоит: (.+)\\. Проверь сон и белок; на этих упражнениях делай последний подход до «тяжело»\\.$",
+   "to": "Stuck: $1. Check sleep and protein; on these exercises take the last set to \"hard\"."
+  },
+  {
+   "re": "^Откат: (.+)\\. Вес уже снижен — это нормально, через 1–2 тренировки вернёшься выше\\.$",
+   "to": "Regressed: $1. The weight has already been lowered — that's normal, in 1–2 sessions you'll be back above."
+  },
+  {
+   "re": "^Выпито (\\d+(?:\\.\\d+)?) из (\\d+(?:\\.\\d+)?) л\\. Осталось (\\d+) стакан(?:а|ов)? \\((\\d+(?:\\.\\d+)?) л\\)\\. Ставь бутылку на стол и пей по стакану каждый час\\.$",
+   "to": "Drunk $1 of $2 L. $3 glass(es) left ($4 L). Keep a bottle on your desk and drink a glass every hour."
+  },
+  {
+   "re": "^Норма (\\d+(?:\\.\\d+)?) л выполнена 👍 Дальше — по жажде\\.$",
+   "to": "Target $1 L reached 👍 From here, drink to thirst."
+  },
+  {
+   "re": "^Талия (-?\\d+(?:\\.\\d+)?) см — жир уходит(, а вес стоит — значит растут мышцы\\. Это идеальная рекомпозиция)?\\. Ничего не меняй\\.$",
+   "to": "Waist $1 cm — fat is going$2. Change nothing."
+  },
+  {
+   "re": "^, а вес стоит — значит растут мышцы\\. Это идеальная рекомпозиция$",
+   "to": ", and weight is flat — so muscle is growing. That's ideal recomposition"
+  },
+  {
+   "re": "^Талия не уменьшается \\(([+-]?\\d+(?:\\.\\d+)?) см\\)\\. Если так 2\\+ недели: убери ~150 ккал \\(например, масло и орехи\\) или добавь 2–3 тыс\\. шагов в день\\. Белок не трогай\\.$",
+   "to": "Waist isn't shrinking ($1 cm). If this lasts 2+ weeks: cut ~150 kcal (e.g. oil and nuts) or add 2–3k steps a day. Don't touch protein."
+  },
+  {
+   "re": "^Вес ([+-]?\\d+(?:\\.\\d+)? кг|без изменений)\\. Добавь замер талии — по ней видно, жир это или мышцы\\.$",
+   "to": "Weight $1. Add a waist measurement — it shows whether it's fat or muscle."
+  },
+  {
+   "re": "^без изменений$",
+   "to": "unchanged"
+  },
+  {
+   "re": "^На этой неделе все (\\d+) тренировки сделаны 🔥 Сегодня отдых: 8–10 тыс\\. шагов, белок (\\d+) г, вода (\\d+(?:\\.\\d+)?) л\\. Переключи неделю наверху, когда начнёшь новую\\.$",
+   "to": "All $1 workouts done this week 🔥 Today is rest: 8–10k steps, protein $2 g, water $3 L. Switch the week at the top when you start a new one."
+  },
+  {
+   "re": "^Следующая: День (\\d+) · (.+?) \\((.+?)\\)\\.(\\n\\nТам поднят вес: (.+?)\\.)?\\n\\nЗал в 8:00: в 6:45 банан \\+ йогурт и 0\\.5 л воды\\. Тяжёлое перед залом не ешь\\. После зала в 9:30 — нормальный завтрак: протеин \\+ креатин 5 г, омлет, овсянка\\. Обед в 12:30\\.$",
+   "to": "Next: Day $1 · $2 ($3).$4\n\nGym at 8:00: at 6:45 a banana + yogurt and 0.5 L of water. Nothing heavy before the gym. After the gym at 9:30 — a proper breakfast: protein + creatine 5 g, omelet, oatmeal. Lunch at 12:30."
+  },
+  {
+   "re": "^\\n\\nТам поднят вес: (.+)\\.$",
+   "to": "\n\nWeight goes up there: $1."
+  },
+  {
+   "re": "^(\\d+) (г|мл|шт|скуп|кус\\.|ст\\.л\\.)$",
+   "to": "$1 $2"
+  },
+  {
+   "re": "^(.+) · День (\\d+)$",
+   "to": "$1 · Day $2"
+  },
+  {
+   "re": "^(.*)вверх (.*)$",
+   "to": "$1up $2"
+  },
+  {
+   "re": "^(.*)вниз (.*)$",
+   "to": "$1down $2"
+  },
+  {
+   "re": "^(.+)\\n\\n\\((.+)\\)$",
+   "to": "$1\n\n($2)"
+  }
+ ]
+}
