@@ -677,7 +677,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <main class="view on" id="v-train"><div class="wrap">
   <div class="top">
     <div style="display:grid;gap:6px"><span class="eyebrow" id="hello"></span><h1 class="txtlogo">FITO<em>KILL</em></h1><img class="imglogo" src="art/logo1.png" alt="FITOKILL"></div>
-    <div style="display:flex;gap:8px;align-items:center"><span class="pill acc mono" id="streak"></span><button class="iconbtn" type="button" data-v="prof" aria-label="Профиль"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button></div>
+    <div style="display:flex;gap:8px;align-items:center"><span class="pill acc mono" id="streak"></span><span class="small muted mono" id="vtag"></span><button class="iconbtn" type="button" data-v="prof" aria-label="Профиль"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button></div>
   </div>
   <section id="startCard"></section>
   <section id="draftCard"></section>
@@ -851,6 +851,10 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small">Креатин моногидрат <b class="mono">5 г</b> каждый день, в любое время. Воды 2.5–3 л. Вес может вырасти на 1–2 кг за счёт воды в мышцах — это нормально.</p>
   </section>
   <section class="card" style="display:grid;gap:10px">
+    <div class="sub-h"><h3>Версия <span class="mono" id="vnow"></span></h3><button type="button" class="pill acc" id="forceUpd" style="border:0">Обновить</button></div>
+    <p class="small muted" id="updHint"></p>
+  </section>
+  <section class="card" style="display:grid;gap:10px">
     <h3>Данные</h3>
     <p class="small muted">Всё хранится только на этом телефоне. Сохрани копию, чтобы не потерять при смене телефона.</p>
     <div class="btnrow"><button type="button" class="yt dark" id="shareBtn" style="justify-content:center">Сохранить файл копии</button><label class="yt dark" style="justify-content:center;cursor:pointer">Загрузить файл<input type="file" id="fileIn" accept=".json,application/json" hidden></label></div>
@@ -862,7 +866,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <button type="button" class="small muted" id="undoFinish" style="padding:8px">Откатить последнее «Завершить»</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v58 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v59 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1194,6 +1198,7 @@ function checkGap(){const dates=LS.get("vf_dates",[]);if(!dates.length)return;co
 function renderTrain(){
   saveS();
   {const wd0=weekDone(),nd=[0,1,2,3].slice(0,DAYS.length).find(d=>!wd0.includes(d)),tr=LS.get("vf_dates",[]).includes(today());document.querySelector("#v-train .wrap").classList.toggle("rest",tr||nd==null||new Date().getHours()>=12)}
+  $("vtag").textContent="v"+APP_V;
   const h=new Date().getHours();$("hello").textContent=(h<12?"Доброе утро":h<18?"Добрый день":"Добрый вечер")+(NAME()?", "+NAME():"");
   const dates=LS.get("vf_dates",[]);$("streak").textContent=dates.length?`${dates.length} трен.`:"старт";
   const wk=$("weeks");wk.innerHTML="";
@@ -2438,11 +2443,12 @@ $("toGpt").onclick=()=>copyFor("gpt");$("toClaude").onclick=()=>copyFor("claude"
 
 /* ========= ПРОФИЛЬ ========= */
 const PF=["name","bw","pu","bench","squat","dead","h","age","kcal"];
-function renderProf(){PF.forEach(id=>{if(document.activeElement!==$(id))$(id).value=S[id]});{const b=LS.get("vf_bak","");const d=b?(dUTC(today())-dUTC(b))/864e5:null;$("bakHint").textContent=b?`Последняя копия: ${dShort(b)}${d>7?" — пора обновить":""}`:"Копии ещё не было. Сохрани в Файлы или iCloud."}
+function renderProf(){$("vnow").textContent="v"+APP_V;PF.forEach(id=>{if(document.activeElement!==$(id))$(id).value=S[id]});{const b=LS.get("vf_bak","");const d=b?(dUTC(today())-dUTC(b))/864e5:null;$("bakHint").textContent=b?`Последняя копия: ${dShort(b)}${d>7?" — пора обновить":""}`:"Копии ещё не было. Сохрани в Файлы или iCloud."}
   $("progList").innerHTML=Object.entries(PROGRAMS).map(([k,P])=>`<button type="button" class="row${S.prog===k?" done":""}" data-prog="${k}" style="grid-template-columns:1fr auto"><span class="nm"><b>${P.n}</b><small>${P.desc}</small></span><span class="mono ${S.prog===k?"":"muted"}">${S.prog===k?"✓":P.d+" дн"}</span></button>`).join("")}
 $("progList").addEventListener("click",e=>{const b=e.target.closest("[data-prog]");if(!b)return;S.prog=b.dataset.prog;saveS();applyProgram();renderProf();toast("Программа: "+PROGRAMS[S.prog].n)});
 $("reOnboard").onclick=openOnboard;
 PF.forEach(id=>$(id).addEventListener("change",e=>{if(id==="name"){S.name=e.target.value.trim();saveS();renderTrain();return}const v=parseFloat(e.target.value);if(v>=0){S[id]=v;if(id==="bw"||id==="h"||id==="age"){S.kcal=autoKcal();$("kcal").value=S.kcal}saveS();toast("Сохранено — веса пересчитаны")}}));
+$("forceUpd").onclick=async()=>{toast("Проверяю…");try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});const m=(await r.text()).match(/APP_V="(\d+)"/);const v=m&&m[1];$("updHint").textContent=v?"На сервере v"+v+(+v>+APP_V?" — обновляю":" — у тебя последняя"):"";if(v&&+v>+APP_V){for(const g of await navigator.serviceWorker.getRegistrations())await g.unregister();for(const k of await caches.keys())await caches.delete(k);location.replace("./?u="+v)}}catch(e){toast("Нет связи")}};
 $("exportBtn").onclick=async()=>{const data={};try{Object.keys(localStorage).filter(k=>k.startsWith("vf_")&&k!=="vf_key"&&k!=="vf_orkey"&&k!=="vf_gkey"&&k!=="vf_art"&&k!=="vf_icon").forEach(k=>data[k]=localStorage.getItem(k))}catch(e){}
   const txt=btoa(unescape(encodeURIComponent(JSON.stringify(data))));const box=$("ioBox");box.hidden=false;box.value=txt;
   try{await navigator.clipboard.writeText(txt);toast("Копия в буфере. Сохрани в Заметки")}catch(e){box.select();toast("Выдели текст в поле и скопируй")}};
@@ -2574,7 +2580,7 @@ S.w=S.wManual?Math.max(S.w,autoWeek()):autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="58";
+const APP_V="59";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
