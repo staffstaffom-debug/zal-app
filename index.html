@@ -866,7 +866,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <button type="button" class="small muted" id="undoFinish" style="padding:8px">Откатить последнее «Завершить»</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v60 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v61 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -895,6 +895,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
+const APP_V="61";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -2585,7 +2586,6 @@ S.w=S.wManual?Math.max(S.w,autoWeek()):autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="60";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
