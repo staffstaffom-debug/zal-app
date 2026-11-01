@@ -862,7 +862,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <button type="button" class="small muted" id="undoFinish" style="padding:8px">Откатить последнее «Завершить»</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v57 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v58 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -2195,7 +2195,7 @@ function parseEat(text){
     const f=FDB.map(d=>[sc(d),d]).filter(x=>x[0]>=0).sort((a,b)=>b[0]-a[0])[0]?.[1];
     if(!f)return{unk:1,name:ch};
     let g=null,why="";
-    const chq=ch.replace(/\d+[.,]?\d*\s*%/g,"").replace(/из\s+\d+\s+яиц/g,"").replace(/\d+\s*сыр/g,"сыр");
+    const chq=ch.replace(/жир\d+/g,"").replace(/из\s+\d+\s+яиц/g,"").replace(/\d+\s*сыр/g,"сыр");
     for(const[re,u]of UNIT){const m=chq.match(re);if(!m)continue;const n=parseFloat(m[1].replace(",","."));
       g=u==="tbsp"?n*(f[1]==="Масло"?10:15):u==="tsp"?n*5:u==="cup"?n*200:u==="pc"?n*(f[6]||f[7]):u==="por"?n*f[7]:n*u;break}
     if(g==null){const m=chq.match(/(\d+[.,]?\d*)/);if(m){const n=parseFloat(m[1].replace(",","."));g=(f[6]&&n<20)?n*f[6]:n<10?n*f[7]:n}}
@@ -2574,7 +2574,7 @@ S.w=S.wManual?Math.max(S.w,autoWeek()):autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="57";
+const APP_V="58";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
