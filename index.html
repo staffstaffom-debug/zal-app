@@ -866,7 +866,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <button type="button" class="small muted" id="undoFinish" style="padding:8px">Откатить последнее «Завершить»</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v59 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v60 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -2448,7 +2448,12 @@ function renderProf(){$("vnow").textContent="v"+APP_V;PF.forEach(id=>{if(documen
 $("progList").addEventListener("click",e=>{const b=e.target.closest("[data-prog]");if(!b)return;S.prog=b.dataset.prog;saveS();applyProgram();renderProf();toast("Программа: "+PROGRAMS[S.prog].n)});
 $("reOnboard").onclick=openOnboard;
 PF.forEach(id=>$(id).addEventListener("change",e=>{if(id==="name"){S.name=e.target.value.trim();saveS();renderTrain();return}const v=parseFloat(e.target.value);if(v>=0){S[id]=v;if(id==="bw"||id==="h"||id==="age"){S.kcal=autoKcal();$("kcal").value=S.kcal}saveS();toast("Сохранено — веса пересчитаны")}}));
-$("forceUpd").onclick=async()=>{toast("Проверяю…");try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});const m=(await r.text()).match(/APP_V="(\d+)"/);const v=m&&m[1];$("updHint").textContent=v?"На сервере v"+v+(+v>+APP_V?" — обновляю":" — у тебя последняя"):"";if(v&&+v>+APP_V){for(const g of await navigator.serviceWorker.getRegistrations())await g.unregister();for(const k of await caches.keys())await caches.delete(k);location.replace("./?u="+v)}}catch(e){toast("Нет связи")}};
+$("forceUpd").onclick=async()=>{toast("Проверяю…");let v=null,err="";
+  try{const r=await fetch("version.txt?t="+Date.now(),{cache:"no-store"});if(r.ok)v=(await r.text()).trim()}catch(e){err=String(e)}
+  if(!v){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});const m=(await r.text()).match(/APP_V="(\d+)"/);v=m&&m[1]}catch(e){err=String(e)}}
+  if(!v){$("updHint").textContent="Не достучался до сервера: "+(err||"пустой ответ")+". Проверь интернет и попробуй ещё раз.";toast("Нет связи с сервером");return}
+  $("updHint").textContent="На сервере v"+v+", у тебя v"+APP_V+(+v>+APP_V?" — обновляю…":" — последняя версия");
+  if(+v>+APP_V){try{for(const g of await navigator.serviceWorker.getRegistrations())await g.unregister();for(const k of await caches.keys())await caches.delete(k)}catch(e){}location.replace("./?u="+v+"&t="+Date.now())}};
 $("exportBtn").onclick=async()=>{const data={};try{Object.keys(localStorage).filter(k=>k.startsWith("vf_")&&k!=="vf_key"&&k!=="vf_orkey"&&k!=="vf_gkey"&&k!=="vf_art"&&k!=="vf_icon").forEach(k=>data[k]=localStorage.getItem(k))}catch(e){}
   const txt=btoa(unescape(encodeURIComponent(JSON.stringify(data))));const box=$("ioBox");box.hidden=false;box.value=txt;
   try{await navigator.clipboard.writeText(txt);toast("Копия в буфере. Сохрани в Заметки")}catch(e){box.select();toast("Выдели текст в поле и скопируй")}};
@@ -2580,7 +2585,7 @@ S.w=S.wManual?Math.max(S.w,autoWeek()):autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="59";
+const APP_V="60";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
