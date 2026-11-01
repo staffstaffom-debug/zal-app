@@ -657,6 +657,8 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <div style="display:flex;gap:8px;align-items:center"><span class="pill acc mono" id="streak"></span><button class="iconbtn" type="button" data-v="prof" aria-label="Профиль"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button></div>
   </div>
   <section id="startCard"></section>
+  <section id="draftCard"></section>
+  <section id="weekReport"></section>
   <section id="todayDone"></section>
   <button type="button" class="callout cool" id="bakNag" data-v="prof" hidden style="text-align:left;width:100%"><b>Сохрани копию</b>Записи только на телефоне. Раз в неделю — файл в Файлы или iCloud, одна кнопка в Профиле.</button>
   <section class="card now" id="nowCard"></section>
@@ -705,6 +707,7 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <p class="small muted">Например: «3 яйца, гречка 80 г, курица 200, банан, кофе с молоком». Граммы можно не писать — возьму обычную порцию.</p>
     <textarea id="eatIn" rows="2" class="keyin" style="font-family:var(--body);font-size:15px;resize:none" placeholder="что съел…" aria-label="Что съел"></textarea>
     <div id="eatPrev"></div>
+    <div class="quick" id="foodQuick"></div>
     <input class="keyin" id="foodQ" placeholder="или найди в базе: краб, сметана, перец…" aria-label="Поиск продукта">
     <div class="foods" id="foodRes"></div>
     <button type="button" class="finish" id="eatAdd" style="padding:13px">Добавить</button>
@@ -830,9 +833,10 @@ body.ios .toast{font-family:"Caveat";font-size:20px;font-weight:700}
     <textarea id="ioBox" hidden style="width:100%;min-height:90px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" aria-label="Копия данных"></textarea>
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
+    <button type="button" class="small muted" id="undoFinish" style="padding:8px">Откатить последнее «Завершить»</button>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v53 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v54 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -1016,7 +1020,7 @@ const MEALS=[
 ];
 
 /* ========= ХРАНИЛИЩЕ ========= */
-const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){try{localStorage.removeItem("vf_chat");localStorage.setItem(k,JSON.stringify(v))}catch(e2){if(typeof toast==="function")toast("Память телефона заполнена — сохрани копию в Профиле")}}}};
 let S=Object.assign({bw:94,pu:6,bench:75,squat:120,dead:130,kcal:2500,h:180,age:35,adj:0,w:0},LS.get("vf_s",{}));
 if(!S.v5){if(+S.bw===90)S.bw=94;if(+S.kcal===2450)S.kcal=2500;S.v5=1;LS.set("vf_s",S)}
 // норма: ~29 ккал/кг при сидячей работе + 3 тренировки, минус 200 на рекомпозицию
@@ -1137,7 +1141,7 @@ function decide(i,sets){
   const nextR=Math.min(hi,Math.max(...reps)+1);
   return{w,reps:nextR+"",why:`В диапазоне — тот же вес, цель ${nextR} повторов.`,dir:"eq",fails:0}}
 
-function finishDay(d){
+function finishDay(d){LS.set("vf_snap",{ts:Date.now(),log:LOG,rec:REC,cur:CUR,week:LS.get("vf_week",{}),dates:LS.get("vf_dates",[]),feed:LS.get("vf_feed",[])});
   const D=DAYS[d],date=today(),feed=[];let any=false;
   D.list.forEach(it=>{const i=info(d,it),sets=curSets(d,i.code);if(!sets.some(s=>s&&s.ok))return;any=true;
     const done=sets.filter(s=>s&&s.ok);
@@ -1181,6 +1185,23 @@ function renderTrain(){
   {const b=LS.get("vf_bak",""),dates=LS.get("vf_dates",[]);const old=!b||(dUTC(today())-dUTC(b))/864e5>7;$("bakNag").hidden=!(old&&dates.length>=2)}
   {const t=today(),items=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{if(x.date===t)items.push({id,x})}));
     $("todayDone").innerHTML=items.length?`<div class="card" style="display:grid;gap:8px"><div class="sub-h"><h3><img class="ii s" src="art/ic_crown.png" alt=""> Сегодня сделано</h3><span class="pill ok">✓ ${DAYS[items[0].x.day]?DAYS[items[0].x.day].t:""}</span></div>${items.map(({id,x})=>{const r=REC[id];return`<div class="fi" style="grid-template-columns:1fr auto"><span style="min-width:0"><b>${EX[id]?EX[id].n:id}</b><small>${x.w.map((w,k)=>(w?w+"×":"")+x.r[k]).join(" · ")}</small></span><span class="v" style="color:${r&&r.dir==="up"?"var(--ok)":r&&r.dir==="dn"?"var(--bad)":"var(--muted)"}">${r?(r.dir==="up"?"↑":r.dir==="dn"?"↓":"=")+(r.w!=null?" "+r.w+" кг":""):""}</span></div>`}).join("")}</div>`:""}
+  {const wk=wkOfDate(today()),done=weekDone(),sun=new Date().getDay()===0,rep=LS.get("vf_reports",{});
+    if(!rep["w"+wk]&&(done.length>=DAYS.length||sun||progDay()>=6)){const logs=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{if(wkOfDate(x.date)===wk)logs.push({id,x})}));
+      const sets=logs.reduce((a,l)=>a+l.x.w.length,0),ton=logs.reduce((a,l)=>a+l.x.w.reduce((s,w,j)=>s+w*(l.x.r[j]||0),0),0);
+      const feels=logs.flatMap(l=>l.x.f),easy=feels.filter(f=>f==1).length,hard=feels.filter(f=>f>=3).length;
+      let kd=0,kc=0,pr=0;for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()-i);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");let c=0,p=0;const q=LS.get("vf_food2_"+k,{});FOODS.forEach((F,j)=>{const n=(q[j]||0)/FU[j].base;c+=F[2]*n;p+=F[3]*n});LS.get("vf_eat_"+k,[]).forEach(x=>{c+=x.k;p+=x.p});if(c>0){kd++;kc+=c;pr+=p}}
+      const T=targets(),ups=Object.values(REC).filter(r=>r&&r.dir==="up").length,dns=Object.values(REC).filter(r=>r&&r.dir==="dn").length;
+      const ins=[];if(kd&&pr/kd<T.p*.9)ins.push(`Белок ${Math.round(pr/kd)} г/день — ниже цели ${T.p}. Творог или протеин вечером.`);if(kd&&kc/kd<T.k*.8)ins.push(`Калории ${Math.round(kc/kd)} — дефицит слишком глубокий для дня зала. Добавь углеводы вокруг тренировки.`);
+      if(easy>=3)ins.push(`${easy} подходов «легко» — веса подняты на неделю 2.`);if(hard>=3)ins.push(`${hard} подходов «тяжело» — где-то держим вес, не гоним.`);if(done.length<DAYS.length)ins.push(`Записано ${done.length} из ${DAYS.length} тренировок. На неделе 2 логируй каждый день.`);
+      $("weekReport").innerHTML=`<div class="card glow" style="display:grid;gap:12px"><div class="sub-h"><h3>Итоги недели ${wk+1}</h3><span class="pill acc">${done.length}/${DAYS.length} трен.</span></div>
+        <div class="stats"><div class="stat"><b>${sets}</b><span>подходов</span></div><div class="stat"><b>${(ton/1000).toFixed(1)}т</b><span>поднято</span></div><div class="stat"><b>${kd?Math.round(kc/kd):"—"}</b><span>ккал/день</span></div></div>
+        <div class="small"><span style="color:var(--ok)">↑ ${ups}</span> вверх · <span style="color:var(--bad)">↓ ${dns}</span> вниз · белок ${kd?Math.round(pr/kd):"—"} г/день</div>
+        ${ins.map(t=>`<div class="callout">${t}</div>`).join("")}
+        <button type="button" class="finish" id="startW2">Запустить неделю ${wk+2} →</button></div>`;
+      const b=$("startW2");if(b)b.onclick=()=>{rep["w"+wk]={sets,ton,kd,kc,pr,ups,dns,ts:Date.now()};LS.set("vf_reports",rep);S.w=Math.min(2,wk+1);S.wManual=1;saveS();hap([30,40,30]);toast("Неделя "+(wk+2)+" запущена");renderTrain()}}
+    else $("weekReport").innerHTML=""}
+  {const cd=LS.get("vf_cur_date","");const open=Object.keys(CUR).length;$("draftCard").innerHTML=(open&&cd&&cd!==today())?`<div class="card" style="display:grid;gap:10px;border-left:3px solid var(--accent)!important"><b>Есть незавершённая тренировка от ${dShort(cd)}</b><span class="small muted">Подходы записаны, но день не закрыт. Завершить — и программа посчитает веса.</span><div class="btnrow"><button type="button" class="finish" id="draftFinish" style="padding:11px">Завершить как есть</button><button type="button" class="yt dark" id="draftDrop" style="justify-content:center">Сбросить</button></div></div>`:"";
+    const df=$("draftFinish");if(df)df.onclick=()=>{const d=+Object.keys(CUR)[0].split("_")[0];const t0=today;window.today=()=>cd;try{finishDay(d)}finally{window.today=t0}renderTrain()};const dd=$("draftDrop");if(dd)dd.onclick=()=>{CUR={};LS.set("vf_cur",{});renderTrain()}}
   $("wpct").innerHTML=`${wd.length}/${DAYS.length}<small>за неделю</small>`;$("wring").style.strokeDashoffset=264-264*wd.length/DAYS.length;
   const feed=LS.get("vf_feed",[]);
   $("feed").innerHTML=feed.length?feed.slice(0,6).map(f=>`<div class="fi"><span class="ic ${f.dir}">${f.dir==="up"?'<img class="ii" src="art/ic_up.png" alt="">':f.dir==="dn"?'<img class="ii" src="art/ic_down.png" alt="">':"="}</span><span style="min-width:0"><b>${EX[f.id].n}</b><small>${f.why}</small></span><span class="v">${f.w!=null?f.w+" кг":""}${f.reps?`<br><small>${f.reps}</small>`:""}</span></div>`).join(""):`<div class="empty">Здесь появятся подсказки после первой тренировки: где добавить вес, где задержаться.</div>`;
@@ -1235,6 +1256,7 @@ function renderEx(){
   const media=EX_U[i.id]?`<div class="hero"><img src="${x.img||img("pushup",0)}" alt=""><span class="tag">Своё упражнение</span></div>`:VID.has(i.id)&&!photo
    ?`<div class="hero"><video src="vid/${i.id}.mp4" autoplay muted loop playsinline poster="${img(i.id,0)}"></video><span class="tag"><i></i>Видео техники${i.id==="bulgarian"?" · похожее: выпады":""}</span><div class="ctr"><button type="button" data-photo="1">Фото старт / конец</button></div></div>`
    :`<div class="hero${frame<0?" live":""}"><img class="a" src="${img(i.id,0)}" alt="${x.n}: старт" style="${frame===1?"opacity:0":""}"><img class="b" src="${img(i.id,1)}" alt="${x.n}: конец" style="${frame===1?"opacity:1":""}">${frame<0?`<span class="tag"><i></i>Старт ⇄ конец</span>`:""}<div class="ctr">${VID.has(i.id)?`<button type="button" data-photo="0">▶ Видео</button>`:""}<button type="button" data-fr="0" aria-pressed="${frame===0}">Старт</button><button type="button" data-fr="1" aria-pressed="${frame===1}">Конец</button><button type="button" data-fr="-1" aria-pressed="${frame<0}">⇄</button></div></div>`;
+  if(renderEx.partial){renderEx.partial=false;const sc=$("sheetW").querySelector(".setchips");if(sc){sc.innerHTML=rows;const cnt=$("sheetW").querySelector(".setcnt");if(cnt)cnt.textContent=doneN+"/"+i.sets;const hn=$("sheetW").querySelector(".hint");if(hn&&!hit)hn.remove();return}}
   $("sheetW").innerHTML=`
   <div class="bar"><button class="iconbtn" type="button" data-close="sheet" aria-label="Назад">${ICON.back}</button><div class="ttl"><span class="eyebrow">${i.code} · ${x.m}</span><h2>${x.n}</h2></div><span class="mono muted">${curE+1}/${list.length}</span></div>
   ${media}
@@ -1245,7 +1267,7 @@ function renderEx(){
   ${last?`<p class="small muted mono">Прошлый раз ${dShort(last.date)}: ${last.w.map((w,k)=>(w?w+"×":"")+last.r[k]).join(" · ")}</p>`:""}
   ${warm}
   ${i.ss?`<div class="callout cool"><b>Суперсет</b>Делаешь это и сразу следующее упражнение пары. Отдых — после обоих.</div>`:""}
-  <div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Подходы</h3><span class="mono muted">${doneN}/${i.sets}</span></div>
+  <div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Подходы</h3><span class="mono muted setcnt">${doneN}/${i.sets}</span></div>
   <div class="setchips">${rows}</div><p class="tapwhy">Тап — подход сделан как в цели. Долгий тап или тап по сделанному — поправить вес, повторы, ощущение.</p>
   <div class="tabs" role="tablist">${["Техника","Ошибки","Замена"].map((t,n)=>`<button type="button" role="tab" data-tab="${n}" aria-selected="${n===tab}">${t}</button>`).join("")}</div>
   <div class="pane">${panes[tab]}</div>
@@ -1275,14 +1297,18 @@ $("sheetW").addEventListener("click",e=>{
 });
 
 let longFiredSet=false,pressSet=null;
-$("sheetW").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-set]");if(!b)return;longFiredSet=false;pressSet=setTimeout(()=>{longFiredSet=true;hap(20);openSetSheet(+b.dataset.set)},450)});
-["pointerup","pointerleave","pointercancel","pointermove"].forEach(ev=>$("sheetW").addEventListener(ev,e=>{if(ev==="pointermove"&&e.buttons)return;clearTimeout(pressSet)}));
+let pressX=0,pressY=0;
+$("sheetW").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-set]");if(!b)return;longFiredSet=false;pressX=e.clientX;pressY=e.clientY;clearTimeout(pressSet);pressSet=setTimeout(()=>{pressSet=null;longFiredSet=true;hap(20);openSetSheet(+b.dataset.set);setTimeout(()=>longFiredSet=false,600)},450)});
+const cancelPress=()=>{clearTimeout(pressSet);pressSet=null};
+["pointerup","pointerleave","pointercancel"].forEach(ev=>$("sheetW").addEventListener(ev,cancelPress));
+$("sheetW").addEventListener("pointermove",e=>{if(pressSet&&(Math.abs(e.clientX-pressX)>8||Math.abs(e.clientY-pressY)>8))cancelPress()});
+$("sheet").addEventListener("scroll",cancelPress,{passive:true});
 $("sheetW").addEventListener("contextmenu",e=>{if(e.target.closest("[data-set]"))e.preventDefault()});
 function markSet(n,w,r,f){const it=DAYS[curD].list[curE],i=info(curD,it),k=curKey(curD,i.code),L=CUR[k]||[],s=L[n]||{};
   s.w=w??s.w??(i.wt??"");s.r=r??s.r??(parseInt(i.reps)||"");s.f=f??s.f??"2";s.ok=true;L[n]=s;CUR[k]=L;LS.set("vf_cur",CUR);LS.set("vf_cur_date",today());hap([30,40,30]);
   const last=L.filter(z=>z&&z.ok).length>=i.sets,nx=DAYS[curD].list[curE+1];
   if(i.ss&&nx&&nx[5]==="ss"&&/А$/.test(i.code))startTimer(0,"Сразу → "+EX[nx[1]].n);else startTimer(i.x.r,last&&nx?"Дальше: "+EX[nx[1]].n:i.x.n);
-  renderEx()}
+  renderEx.partial=true;renderEx()}
 let bsN=0;
 function openSetSheet(n){bsN=n;const it=DAYS[curD].list[curE],i=info(curD,it),x=i.x,L=curSets(curD,i.code),s=L[n]||{};const w=s.w??(i.wt??""),r=s.r??(parseInt(i.reps)||""),f=s.f||"2";
   $("bs").innerHTML=`<div style="display:grid;gap:14px"><div class="sub-h"><h3>Подход ${n+1} · ${x.n}</h3>${s.ok?`<button type="button" class="small muted" data-unset>не сделан</button>`:""}</div>
@@ -1296,7 +1322,7 @@ $("bsbg").onclick=closeSheet;
 $("bs").addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;const it=DAYS[curD].list[curE],i=info(curD,it);
   if(t.dataset.badj){const inp=$(t.dataset.badj==="w"?"bsw":"bsr"),st=t.dataset.badj==="w"?2.5:(i.x.t?5:1);let v=(parseFloat(String(inp.value).replace(",","."))||0)+st*(+t.dataset.v);inp.value=Math.max(0,Math.round(v*10)/10);hap(5);return}
   if(t.dataset.bf){$("bs").querySelectorAll("[data-bf]").forEach(b=>b.setAttribute("aria-pressed",b===t));hap(5);return}
-  if(t.dataset.unset!==undefined){const k=curKey(curD,i.code),L=CUR[k]||[];if(L[bsN])L[bsN].ok=false;CUR[k]=L;LS.set("vf_cur",CUR);closeSheet();renderEx();return}
+  if(t.dataset.unset!==undefined){const k=curKey(curD,i.code),L=CUR[k]||[];if(L[bsN])L[bsN].ok=false;CUR[k]=L;LS.set("vf_cur",CUR);closeSheet();renderEx.partial=true;renderEx();return}
   if(t.dataset.bsave!==undefined){const w=$("bsw")?$("bsw").value:"",r=$("bsr").value,f=($("bs").querySelector('[data-bf][aria-pressed="true"]')||{}).dataset?.bf||"2";closeSheet();markSet(bsN,w,r,f);return}});
 (()=>{let sy=0,dy=0,on=false;const el=$("bs");el.addEventListener("pointerdown",e=>{if(e.target.closest("input,button"))return;sy=e.clientY;dy=0;on=true;el.classList.add("drag")},{passive:true});
 el.addEventListener("pointermove",e=>{if(!on)return;dy=Math.max(0,e.clientY-sy);el.style.transform=`translateY(${dy}px)`},{passive:true});
@@ -1445,6 +1471,9 @@ function renderFood(){
   $("frings").innerHTML=ring(t[0],T.k,"var(--accent)","Калории","")+ring(t[1],T.p,"var(--ok)","Белок","г")+ring(t[2],T.f,"var(--pink)","Жиры","г")+ring(t[3],cAdj,"var(--cool)","Углеводы","г");
   const leftP=Math.round(Math.max(0,T.p-t[1])),leftK=Math.round(T.k-t[0]);
   $("fhint").innerHTML=`<span class="pill cool">${T.why}</span><br>`+(t[0]===0?`Цель: <b>${T.k} ккал</b> и <b>${T.p} г белка</b>. Отмечай еду ниже — кольца заполнятся.`:leftK<-150?`Перебор на ${-leftK} ккал. Ничего страшного — завтра держи план.`:leftP>0?`Осталось <b>${leftP} г белка</b> и ~${Math.max(0,leftK)} ккал. ${leftP>30?"Например: творог 200 г или протеин + курица.":"Почти закрыл — йогурт или протеин."}`:`Белок закрыт 💪 Осталось ~${Math.max(0,leftK)} ккал.`);
+  {const y=new Date();y.setDate(y.getDate()-1);const yk=y.getFullYear()+"-"+String(y.getMonth()+1).padStart(2,"0")+"-"+String(y.getDate()).padStart(2,"0");const ye=LS.get("vf_eat_"+yk,[]);const freq=LS.get("vf_freq",{});
+    const top=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([n])=>n);
+    $("foodQuick").innerHTML=(ye.length?`<button type="button" data-yday="1">Как вчера · ${ye.length}</button>`:"")+Object.keys(DISHES).map(d=>`<button type="button" data-dish="${esc(d)}">${esc(d)}</button>`).join("")+top.map(n=>`<button type="button" data-freq="${esc(n)}">${esc(n)}</button>`).join("")}
   renderEat();
   {const days=[];for(let i=1;i<=7;i++){const d=new Date();d.setDate(d.getDate()-i);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
       let kc=0,pr=0;const q=LS.get("vf_food2_"+k,{});FOODS.forEach((F,j)=>{const n=(q[j]||0)/FU[j].base;kc+=F[2]*n;pr+=F[3]*n});LS.get("vf_eat_"+k,[]).forEach(x=>{kc+=x.k;pr+=x.p});if(kc>0)days.push([kc,pr])}
@@ -1460,7 +1489,9 @@ function renderFood(){
 }
 $("foods").addEventListener("click",e=>{const st=e.target.closest("[data-fd]");if(st){changeFood(+st.dataset.fd,+st.dataset.v);return}const b=e.target.closest("[data-food]");if(b)changeFood(+b.dataset.food,0)});
 // d=0 — первая порция; ±1 — шаг 10 г или 1 шт
-function changeFood(i,d){const k="vf_food2_"+today(),day=LS.get(k,{}),u=FU[i];day[i]=d===0?u.base:Math.max(0,(day[i]||0)+d*u.step);LS.set(k,day);if(d===0)toast(`+ ${FOODS[i][0]} ${u.base} ${u.unit} · дальше ± по ${u.step} ${u.unit}`);renderFood()}
+function foodCell(i,n){const F=FOODS[i],u=FU[i],k=n/u.base;return n?`<div class="food on"><span class="e">${F[3]>=15?"Б":F[5]>=20?"У":F[4]>=8?"Ж":"•"}</span><span style="min-width:0"><b>${F[0]}</b><small>${Math.round(F[2]*k)} ккал · Б ${Math.round(F[3]*k)} г</small></span><span class="fstep"><button type="button" data-fd="${i}" data-v="-1" aria-label="Меньше">−</button><b>${n}<small>${u.unit}</small></b><button type="button" data-fd="${i}" data-v="1" aria-label="Больше">+</button></span></div>`:`<button type="button" class="food" data-food="${i}"><span class="e">${F[3]>=15?"Б":F[5]>=20?"У":F[4]>=8?"Ж":"•"}</span><span style="min-width:0"><b>${F[0]}</b><small>${F[1]} · ${F[2]} ккал · ${F[3]} г Б</small></span><span class="plus">+</span></button>`}
+function changeFood(i,d){const k="vf_food2_"+today(),day=LS.get(k,{}),u=FU[i];day[i]=d===0?u.base:Math.max(0,(day[i]||0)+d*u.step);LS.set(k,day);if(d===0)toast(`+ ${FOODS[i][0]} ${u.base} ${u.unit} · дальше ± по ${u.step} ${u.unit}`);hap(6);
+  const cell=$("foods").children[i];if(cell){cell.outerHTML=foodCell(i,day[i])}clearTimeout(changeFood.t);changeFood.t=setTimeout(()=>{if(!/INPUT|TEXTAREA/.test(document.activeElement.tagName))renderFood()},500)}
 let clrArm=false;$("fClear").onclick=()=>{if(!clrArm){clrArm=true;$("fClear").textContent="нажми ещё раз";setTimeout(()=>{clrArm=false;$("fClear").textContent="очистить день"},2500);return}LS.set("vf_food2_"+today(),{});LS.set("vf_eat_"+today(),[]);clrArm=false;$("fClear").textContent="очистить день";renderFood()};
 
 /* ========= ЕДА ТЕКСТОМ ========= */
@@ -1469,7 +1500,15 @@ const FDB=[
  [/яйц|яичн|омлет/,"Яйцо",143,12.6,10,.7,55,110],[/белк.*яйц|яичн.*бел/,"Яичный белок",52,11,0,.7,33,99],
  [/курин|куриц|курочк|грудк|филе к/,"Курица грудка",113,23.6,1.9,0,0,150],[/бедр/,"Куриное бедро",185,19,12,0,0,150],[/индейк/,"Индейка",115,24,1.5,0,0,150],
  [/говяд|стейк|телят/,"Говядина",187,26,9,0,0,150],[/фарш/,"Фарш",250,17,20,0,0,150],[/свинин/,"Свинина",242,25,15,0,0,150],[/котлет/,"Котлета",220,15,14,9,90,180],
- [/лосос|сёмг|семг|форел/,"Лосось",208,20,13,0,0,120],[/тунец/,"Тунец",116,26,1,0,0,100],[/минта|треск|хек|рыб/,"Рыба белая",85,18,1,0,0,150],[/фарширован.*перец|перец.*фарширован|перц.*фарш/,"Перец фаршированный",120,7,5,12,120,360],[/квашен.*капуст|капуст.*квашен/,"Капуста квашеная",20,1.8,.1,3,0,150],[/протеин.*кокт|кокт.*протеин|протеиновый шейк/,"Протеиновый коктейль",110,22,1.5,4,0,350],[/стейк.*тунц|тунец.*стейк/,"Стейк тунца",120,27,1,0,0,180],[/краб/,"Крабовые палочки",95,6,1,10,20,100],[/перец/,"Перец болгарский",27,1.3,.1,5,120,120],[/помидор|томат/,"Помидор",20,.9,.2,3.8,120,120],[/огур/,"Огурец",15,.8,.1,2.5,120,120],[/кревет/,"Креветки",95,20,1.5,0,0,150],
+ [/лосос|сёмг|семг|форел/,"Лосось",208,20,13,0,0,120],[/тунец/,"Тунец",116,26,1,0,0,100],[/минта|треск|хек|рыб/,"Рыба белая",85,18,1,0,0,150],[/фарширован.*перец|перец.*фарширован|перц.*фарш/,"Перец фаршированный",120,7,5,12,120,360],[/квашен.*капуст|капуст.*квашен/,"Капуста квашеная",20,1.8,.1,3,0,150],[/протеин.*кокт|кокт.*протеин|протеиновый шейк/,"Протеиновый коктейль",110,22,1.5,4,0,350],[/стейк.*тунц|тунец.*стейк/,"Стейк тунца",120,27,1,0,0,180],[/мачанк/,"Мачанка",210,12,15,6,0,200],[/колдун/,"Колдуны",185,7,9,20,0,250],[/кускус/,"Кускус",112,3.8,.2,23,0,200],[/лазань/,"Лазанья",190,10,10,15,0,300],
+ [/изолят|whey|сыворот/,"Сывороточный протеин",380,78,5,6,30,30],[/казеин/,"Казеин",370,80,2,6,30,30],[/креатин/,"Креатин",0,0,0,0,5,5],[/bcaa|аминок/,"BCAA",0,0,0,0,10,10],
+ [/зерн[её]н|творож.*десерт/,"Творожный десерт",150,8,5,18,0,130],[/гранол/,"Гранола",430,10,15,62,0,50],[/каша.*молок/,"Каша на молоке",110,3.5,3.5,17,0,250],[/финик/,"Финики",280,2.5,.5,69,8,40],
+ [/индейк.*котлет|котлет.*индейк/,"Котлеты из индейки",170,19,9,5,80,160],[/стейк.*лосос|лосос.*стейк|стейк.*сёмг/,"Стейк лосося",200,22,12,0,0,180],[/минтай|треска|хек/,"Рыба белая",85,18,1,0,0,180],
+ [/омлет/,"Омлет",160,11,12,2,0,220],[/яичниц|глазунь/,"Яичница",190,13,15,1,60,120],[/запеканк.*твор|твор.*запеканк/,"Творожная запеканка",170,13,5,20,0,200],
+ [/рис.*бур|бур.*рис/,"Рис бурый",110,2.6,.9,23,0,200],[/макарон.*цельнозерн|цельнозерн.*макарон/,"Макароны цельнозерновые",125,5,1,25,0,200],[/батат/,"Батат",90,1.6,.1,20,0,200],
+ [/тунец.*консерв|консерв.*тунец|тунец в собств/,"Тунец консервированный",100,23,1,0,0,150],[/яйц.*белок|белк.*яйц|белок яйца/,"Яичный белок",52,11,.2,.7,33,99],[/сыр.*лёгк|лёгкий сыр|сыр.*17/,"Сыр лёгкий 17%",250,28,17,0,0,30],
+ [/кефир/,"Кефир",50,3,2.5,4,0,250],[/молок.*топл|топл.*молок/,"Молоко топлёное",67,3,4,4.7,0,200],[/йогурт.*2%|йогурт 2/,"Греческий йогурт 2%",65,8,2,4,0,150],
+ [/краб/,"Крабовые палочки",95,6,1,10,20,100],[/перец/,"Перец болгарский",27,1.3,.1,5,120,120],[/помидор|томат/,"Помидор",20,.9,.2,3.8,120,120],[/огур/,"Огурец",15,.8,.1,2.5,120,120],[/кревет/,"Креветки",95,20,1.5,0,0,150],
  [/колбас|сосис/,"Колбаса/сосиски",280,12,25,2,50,100],[/ветчин/,"Ветчина",150,18,7,2,0,50],
  [/творог/,"Творог 5%",121,17,5,3,0,200],[/греческ|йогурт/,"Йогурт",66,10,0,4,0,150],[/кефир/,"Кефир",50,3,2.5,4,0,250],[/молок/,"Молоко",52,3,2.5,4.8,0,200],
  [/сыр(?!ок)|сыра|сыром/,"Сыр",360,25,28,0,0,30],[/сырок/,"Сырок",400,8,25,32,45,45],[/сметан/,"Сметана",206,2.5,20,3,0,30],
@@ -1531,6 +1570,11 @@ const UNIT=[[/(\d+[.,]?\d*)\s*(кг)/,1000],[/(\d+[.,]?\d*)\s*(г|гр|грам�
  [/(\d+[.,]?\d*)\s*(ст\.?\s*л|столов)/,"tbsp"],[/(\d+[.,]?\d*)\s*(ч\.?\s*л|чайн)/,"tsp"],[/(\d+[.,]?\d*)\s*(стакан|кружк|чашк)/,"cup"],[/(\d+[.,]?\d*)\s*(шт|штук|кусоч|куск|ломт)/,"pc"],[/(\d+[.,]?\d*)\s*(скуп|порци|мерн)/,"por"]];
 const WORDN={"один":1,"одн":1,"два":2,"две":2,"три":3,"четыр":4,"пят":5,"шест":6,"пол":.5,"половин":.5};
 const DISHES=LS.get("vf_dishes",{});
+// пользовательские продукты: [{re,n,k,p,f,c,u,g}] → в начало базы при старте
+const UFDB=LS.get("vf_fdb_user",[]);UFDB.forEach(x=>{try{FDB.unshift([new RegExp(x.re,"i"),x.n,x.k,x.p,x.f,x.c,x.u||0,x.g||100])}catch(e){}});
+function addUserFood(n,g,k,p,f,c,per100){const words=n.toLowerCase().replace(/ё/g,"е").split(/\s+/).filter(w=>w.length>=3).map(w=>w.slice(0,Math.max(3,w.length-1)));if(!words.length)return;
+  const re=words.length>1?words.map(w=>words.filter(x=>x!==w).map(o=>w+".*"+o).join("|")).join("|"):words[0];const kk=per100?1:100/g;
+  const rec={re,n,k:Math.round(k*kk),p:Math.round(p*kk*10)/10,f:Math.round(f*kk*10)/10,c:Math.round(c*kk*10)/10,u:0,g};UFDB.unshift(rec);LS.set("vf_fdb_user",UFDB.slice(0,200));FDB.unshift([new RegExp(re,"i"),rec.n,rec.k,rec.p,rec.f,rec.c,0,g])}
 function parseEat(text){
   return text.toLowerCase().replace(/ё/g,"е").split(/[,;\n+]|\sи\s|\sс\s(?=\d)/).map(x=>x.trim()).filter(Boolean).flatMap(ch=>{
     const dn=Object.keys(DISHES).find(n=>ch.includes(n));if(dn){const m=ch.match(/(\d+[.,]?\d*)\s*(г|гр|грамм)?/);const parts=DISHES[dn];const tot=parts.reduce((a,x)=>a+x.g,0);const k=m&&+m[1]>20?(+m[1].replace(",","."))/tot:1;
@@ -1544,7 +1588,7 @@ function parseEat(text){
     if(g==null){const m=ch.match(/(\d+[.,]?\d*)/);if(m){const n=parseFloat(m[1].replace(",","."));g=(f[6]&&n<20)?n*f[6]:n<10?n*f[7]:n}}
     if(g==null){const w=Object.keys(WORDN).find(k=>new RegExp("(^|\\s)"+k).test(ch));g=w?WORDN[w]*(f[6]||f[7]):f[7];if(!w)why="обычная порция"}
     const k=g/100;return{name:f[1],g:Math.round(g),pc:f[6]?Math.round(g/f[6]*10)/10:null,k:Math.round(f[2]*k),p:Math.round(f[3]*k*10)/10,f:Math.round(f[4]*k*10)/10,c:Math.round(f[5]*k*10)/10,why}})}
-const eatRow=(x,i,prev)=>x.unk?`<div class="eat unk"><span><b>«${esc(x.name)}»</b><small>не узнал — напиши проще, например «курица 150 г»</small></span><span></span><span></span></div>`
+const eatRow=(x,i,prev)=>x.unk?`<div class="eat unk" style="grid-template-columns:1fr auto"><span><b>«${esc(x.name)}»</b><small>нет в базе</small></span><button type="button" class="pill acc" data-manual="${esc(x.name)}" style="border:0">Ввести КБЖУ</button></div>`
   :`<div class="eat${prev?" prev":""}"><span style="min-width:0"><b>${x.name}${x.pc&&x.pc<=12&&Number.isInteger(x.pc)?` · ${x.pc} шт`:""}</b><small>${x.g} г · Б ${x.p} · Ж ${x.f} · У ${x.c}${x.why?" · "+x.why:""}</small></span><span class="k">${x.k}</span>${prev?"<span></span>":`<button type="button" data-del="${i}" aria-label="Убрать">×</button>`}</div>`;
 function renderEat(){const L=LS.get("vf_eat_"+today(),[]);$("eatList").innerHTML=L.length?`<span class="eyebrow">Записано сегодня</span>`+L.map((x,i)=>eatRow(x,i,false)).join(""):""}
 $("eatIn").addEventListener("input",()=>{const v=$("eatIn").value.trim();if(!v){$("eatPrev").innerHTML="";return}const P=parseEat(v),ok=P.filter(x=>!x.unk);
@@ -1602,7 +1646,17 @@ $("foodPhoto").addEventListener("change",async e=>{const f=e.target.files[0];e.t
     $("photoRes").innerHTML=`<div class="grp">${PH.map((x,i)=>eatRow(x,i,true)).join("")}<p class="small mono muted">≈ ${PH.reduce((a,x)=>a+x.k,0)} ккал · белок ${Math.round(PH.reduce((a,x)=>a+x.p,0))} г · оценка по фото, ±20%</p></div><button type="button" class="finish" id="photoAdd" style="margin-top:8px">Добавить всё</button>`;
     $("photoAdd").onclick=()=>{const key="vf_eat_"+today(),L=LS.get(key,[]);LS.set(key,L.concat(PH));$("photoRes").innerHTML="";toast(`Добавлено ${PH.reduce((a,x)=>a+x.k,0)} ккал`);renderFood()}}
   catch(err){$("photoRes").innerHTML=`<p class="small" style="color:var(--bad)">${err.message==="Failed to fetch"?"Нет интернета":err.message}</p>`}});
-$("eatAdd").onclick=()=>{const P=parseEat($("eatIn").value).filter(x=>!x.unk);if(!P.length)return toast("Не понял, что добавить");
+$("eatPrev").addEventListener("click",e=>{const b=e.target.closest("[data-manual]");if(!b)return;const n=b.dataset.manual.replace(/\d+[.,]?\d*\s*(г|гр|мл)?/g,"").trim();
+  $("bs").innerHTML=`<div style="display:grid;gap:12px"><h3>Новый продукт</h3><p class="small muted">Введи с упаковки на 100 г — запомню навсегда, дальше просто пиши название.</p>
+   <label class="field">Название<input id="mfN" value="${esc(n)}" style="font-size:16px"></label>
+   <div class="grid2"><label class="field">Порция, г<input id="mfG" inputmode="numeric" value="100"></label><label class="field">Ккал / 100 г<input id="mfK" inputmode="numeric"></label><label class="field">Белки<input id="mfP" inputmode="decimal"></label><label class="field">Жиры<input id="mfF" inputmode="decimal"></label><label class="field">Углеводы<input id="mfC" inputmode="decimal"></label></div>
+   <button type="button" class="finish" id="mfSave">Сохранить и добавить</button></div>`;$("bs").classList.add("on");$("bsbg").classList.add("on");
+  $("mfSave").onclick=()=>{const v=id=>parseFloat(String($(id).value).replace(",","."))||0;const nm=$("mfN").value.trim();if(!nm||!v("mfK"))return toast("Нужны название и калории");addUserFood(nm,v("mfG")||100,v("mfK"),v("mfP"),v("mfF"),v("mfC"),true);closeSheet();$("eatIn").dispatchEvent(new Event("input"));toast("Запомнил: "+nm)}});
+$("foodQuick").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const key="vf_eat_"+today(),L=LS.get(key,[]);
+  if(b.dataset.yday){const y=new Date();y.setDate(y.getDate()-1);const yk=y.getFullYear()+"-"+String(y.getMonth()+1).padStart(2,"0")+"-"+String(y.getDate()).padStart(2,"0");const ye=LS.get("vf_eat_"+yk,[]);LS.set(key,L.concat(ye));toast(`Добавил вчерашнее · ${ye.reduce((a,x)=>a+x.k,0)} ккал`)}
+  else{const t=b.dataset.dish||b.dataset.freq;$("eatIn").value=t;$("eatIn").dispatchEvent(new Event("input"));return}renderFood()});
+function bumpFreq(P){const f=LS.get("vf_freq",{});P.forEach(x=>{f[x.name]=(f[x.name]||0)+1});LS.set("vf_freq",f)}
+$("eatAdd").onclick=()=>{const P=parseEat($("eatIn").value).filter(x=>!x.unk);if(!P.length)return toast("Не понял, что добавить");bumpFreq(P);
   const k="vf_eat_"+today(),L=LS.get(k,[]);LS.set(k,L.concat(P));$("eatIn").value="";$("eatPrev").innerHTML="";toast(`Добавлено ${P.reduce((a,x)=>a+x.k,0)} ккал`);renderFood()};
 $("eatList").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(!b)return;const k="vf_eat_"+today(),L=LS.get(k,[]);L.splice(+b.dataset.del,1);LS.set(k,L);renderFood()});
 
@@ -1650,7 +1704,7 @@ function renderNow(){const el=$("nowCard");if(!el||!$("v-train").classList.conta
   el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><div class="clock">${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}<small>${d.toLocaleDateString(LANG==="en"?"en-US":"ru-RU",{weekday:"short",day:"numeric",month:"short"})}</small></div><span class="pill acc">${ph.ic} ${ph.n}</span></div>
   <p class="small muted">${ph.tip}</p>${rows.join("")}`}
 $("nowCard").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(b)return openDay(+b.dataset.day);if(e.target.closest("[data-go]"))go("food")});
-setInterval(()=>{renderNow();if($("v-food").classList.contains("on")&&document.activeElement.tagName!=="INPUT")renderFood()},30000);
+setInterval(()=>{renderNow();if($("v-food").classList.contains("on")&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName))renderFood()},30000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){renderNow();if(view==="train")renderTrain()}});
 
 /* ========= ТРЕНЕР (бесплатный, работает на телефоне) ========= */
@@ -1781,6 +1835,7 @@ $("ioApply").onclick=()=>{try{const raw=$("ioBox").value.trim();const data=JSON.
   const ok=Object.entries(data).filter(([k,v])=>k.startsWith("vf_")&&!/^vf_(key|orkey|gkey|art|icon)$/.test(k)&&typeof v==="string"&&v.length<400000);
   if(!ok.length)throw 0;ok.forEach(([k])=>{try{JSON.parse(data[k])}catch(e){throw 0}});
   ok.forEach(([k,v])=>localStorage.setItem(k,v));toast(`Загружено ${ok.length} записей`);setTimeout(()=>location.reload(),700)}catch(e){toast("Не получилось прочитать копию")}};
+$("undoFinish").onclick=()=>{const sn=LS.get("vf_snap",null);if(!sn)return toast("Откатывать нечего");LS.set("vf_log",sn.log);LS.set("vf_rec",sn.rec);LS.set("vf_cur",sn.cur);LS.set("vf_week",sn.week);LS.set("vf_dates",sn.dates);LS.set("vf_feed",sn.feed);LS.set("vf_snap",null);toast("Откатил");setTimeout(()=>location.reload(),500)};
 let resetArm=false;$("reset").onclick=()=>{if(!resetArm){resetArm=true;$("reset").textContent="Точно? Нажми ещё раз";return}
   try{Object.keys(localStorage).filter(k=>k.startsWith("vf_")&&k!=="vf_s").forEach(k=>localStorage.removeItem(k))}catch(e){}
   LOG={};REC={};CUR={};BODY=[];resetArm=false;$("reset").textContent="Сбросить все тренировки";toast("Тренировки сброшены");renderTrain()};
@@ -1893,19 +1948,20 @@ $("obW").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)r
 applyProgram();checkGap();
 document.querySelectorAll("#langSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===(S.lang||"ru")));
 if(S.lang==="en")loadI18n().then(ok=>{if(ok)startEn()});
-S.w=autoWeek();
+S.w=S.wManual?Math.max(S.w,autoWeek()):autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
-const APP_V="53";
+const APP_V="54";
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
 // автообновление: если на сервере версия новее — чистим кеш и перезагружаем
 async function checkUpdate(){try{const r=await fetch("./?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const m=(await r.text()).match(/APP_V="(\d+)"/),v=m&&m[1];if(!v||+v<=+APP_V)return;
   if(sessionStorage.getItem("vf_upd")===v)return;sessionStorage.setItem("vf_upd",v);
   const regs=navigator.serviceWorker?await navigator.serviceWorker.getRegistrations():[];
-  if(!regs.length){location.reload();return}
-  let done=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!done){done=true;location.reload()}});
-  for(const g of regs)await g.update();setTimeout(()=>{if(!done){done=true;location.reload()}},4000)}catch(e){}}
+  if(!regs.length){safeReload();return}
+  let done=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!done){done=true;safeReload()}});
+  for(const g of regs)await g.update();setTimeout(()=>{if(!done){done=true;safeReload()}},4000)}catch(e){}}
+function safeReload(){if(STACK.length||tInt||document.querySelector(".bs.on")||Object.keys(CUR).length){window.addEventListener("focus",()=>setTimeout(safeReload,1500),{once:true});return}location.reload()}
 checkUpdate();document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdate()});
 </script>
 </body>
