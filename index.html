@@ -867,7 +867,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v64 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v65 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -896,7 +896,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="64";
+const APP_V="65";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -1100,8 +1100,10 @@ let REC=LS.get("vf_rec",{});
 // текущая тренировка: vf_cur = { "<day>_<code>": [{w,r,f,ok}] }
 let CUR=LS.get("vf_cur",{});
 let BODY=LS.get("vf_body",[]);
+// восстановление дат тренировок из журнала, если их стёрла старая кнопка «Открыть неделю»
+{const ds=new Set(LS.get("vf_dates",[]));let ch=false;Object.values(LOG).forEach(L=>L.forEach(x=>{if(x.date&&!ds.has(x.date)){ds.add(x.date);ch=true}}));if(ch)LS.set("vf_dates",[...ds].sort())}
 // миграция 03.11: веса недели 2 по факту недели 1 (разбор тренера), применяется один раз
-if(!LS.get("vf_w2fix",0)){const W2={"bench": {"w": 65, "reps": "8", "why": "Неделя 1: 60/62.5/62.5×8 норм — +2.5 кг, отдых 3 мин.", "dir": "up", "fails": 0}, "pullup": {"w": null, "reps": "5", "why": "Было 5,5,5 — добавляем 4-й подход, не повторы.", "dir": "eq", "fails": 0}, "incline": {"w": 20, "reps": "10", "why": "Было 10 и 7 — держим 20, третий подход 17.5, отдых 2.5 мин.", "dir": "eq", "fails": 0}, "dbrow": {"w": 27.5, "reps": "10", "why": "25×10 ×2 чисто — +2.5 кг, пауза вверху.", "dir": "up", "fails": 0}, "lateral": {"w": 5, "reps": "15", "why": "7.5×8 с рывком — вес вниз до 5, повторы 15 строго.", "dir": "dn", "fails": 0}, "dip": {"w": null, "reps": "7", "why": "Было 6, 5 — три подхода 7/6/5.", "dir": "eq", "fails": 0}, "hammer": {"w": 12.5, "reps": "12", "why": "12.5×10 ×2 — повторы вверх до 12.", "dir": "eq", "fails": 0}, "hanging": {"w": null, "reps": "10", "why": "8,8 — +2 повтора.", "dir": "eq", "fails": 0}, "squat": {"w": 85, "reps": "6", "why": "Ноги ещё не делал — старт 70% (85 кг), запас 3 повтора. Мог 9 → +5 кг.", "dir": "eq", "fails": 0}, "hip": {"w": 60, "reps": "10", "why": "Старт 70%, техника и пауза вверху.", "dir": "eq", "fails": 0}, "bulgarian": {"w": 15, "reps": "10", "why": "Старт лёгкий, равновесие важнее веса.", "dir": "eq", "fails": 0}, "dead": {"w": 80, "reps": "5", "why": "Первая становая после перерыва — 60–65%, спина ровная, гриф по ногам.", "dir": "eq", "fails": 0}, "ohp": {"w": 35, "reps": "8", "why": "Старт 70% — пресс и ягодицы в тонусе, без прогиба.", "dir": "eq", "fails": 0}, "goblet": {"w": 16, "reps": "12", "why": "Лёгкая добивка после становой.", "dir": "eq", "fails": 0}, "inclinecurl": {"w": 10, "reps": "10", "why": "Старт по формуле, растяжение внизу 3 сек.", "dir": "eq", "fails": 0}, "chin": {"w": null, "reps": "4", "why": "После обычных подтягиваний — 3 подхода по 4 чистых.", "dir": "eq", "fails": 0}};Object.entries(W2).forEach(([k,v])=>{if(!REC[k]||REC[k].w==null||k==="lateral"||k==="squat"||k==="dead"||k==="hip"||k==="ohp")REC[k]=v});LS.set("vf_rec",REC);LS.set("vf_w2fix",1)}
+if(LS.get("vf_w2fix",0)!==2){const W2={"bench": {"w": 65, "reps": "8", "why": "Неделя 1: 60/62.5/62.5×8 норм — +2.5 кг, отдых 3 мин.", "dir": "up", "fails": 0}, "pullup": {"w": null, "reps": "5", "why": "Было 5,5,5 — добавляем 4-й подход, не повторы.", "dir": "eq", "fails": 0}, "incline": {"w": 20, "reps": "10", "why": "Было 10 и 7 — держим 20, третий подход 17.5, отдых 2.5 мин.", "dir": "eq", "fails": 0}, "dbrow": {"w": 27.5, "reps": "10", "why": "25×10 ×2 чисто — +2.5 кг, пауза вверху.", "dir": "up", "fails": 0}, "lateral": {"w": 5, "reps": "15", "why": "7.5×8 с рывком — вес вниз до 5, повторы 15 строго.", "dir": "dn", "fails": 0}, "dip": {"w": null, "reps": "7", "why": "Было 6, 5 — три подхода 7/6/5.", "dir": "eq", "fails": 0}, "hammer": {"w": 12.5, "reps": "12", "why": "12.5×10 ×2 — повторы вверх до 12.", "dir": "eq", "fails": 0}, "hanging": {"w": null, "reps": "10", "why": "8,8 — +2 повтора.", "dir": "eq", "fails": 0}, "squat": {"w": 85, "reps": "6", "why": "Ноги ещё не делал — старт 70% (85 кг), запас 3 повтора. Мог 9 → +5 кг.", "dir": "eq", "fails": 0}, "hip": {"w": 60, "reps": "10", "why": "Старт 70%, техника и пауза вверху.", "dir": "eq", "fails": 0}, "bulgarian": {"w": 15, "reps": "10", "why": "Старт лёгкий, равновесие важнее веса.", "dir": "eq", "fails": 0}, "dead": {"w": 80, "reps": "5", "why": "Первая становая после перерыва — 60–65%, спина ровная, гриф по ногам.", "dir": "eq", "fails": 0}, "ohp": {"w": 35, "reps": "8", "why": "Старт 70% — пресс и ягодицы в тонусе, без прогиба.", "dir": "eq", "fails": 0}, "goblet": {"w": 16, "reps": "12", "why": "Лёгкая добивка после становой.", "dir": "eq", "fails": 0}, "inclinecurl": {"w": 10, "reps": "10", "why": "Старт по формуле, растяжение внизу 3 сек.", "dir": "eq", "fails": 0}, "chin": {"w": null, "reps": "4", "why": "После обычных подтягиваний — 3 подхода по 4 чистых.", "dir": "eq", "fails": 0}};Object.entries(W2).forEach(([k,v])=>{REC[k]=v});LS.set("vf_rec",REC);LS.set("vf_w2fix",2);S.w=Math.max(S.w||0,1);S.wManual=1;LS.set("vf_s",S)}
 // пользовательский контент: EX_U и PROG_U хранятся на телефоне и подмешиваются в базу
 const EX_U=LS.get("vf_ex_u",{}),PROG_U=LS.get("vf_prog_u",{});
 Object.entries(EX_U).forEach(([k,v])=>{EX[k]=v});Object.entries(PROG_U).forEach(([k,v])=>{PROGRAMS[k]=v});
@@ -2474,7 +2476,6 @@ $("ioApply").onclick=()=>{try{const raw=$("ioBox").value.trim();const data=JSON.
 let roArm=false;$("reopenWeek").onclick=()=>{if(!roArm){roArm=true;$("reopenWeek").textContent="Точно? Нажми ещё раз";setTimeout(()=>{roArm=false;$("reopenWeek").textContent="Открыть эту неделю заново"},3000);return}
   const wk=wkOfDate(today()),w=LS.get("vf_week",{});delete w["d"+wk];LS.set("vf_week",w);
   const rep=LS.get("vf_reports",{});delete rep["w"+wk];LS.set("vf_reports",rep);
-  const dates=LS.get("vf_dates",[]).filter(d=>wkOfDate(d)!==wk);LS.set("vf_dates",dates);
   Object.keys(localStorage).filter(k=>k.startsWith("vf_ready_")).forEach(k=>localStorage.removeItem(k));
   CUR={};LS.set("vf_cur",{});S.wManual=1;S.w=Math.max(1,S.w||0);saveS();roArm=false;hap([30,40,30]);toast("Неделя открыта — все 3 тренировки впереди");setTimeout(()=>location.reload(),600)};
 $("undoFinish").onclick=()=>{const sn=LS.get("vf_snap",null);if(!sn)return toast("Откатывать нечего");LS.set("vf_log",sn.log);LS.set("vf_rec",sn.rec);LS.set("vf_cur",sn.cur);LS.set("vf_week",sn.week);LS.set("vf_dates",sn.dates);LS.set("vf_feed",sn.feed);LS.set("vf_snap",null);toast("Откатил");setTimeout(()=>location.reload(),500)};
