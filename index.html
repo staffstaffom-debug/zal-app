@@ -863,10 +863,11 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <textarea id="ioBox" hidden style="width:100%;min-height:90px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" aria-label="Копия данных"></textarea>
     <button type="button" class="yt dark" id="ioApply" hidden style="justify-content:center">Загрузить из поля</button>
     <details class="fold"><summary class="small muted" style="padding:8px">Импорт контента (JSON с упражнениями/программами)</summary><textarea id="contentIn" style="width:100%;min-height:80px;background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono)" placeholder='{"exercises":{"id":{"n":"Название","m":"мышцы","b":"bench","k":.5,"db":1,"r":90,"q":"запрос youtube","s":["шаг"],"e":["ошибка"],"easy":"","alt":""}},"programs":{"MY":{"n":"Моя","d":3,"days":[...]}}}'></textarea><button type="button" class="yt dark" id="contentApply" style="justify-content:center;margin-top:8px">Загрузить контент</button></details>
-    <button type="button" class="small muted" id="undoFinish" style="padding:8px">Откатить последнее «Завершить»</button>
+    <div class="btnrow"><button type="button" class="yt dark" id="reopenWeek" style="justify-content:center">Открыть эту неделю заново</button><button type="button" class="yt dark" id="undoFinish" style="justify-content:center">Откатить «Завершить»</button></div>
+    <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v61 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v62 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -895,7 +896,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="61";
+const APP_V="62";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -2468,6 +2469,12 @@ $("ioApply").onclick=()=>{try{const raw=$("ioBox").value.trim();const data=JSON.
   const ok=Object.entries(data).filter(([k,v])=>k.startsWith("vf_")&&!/^vf_(key|orkey|gkey|art|icon)$/.test(k)&&typeof v==="string"&&v.length<400000);
   if(!ok.length)throw 0;ok.forEach(([k])=>{try{JSON.parse(data[k])}catch(e){throw 0}});
   ok.forEach(([k,v])=>localStorage.setItem(k,v));toast(`Загружено ${ok.length} записей`);setTimeout(()=>location.reload(),700)}catch(e){toast("Не получилось прочитать копию")}};
+let roArm=false;$("reopenWeek").onclick=()=>{if(!roArm){roArm=true;$("reopenWeek").textContent="Точно? Нажми ещё раз";setTimeout(()=>{roArm=false;$("reopenWeek").textContent="Открыть эту неделю заново"},3000);return}
+  const wk=wkOfDate(today()),w=LS.get("vf_week",{});delete w["d"+wk];LS.set("vf_week",w);
+  const rep=LS.get("vf_reports",{});delete rep["w"+wk];LS.set("vf_reports",rep);
+  const dates=LS.get("vf_dates",[]).filter(d=>wkOfDate(d)!==wk);LS.set("vf_dates",dates);
+  Object.keys(localStorage).filter(k=>k.startsWith("vf_ready_")).forEach(k=>localStorage.removeItem(k));
+  CUR={};LS.set("vf_cur",{});S.wManual=0;saveS();roArm=false;hap([30,40,30]);toast("Неделя открыта — все 3 тренировки впереди");setTimeout(()=>location.reload(),600)};
 $("undoFinish").onclick=()=>{const sn=LS.get("vf_snap",null);if(!sn)return toast("Откатывать нечего");LS.set("vf_log",sn.log);LS.set("vf_rec",sn.rec);LS.set("vf_cur",sn.cur);LS.set("vf_week",sn.week);LS.set("vf_dates",sn.dates);LS.set("vf_feed",sn.feed);LS.set("vf_snap",null);toast("Откатил");setTimeout(()=>location.reload(),500)};
 let resetArm=false;$("reset").onclick=()=>{if(!resetArm){resetArm=true;$("reset").textContent="Точно? Нажми ещё раз";return}
   try{Object.keys(localStorage).filter(k=>k.startsWith("vf_")&&k!=="vf_s").forEach(k=>localStorage.removeItem(k))}catch(e){}
