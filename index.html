@@ -869,7 +869,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v68 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v69 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -898,7 +898,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="68";
+const APP_V="69";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -1108,6 +1108,9 @@ let BODY=LS.get("vf_body",[]);
 // миграция 03.11: веса недели 2 по факту недели 1 (разбор тренера), применяется один раз
 if(LS.get("vf_w2fix",0)!==2){const W2={"bench": {"w": 65, "reps": "8", "why": "Неделя 1: 60/62.5/62.5×8 норм — +2.5 кг, отдых 3 мин.", "dir": "up", "fails": 0}, "pullup": {"w": null, "reps": "5", "why": "Было 5,5,5 — добавляем 4-й подход, не повторы.", "dir": "eq", "fails": 0}, "incline": {"w": 20, "reps": "10", "why": "Было 10 и 7 — держим 20, третий подход 17.5, отдых 2.5 мин.", "dir": "eq", "fails": 0}, "dbrow": {"w": 27.5, "reps": "10", "why": "25×10 ×2 чисто — +2.5 кг, пауза вверху.", "dir": "up", "fails": 0}, "lateral": {"w": 5, "reps": "15", "why": "7.5×8 с рывком — вес вниз до 5, повторы 15 строго.", "dir": "dn", "fails": 0}, "dip": {"w": null, "reps": "7", "why": "Было 6, 5 — три подхода 7/6/5.", "dir": "eq", "fails": 0}, "hammer": {"w": 12.5, "reps": "12", "why": "12.5×10 ×2 — повторы вверх до 12.", "dir": "eq", "fails": 0}, "hanging": {"w": null, "reps": "10", "why": "8,8 — +2 повтора.", "dir": "eq", "fails": 0}, "squat": {"w": 85, "reps": "6", "why": "Ноги ещё не делал — старт 70% (85 кг), запас 3 повтора. Мог 9 → +5 кг.", "dir": "eq", "fails": 0}, "hip": {"w": 60, "reps": "10", "why": "Старт 70%, техника и пауза вверху.", "dir": "eq", "fails": 0}, "bulgarian": {"w": 15, "reps": "10", "why": "Старт лёгкий, равновесие важнее веса.", "dir": "eq", "fails": 0}, "dead": {"w": 80, "reps": "5", "why": "Первая становая после перерыва — 60–65%, спина ровная, гриф по ногам.", "dir": "eq", "fails": 0}, "ohp": {"w": 35, "reps": "8", "why": "Старт 70% — пресс и ягодицы в тонусе, без прогиба.", "dir": "eq", "fails": 0}, "goblet": {"w": 16, "reps": "12", "why": "Лёгкая добивка после становой.", "dir": "eq", "fails": 0}, "inclinecurl": {"w": 10, "reps": "10", "why": "Старт по формуле, растяжение внизу 3 сек.", "dir": "eq", "fails": 0}, "chin": {"w": null, "reps": "4", "why": "После обычных подтягиваний — 3 подхода по 4 чистых.", "dir": "eq", "fails": 0}};Object.entries(W2).forEach(([k,v])=>{REC[k]=v});LS.set("vf_rec",REC);LS.set("vf_w2fix",2);S.w=Math.max(S.w||0,1);S.wManual=1;LS.set("vf_s",S)}
 
+function mergeLog(src){if(!src||typeof src!=="object")return 0;let n=0;Object.entries(src).forEach(([id,L])=>{if(!Array.isArray(L))return;const cur=LOG[id]=LOG[id]||[];L.forEach(x=>{if(x&&x.date&&!cur.some(y=>y.date===x.date))
+  {cur.push(x);n++}})});if(n){LS.set("vf_log",LOG);const ds=new Set(LS.get("vf_dates",[]));Object.values(LOG).forEach(L=>L.forEach(x=>ds.add(x.date)));LS.set("vf_dates",[...ds].sort())}return n}
+if(!LS.get("vf_logfix",0)){const sn=LS.get("vf_snap",null);const n=sn&&sn.log?mergeLog(sn.log):0;if(n)LS.set("vf_logfix_n",n);if(sn&&Array.isArray(sn.feed)){const fd=LS.get("vf_feed",[]);sn.feed.forEach(f=>{if(!fd.some(g=>g.id===f.id&&g.date===f.date))fd.push(f)});LS.set("vf_feed",fd)}LS.set("vf_logfix",1)}
 if(!LS.get("vf_wkfix",0)){const mon=new Date();mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));const monS=mon.toISOString().slice(0,10);const tag=x=>{if(x.wk==null)x.wk=x.date>=monS?(S.w||0):Math.max(0,(S.w||0)-1)};
   Object.values(LOG).forEach(L=>L.forEach(tag));LS.set("vf_log",LOG);const fd=LS.get("vf_feed",[]);fd.forEach(tag);LS.set("vf_feed",fd);LS.set("vf_wkfix",1)}
 // пользовательский контент: EX_U и PROG_U хранятся на телефоне и подмешиваются в базу
@@ -1210,7 +1213,7 @@ function checkGap(){const dates=LS.get("vf_dates",[]);if(!dates.length)return;co
 function renderTrain(){
   saveS();
   {const wd0=weekDone(),nd=[0,1,2,3].slice(0,DAYS.length).find(d=>!wd0.includes(d)),tr=LS.get("vf_dates",[]).includes(today());document.querySelector("#v-train .wrap").classList.toggle("rest",tr||nd==null||new Date().getHours()>=12)}
-  $("vtag").textContent="v"+APP_V;
+  $("vtag").textContent="v"+APP_V;{const n=LS.get("vf_logfix_n",0);if(n){LS.set("vf_logfix_n",0);setTimeout(()=>toast(`Вернул из снимка ${n} записей тренировок`),800)}}
   const h=new Date().getHours();$("hello").textContent=(h<12?"Доброе утро":h<18?"Добрый день":"Добрый вечер")+(NAME()?", "+NAME():"");
   const dates=LS.get("vf_dates",[]);$("streak").textContent=dates.length?`${dates.length} трен.`:"старт";
   const wk=$("weeks");wk.innerHTML="";
@@ -2484,7 +2487,7 @@ $("importBtn").onclick=()=>{const box=$("ioBox");box.hidden=false;box.value="";b
 $("ioApply").onclick=()=>{try{const raw=$("ioBox").value.trim();const data=JSON.parse(raw.startsWith("{")?raw:decodeURIComponent(escape(atob(raw))));
   const ok=Object.entries(data).filter(([k,v])=>k.startsWith("vf_")&&!/^vf_(key|orkey|gkey|art|icon)$/.test(k)&&typeof v==="string"&&v.length<400000);
   if(!ok.length)throw 0;ok.forEach(([k])=>{try{JSON.parse(data[k])}catch(e){throw 0}});
-  ok.forEach(([k,v])=>localStorage.setItem(k,v));toast(`Загружено ${ok.length} записей`);setTimeout(()=>location.reload(),700)}catch(e){toast("Не получилось прочитать копию")}};
+  LS.set("vf_prev_log",LOG);ok.forEach(([k,v])=>{if(k==="vf_log"){mergeLog(JSON.parse(v));return}if(k==="vf_dates"){const ds=new Set([...LS.get("vf_dates",[]),...JSON.parse(v)]);LS.set("vf_dates",[...ds].sort());return}if(k==="vf_feed"){const fd=LS.get("vf_feed",[]);JSON.parse(v).forEach(f=>{if(!fd.some(g=>g.id===f.id&&g.date===f.date))fd.push(f)});LS.set("vf_feed",fd);return}localStorage.setItem(k,v)});toast(`Загружено ${ok.length} записей, журнал объединён`);setTimeout(()=>location.reload(),700)}catch(e){toast("Не получилось прочитать копию")}};
 let roArm=false;$("reopenWeek").onclick=()=>{if(!roArm){roArm=true;$("reopenWeek").textContent="Точно? Нажми ещё раз";setTimeout(()=>{roArm=false;$("reopenWeek").textContent="Открыть эту неделю заново"},3000);return}
   const w=LS.get("vf_week",{});delete w["p"+S.w];LS.set("vf_week",w);
   const rep=LS.get("vf_reports",{});delete rep["w"+wk];LS.set("vf_reports",rep);
