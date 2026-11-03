@@ -869,7 +869,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v69 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v70 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -898,7 +898,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="69";
+const APP_V="70";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -1111,8 +1111,8 @@ if(LS.get("vf_w2fix",0)!==2){const W2={"bench": {"w": 65, "reps": "8", "why": "�
 function mergeLog(src){if(!src||typeof src!=="object")return 0;let n=0;Object.entries(src).forEach(([id,L])=>{if(!Array.isArray(L))return;const cur=LOG[id]=LOG[id]||[];L.forEach(x=>{if(x&&x.date&&!cur.some(y=>y.date===x.date))
   {cur.push(x);n++}})});if(n){LS.set("vf_log",LOG);const ds=new Set(LS.get("vf_dates",[]));Object.values(LOG).forEach(L=>L.forEach(x=>ds.add(x.date)));LS.set("vf_dates",[...ds].sort())}return n}
 if(!LS.get("vf_logfix",0)){const sn=LS.get("vf_snap",null);const n=sn&&sn.log?mergeLog(sn.log):0;if(n)LS.set("vf_logfix_n",n);if(sn&&Array.isArray(sn.feed)){const fd=LS.get("vf_feed",[]);sn.feed.forEach(f=>{if(!fd.some(g=>g.id===f.id&&g.date===f.date))fd.push(f)});LS.set("vf_feed",fd)}LS.set("vf_logfix",1)}
-if(!LS.get("vf_wkfix",0)){const mon=new Date();mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));const monS=mon.toISOString().slice(0,10);const tag=x=>{if(x.wk==null)x.wk=x.date>=monS?(S.w||0):Math.max(0,(S.w||0)-1)};
-  Object.values(LOG).forEach(L=>L.forEach(tag));LS.set("vf_log",LOG);const fd=LS.get("vf_feed",[]);fd.forEach(tag);LS.set("vf_feed",fd);LS.set("vf_wkfix",1)}
+if(LS.get("vf_wkfix",0)!==2){const mon=new Date();mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));const monS=mon.getFullYear()+"-"+String(mon.getMonth()+1).padStart(2,"0")+"-"+String(mon.getDate()).padStart(2,"0");const tag=x=>{if(x.wk==null||(x.wk>=(S.w||0)&&x.date<monS))x.wk=x.date>=monS?(S.w||0):Math.max(0,(S.w||0)-1)};
+  Object.values(LOG).forEach(L=>L.forEach(tag));LS.set("vf_log",LOG);const fd=LS.get("vf_feed",[]);fd.forEach(tag);LS.set("vf_feed",fd);LS.set("vf_wkfix",2)}
 // пользовательский контент: EX_U и PROG_U хранятся на телефоне и подмешиваются в базу
 const EX_U=LS.get("vf_ex_u",{}),PROG_U=LS.get("vf_prog_u",{});
 Object.entries(EX_U).forEach(([k,v])=>{EX[k]=v});Object.entries(PROG_U).forEach(([k,v])=>{PROGRAMS[k]=v});
