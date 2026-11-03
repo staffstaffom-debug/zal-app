@@ -691,6 +691,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
       <h3 id="wname">Неделя 1</h3>
       <div class="seg" id="weeks" role="group" aria-label="Неделя"></div>
       <p class="small muted" id="weektxt"></p>
+      <div id="pastWeeks" style="display:grid;gap:6px"></div>
     </div>
   </section>
   <details class="fold" id="daysFold"><summary class="sub-h"><h3>План недели</h3><span class="muted small">показать</span></summary><section class="days" id="days" style="margin-top:10px"></section></details>
@@ -868,7 +869,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v67 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v68 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -897,7 +898,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="67";
+const APP_V="68";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -1106,6 +1107,9 @@ let BODY=LS.get("vf_body",[]);
 {const ds=new Set(LS.get("vf_dates",[]));let ch=false;Object.values(LOG).forEach(L=>L.forEach(x=>{if(x.date&&!ds.has(x.date)){ds.add(x.date);ch=true}}));if(ch)LS.set("vf_dates",[...ds].sort())}
 // миграция 03.11: веса недели 2 по факту недели 1 (разбор тренера), применяется один раз
 if(LS.get("vf_w2fix",0)!==2){const W2={"bench": {"w": 65, "reps": "8", "why": "Неделя 1: 60/62.5/62.5×8 норм — +2.5 кг, отдых 3 мин.", "dir": "up", "fails": 0}, "pullup": {"w": null, "reps": "5", "why": "Было 5,5,5 — добавляем 4-й подход, не повторы.", "dir": "eq", "fails": 0}, "incline": {"w": 20, "reps": "10", "why": "Было 10 и 7 — держим 20, третий подход 17.5, отдых 2.5 мин.", "dir": "eq", "fails": 0}, "dbrow": {"w": 27.5, "reps": "10", "why": "25×10 ×2 чисто — +2.5 кг, пауза вверху.", "dir": "up", "fails": 0}, "lateral": {"w": 5, "reps": "15", "why": "7.5×8 с рывком — вес вниз до 5, повторы 15 строго.", "dir": "dn", "fails": 0}, "dip": {"w": null, "reps": "7", "why": "Было 6, 5 — три подхода 7/6/5.", "dir": "eq", "fails": 0}, "hammer": {"w": 12.5, "reps": "12", "why": "12.5×10 ×2 — повторы вверх до 12.", "dir": "eq", "fails": 0}, "hanging": {"w": null, "reps": "10", "why": "8,8 — +2 повтора.", "dir": "eq", "fails": 0}, "squat": {"w": 85, "reps": "6", "why": "Ноги ещё не делал — старт 70% (85 кг), запас 3 повтора. Мог 9 → +5 кг.", "dir": "eq", "fails": 0}, "hip": {"w": 60, "reps": "10", "why": "Старт 70%, техника и пауза вверху.", "dir": "eq", "fails": 0}, "bulgarian": {"w": 15, "reps": "10", "why": "Старт лёгкий, равновесие важнее веса.", "dir": "eq", "fails": 0}, "dead": {"w": 80, "reps": "5", "why": "Первая становая после перерыва — 60–65%, спина ровная, гриф по ногам.", "dir": "eq", "fails": 0}, "ohp": {"w": 35, "reps": "8", "why": "Старт 70% — пресс и ягодицы в тонусе, без прогиба.", "dir": "eq", "fails": 0}, "goblet": {"w": 16, "reps": "12", "why": "Лёгкая добивка после становой.", "dir": "eq", "fails": 0}, "inclinecurl": {"w": 10, "reps": "10", "why": "Старт по формуле, растяжение внизу 3 сек.", "dir": "eq", "fails": 0}, "chin": {"w": null, "reps": "4", "why": "После обычных подтягиваний — 3 подхода по 4 чистых.", "dir": "eq", "fails": 0}};Object.entries(W2).forEach(([k,v])=>{REC[k]=v});LS.set("vf_rec",REC);LS.set("vf_w2fix",2);S.w=Math.max(S.w||0,1);S.wManual=1;LS.set("vf_s",S)}
+
+if(!LS.get("vf_wkfix",0)){const mon=new Date();mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));const monS=mon.toISOString().slice(0,10);const tag=x=>{if(x.wk==null)x.wk=x.date>=monS?(S.w||0):Math.max(0,(S.w||0)-1)};
+  Object.values(LOG).forEach(L=>L.forEach(tag));LS.set("vf_log",LOG);const fd=LS.get("vf_feed",[]);fd.forEach(tag);LS.set("vf_feed",fd);LS.set("vf_wkfix",1)}
 // пользовательский контент: EX_U и PROG_U хранятся на телефоне и подмешиваются в базу
 const EX_U=LS.get("vf_ex_u",{}),PROG_U=LS.get("vf_prog_u",{});
 Object.entries(EX_U).forEach(([k,v])=>{EX[k]=v});Object.entries(PROG_U).forEach(([k,v])=>{PROGRAMS[k]=v});
@@ -1183,8 +1187,8 @@ function finishDay(d){LS.set("vf_snap",{ts:Date.now(),log:LOG,rec:REC,cur:CUR,we
   const D=DAYS[d],date=today(),feed=[];let any=false;
   D.list.forEach(it=>{const i=info(d,it),sets=curSets(d,i.code);if(!sets.some(s=>s&&s.ok))return;any=true;
     const done=sets.filter(s=>s&&s.ok);
-    (LOG[i.id]=LOG[i.id]||[]).push({date,day:d,code:i.code,w:done.map(s=>+s.w||0),r:done.map(s=>+s.r||0),f:done.map(s=>+s.f||2)});
-    if(readyMode()!=="light"){const dec=decide(i,done);if(dec){REC[i.id]=dec;feed.push({id:i.id,...dec,date})}}
+    (LOG[i.id]=LOG[i.id]||[]).push({date,day:d,wk:S.w,code:i.code,w:done.map(s=>+s.w||0),r:done.map(s=>+s.r||0),f:done.map(s=>+s.f||2)});
+    if(readyMode()!=="light"){const dec=decide(i,done);if(dec){REC[i.id]=dec;feed.push({id:i.id,...dec,date,wk:S.w})}}
     delete CUR[curKey(d,i.code)]});
   if(!any){toast("Отметь хотя бы один подход");return false}
   const wk=LS.get("vf_week",{}),wkk="p"+S.w;wk[wkk]=[...new Set([...(wk[wkk]||[]),d])];LS.set("vf_week",wk);
@@ -1212,7 +1216,9 @@ function renderTrain(){
   const wk=$("weeks");wk.innerHTML="";
   WEEKS.forEach((w,i)=>{const b=document.createElement("button");b.type="button";b.textContent=w.n;b.setAttribute("aria-pressed",i===S.w);b.onclick=()=>{S.w=i;S.wManual=1;saveS();applyProgram();renderTrain();toast("Веса пересчитаны под "+w.n)};wk.appendChild(b)});
   {const pd=progDay(),ws=new Date(S.start);ws.setDate(ws.getDate()+S.w*7);const we=new Date(ws);we.setDate(we.getDate()+6);
-  $("wname").innerHTML=S.deload?`<span style="color:var(--accent)">Разгрузка</span> · ${WEEKS[S.w].n}`:pd<0?`Старт ${dShort(S.start)}`:`${WEEKS[S.w].n} <span class="muted small mono">${dShort(ws)}–${dShort(we)} · день ${pd+1}</span>`}$("weektxt").textContent=WEEKS[S.w].txt;
+  $("wname").innerHTML=S.deload?`<span style="color:var(--accent)">Разгрузка</span> · ${WEEKS[S.w].n}`:pd<0?`Старт ${dShort(S.start)}`:S.wManual?`${WEEKS[S.w].n} <span class="muted small mono">день программы ${pd+1}</span>`:`${WEEKS[S.w].n} <span class="muted small mono">${dShort(ws)}–${dShort(we)} · день ${pd+1}</span>`}$("weektxt").textContent=WEEKS[S.w].txt;
+  {const pw={};Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{const k=x.wk!=null?x.wk:Math.max(0,wkOfDate(x.date));if(k>=S.w)return;const r=pw[k]=pw[k]||{d:new Set(),ex:new Set(),ton:0};r.d.add(x.date);r.ex.add(id);x.w.forEach((w,j)=>r.ton+=w*(x.r[j]||0))}));
+    $("pastWeeks").innerHTML=Object.keys(pw).sort().map(k=>{const r=pw[k];return`<button type="button" class="pill ok" data-v="prog" style="justify-self:start;cursor:pointer">✓ Неделя ${+k+1} · ${r.d.size} трен. · ${r.ex.size} упр. · ${(r.ton/1000).toFixed(1)} т →</button>`}).join("")}
   setTimeout(renderNow,0);
   const wd=weekDone(),nextD=[0,1,2,3].slice(0,DAYS.length).find(d=>!wd.includes(d));
   $("days").innerHTML=DAYS.map((D,d)=>{const[a,b]=dayProg(d),done=wd.includes(d);
@@ -1462,19 +1468,20 @@ function renderProg(){
     const groups=Object.keys(REST_H);$("recMap").innerHTML=groups.map(g=>{const h=last[g];const need=REST_H[g];const pc=h==null?100:Math.min(100,Math.round(h/need*100));const col=pc>=100?"var(--ok)":pc>=60?"var(--accent)":"var(--bad)";
       return`<div class="r"><span>${g}</span><div class="bar"><i style="width:${pc}%;background:${col}"></i></div><span class="mono muted">${h==null?"свежие":pc>=100?"готовы":Math.ceil((need-h))+" ч"}</span></div>`}).join("")}
   const wkOf=wkOfDate,rep={};
-  Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{const k=wkOf(x.date);if(k<0)return;const r=rep[k]=rep[k]||{d:new Set(),sets:0,ton:0,ex:new Set()};
+  const pwk=x=>x.wk!=null?x.wk:Math.max(0,wkOf(x.date));Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{const k=pwk(x);const r=rep[k]=rep[k]||{d:new Set(),sets:0,ton:0,ex:new Set()};
     r.d.add(x.date);r.sets+=x.w.length;r.ex.add(id);x.w.forEach((w,j)=>r.ton+=w*(x.r[j]||0))}));
   const fd=LS.get("vf_feed",[]),keys=Object.keys(rep).map(Number).sort((a,b)=>b-a);
   {const byDay={};Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{(byDay[x.date]=byDay[x.date]||{day:x.day,items:[]}).items.push({id,x})}));
     const days=Object.keys(byDay).sort().reverse();
     $("histDays").innerHTML=days.length?days.map(d=>{const b=byDay[d],D=DAYS[b.day];return`<details class="meal"><summary class="h" style="cursor:pointer;list-style:none"><h3>${dShort(d)} · ${D?D.t:"День "+(b.day+1)}</h3><span class="mono muted small">${b.items.length} упр.</span></summary><div class="grp" style="margin-top:8px">${b.items.map(({id,x})=>`<div class="fi" style="grid-template-columns:1fr auto"><span style="min-width:0"><b>${EX[id]?EX[id].n:id}</b><small>${x.w.map((w,k)=>(w?w+"×":"")+x.r[k]).join(" · ")}</small></span><span class="mono muted small">${x.f.map(f=>({1:"легко",2:"норм",3:"тяж",4:"отказ"})[f]||"").filter((v,i,a)=>a.indexOf(v)===i).join("/")}</span></div>`).join("")}</div></details>`}).join(""):`<div class="empty">Пока нет завершённых тренировок.</div>`}
-  $("report").innerHTML=keys.length?keys.map(k=>{const r=rep[k],ws=new Date(S.start);ws.setDate(ws.getDate()+k*7);const we=new Date(ws);we.setDate(we.getDate()+6);
-    const f=fd.filter(x=>wkOf(x.date)===k),up=f.filter(x=>x.dir==="up").length,dn=f.filter(x=>x.dir==="dn").length;
+  $("report").innerHTML=keys.length?keys.map(k=>{const r=rep[k],ds=[...r.d].sort(),ws=ds[0],we=ds.at(-1);
+    const f=fd.filter(x=>pwk(x)===k),up=f.filter(x=>x.dir==="up").length,dn=f.filter(x=>x.dir==="dn").length;
     const bw=BODY.filter(b=>wkOf(b.d)===k).at(-1);
-    return`<div class="meal"><div class="h"><h3>Неделя ${k+1}</h3><span class="mono muted small">${dShort(ws)}–${dShort(we)}</span></div>
+    return`<div class="meal"><div class="h"><h3>Неделя ${k+1}${k<S.w?' <span class="pill ok" style="font-size:11px">закрыта</span>':k===S.w?' <span class="pill acc" style="font-size:11px">идёт</span>':""}</h3><span class="mono muted small">${ws===we?dShort(ws):dShort(ws)+"–"+dShort(we)}</span></div>
       <span class="mac">${r.d.size} трен. · ${r.sets} подходов · ${(r.ton/1000).toFixed(1)} т</span>
       <span class="small">${up?`<b style="color:var(--ok)">↑ ${up}</b> вверх `:""}${dn?`<b style="color:var(--bad)">↓ ${dn}</b> вниз `:""}${!up&&!dn?"веса держим":""}${bw?` · вес ${bw.bw||"—"} кг, талия ${bw.waist||"—"} см`:""}</span>
-      <span class="small muted">${r.d.size>=3?"План недели выполнен 🔥":r.d.size===2?"2 из 3 — нормально, главное регулярность.":"1 тренировка — постарайся добавить ещё."}</span></div>`}).join(""):`<div class="empty">Отчёт появится после первой тренировки с ${dShort(S.start)}.</div>`;
+      <span class="small muted">${r.d.size>=3?"План недели выполнен 🔥":k<S.w?`Записано ${r.d.size} из 3 тренировок — остальные не внесены.`:r.d.size===2?"2 из 3 — нормально, главное регулярность.":"1 тренировка — постарайся добавить ещё."}</span>
+      <span class="small">${[...r.ex].slice(0,4).map(id=>{const L=LOG[id].filter(x=>pwk(x)===k),best=Math.max(...L.flatMap(x=>x.w));return`${EX[id]?EX[id].n:id} ${best?best+" кг":""}`}).join(" · ")}</span></div>`}).join(""):`<div class="empty">Отчёт появится после первой тренировки с ${dShort(S.start)}.</div>`;
   const b=BODY;$("bodyHint").textContent=b.length>=3?((+b.at(-1).waist||0)<(+b.at(-3).waist||0)?"Талия уходит — жир сгорает. Продолжай.":"Талия стоит 2+ недели — убери ~150 ккал или добавь 2–3 тыс. шагов."):"Взвешивайся утром натощак, талию меряй на уровне пупка.";
   const ids=Object.keys(EX).filter(id=>!EX[id].t);
   const withLog=ids.filter(id=>(LOG[id]||[]).length),noLog=ids.filter(id=>!(LOG[id]||[]).length);
