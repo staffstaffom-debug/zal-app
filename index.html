@@ -868,7 +868,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v66 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v67 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -897,7 +897,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="66";
+const APP_V="67";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -1101,6 +1101,7 @@ let REC=LS.get("vf_rec",{});
 // текущая тренировка: vf_cur = { "<day>_<code>": [{w,r,f,ok}] }
 let CUR=LS.get("vf_cur",{});
 let BODY=LS.get("vf_body",[]);
+{const w=LS.get("vf_week",{});if(w.d0&&!w.p0&&(S.w||0)===0){w.p0=w.d0}Object.keys(w).filter(k=>k.startsWith("d")).forEach(k=>delete w[k]);LS.set("vf_week",w)}
 // восстановление дат тренировок из журнала, если их стёрла старая кнопка «Открыть неделю»
 {const ds=new Set(LS.get("vf_dates",[]));let ch=false;Object.values(LOG).forEach(L=>L.forEach(x=>{if(x.date&&!ds.has(x.date)){ds.add(x.date);ch=true}}));if(ch)LS.set("vf_dates",[...ds].sort())}
 // миграция 03.11: веса недели 2 по факту недели 1 (разбор тренера), применяется один раз
@@ -1154,7 +1155,7 @@ function curSets(d,code){return CUR[curKey(d,code)]||[]}
 function doneCount(d,item){const i=info(d,item);return Math.min(i.sets,curSets(d,i.code).filter(s=>s&&s.ok).length)}
 function dayProg(d){let a=0,b=0;DAYS[d].list.forEach(it=>{a+=doneCount(d,it);b+=info(d,it).sets});return[a,b]}
 const wkOfDate=d=>Math.floor((dUTC(d)-dUTC(S.start))/864e5/7);
-function weekDone(){const wk=LS.get("vf_week",{});return wk["d"+wkOfDate(today())]||[]}
+function weekDone(){const wk=LS.get("vf_week",{});return wk["p"+S.w]||[]}
 
 /* ========= ДВИЖОК ПРОГРЕССИИ ========= */
 // Решает, что делать в следующий раз, по повторам и ощущениям
@@ -1186,7 +1187,7 @@ function finishDay(d){LS.set("vf_snap",{ts:Date.now(),log:LOG,rec:REC,cur:CUR,we
     if(readyMode()!=="light"){const dec=decide(i,done);if(dec){REC[i.id]=dec;feed.push({id:i.id,...dec,date})}}
     delete CUR[curKey(d,i.code)]});
   if(!any){toast("Отметь хотя бы один подход");return false}
-  const wk=LS.get("vf_week",{}),wkk="d"+wkOfDate(date);wk[wkk]=[...new Set([...(wk[wkk]||[]),d])];LS.set("vf_week",wk);
+  const wk=LS.get("vf_week",{}),wkk="p"+S.w;wk[wkk]=[...new Set([...(wk[wkk]||[]),d])];LS.set("vf_week",wk);
   const all=LS.get("vf_feed",[]);LS.set("vf_feed",[...feed,...all].slice(0,30));
   const dates=LS.get("vf_dates",[]);if(!dates.includes(date))dates.push(date);LS.set("vf_dates",dates);
   if(S.swapToday){Object.keys(S.swapToday).filter(k=>k.startsWith(d+"_")).forEach(k=>delete S.swapToday[k]);saveS();applyProgram()}
@@ -1224,8 +1225,8 @@ function renderTrain(){
   {const b=LS.get("vf_bak",""),dates=LS.get("vf_dates",[]);const old=!b||(dUTC(today())-dUTC(b))/864e5>7;$("bakNag").hidden=!(old&&dates.length>=2)}
   {const t=today(),items=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{if(x.date===t)items.push({id,x})}));
     $("todayDone").innerHTML=items.length?`<div class="card" style="display:grid;gap:8px"><div class="sub-h"><h3><img class="ii s" src="art/ic_crown.png" alt=""> Сегодня сделано</h3><span class="pill ok">✓ ${DAYS[items[0].x.day]?DAYS[items[0].x.day].t:""}</span></div>${items.map(({id,x})=>{const r=REC[id];return`<div class="fi" style="grid-template-columns:1fr auto"><span style="min-width:0"><b>${EX[id]?EX[id].n:id}</b><small>${x.w.map((w,k)=>(w?w+"×":"")+x.r[k]).join(" · ")}</small></span><span class="v" style="color:${r&&r.dir==="up"?"var(--ok)":r&&r.dir==="dn"?"var(--bad)":"var(--muted)"}">${r?(r.dir==="up"?"↑":r.dir==="dn"?"↓":"=")+(r.w!=null?" "+r.w+" кг":""):""}</span></div>`}).join("")}</div>`:""}
-  {const wk=wkOfDate(today()),done=weekDone(),sun=new Date().getDay()===0,rep=LS.get("vf_reports",{});
-    if(!rep["w"+wk]&&(done.length>=DAYS.length||sun||progDay()>=6)){const logs=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{if(wkOfDate(x.date)===wk)logs.push({id,x})}));
+  {const wk=S.w,done=weekDone(),rep=LS.get("vf_reports",{});const cutoff=(()=>{const d=new Date();d.setDate(d.getDate()-7);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")})();
+    if(!rep["w"+wk]&&done.length>=DAYS.length){const logs=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{if(x.date>=cutoff)logs.push({id,x})}));
       const sets=logs.reduce((a,l)=>a+l.x.w.length,0),ton=logs.reduce((a,l)=>a+l.x.w.reduce((s,w,j)=>s+w*(l.x.r[j]||0),0),0);
       const feels=logs.flatMap(l=>l.x.f),easy=feels.filter(f=>f==1).length,hard=feels.filter(f=>f>=3).length;
       let kd=0,kc=0,pr=0;for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()-i);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");let c=0,p=0;const q=LS.get("vf_food2_"+k,{});FOODS.forEach((F,j)=>{const n=(q[j]||0)/FU[j].base;c+=F[2]*n;p+=F[3]*n});LS.get("vf_eat_"+k,[]).forEach(x=>{c+=x.k;p+=x.p});if(c>0){kd++;kc+=c;pr+=p}}
@@ -1237,7 +1238,7 @@ function renderTrain(){
         <div class="small"><span style="color:var(--ok)">↑ ${ups}</span> вверх · <span style="color:var(--bad)">↓ ${dns}</span> вниз · белок ${kd?Math.round(pr/kd):"—"} г/день</div>
         ${ins.map(t=>`<div class="callout">${t}</div>`).join("")}
         <button type="button" class="finish" id="startW2">Запустить неделю ${wk+2} →</button></div>`;
-      const b=$("startW2");if(b)b.onclick=()=>{rep["w"+wk]={sets,ton,kd,kc,pr,ups,dns,ts:Date.now()};LS.set("vf_reports",rep);S.w=Math.min(2,wk+1);S.wManual=1;saveS();hap([30,40,30]);toast("Неделя "+(wk+2)+" запущена");renderTrain()}}
+      const b=$("startW2");if(b)b.onclick=()=>{rep["w"+wk]={sets,ton,kd,kc,pr,ups,dns,ts:Date.now()};LS.set("vf_reports",rep);S.w=Math.min(2,S.w+1);S.wManual=1;saveS();hap([30,40,30]);toast("Неделя "+(wk+2)+" запущена");renderTrain()}}
     else $("weekReport").innerHTML=""}
   {const cd=LS.get("vf_cur_date","");const open=Object.keys(CUR).length;$("draftCard").innerHTML=(open&&cd&&cd!==today())?`<div class="card" style="display:grid;gap:10px;border-left:3px solid var(--accent)!important"><b>Есть незавершённая тренировка от ${dShort(cd)}</b><span class="small muted">Подходы записаны, но день не закрыт. Завершить — и программа посчитает веса.</span><div class="btnrow"><button type="button" class="finish" id="draftFinish" style="padding:11px">Завершить как есть</button><button type="button" class="yt dark" id="draftDrop" style="justify-content:center">Сбросить</button></div></div>`:"";
     const df=$("draftFinish");if(df)df.onclick=()=>{const d=+Object.keys(CUR)[0].split("_")[0];const t0=today;window.today=()=>cd;try{finishDay(d)}finally{window.today=t0}renderTrain()};const dd=$("draftDrop");if(dd)dd.onclick=()=>{CUR={};LS.set("vf_cur",{});renderTrain()}}
@@ -2478,7 +2479,7 @@ $("ioApply").onclick=()=>{try{const raw=$("ioBox").value.trim();const data=JSON.
   if(!ok.length)throw 0;ok.forEach(([k])=>{try{JSON.parse(data[k])}catch(e){throw 0}});
   ok.forEach(([k,v])=>localStorage.setItem(k,v));toast(`Загружено ${ok.length} записей`);setTimeout(()=>location.reload(),700)}catch(e){toast("Не получилось прочитать копию")}};
 let roArm=false;$("reopenWeek").onclick=()=>{if(!roArm){roArm=true;$("reopenWeek").textContent="Точно? Нажми ещё раз";setTimeout(()=>{roArm=false;$("reopenWeek").textContent="Открыть эту неделю заново"},3000);return}
-  const wk=wkOfDate(today()),w=LS.get("vf_week",{});delete w["d"+wk];LS.set("vf_week",w);
+  const w=LS.get("vf_week",{});delete w["p"+S.w];LS.set("vf_week",w);
   const rep=LS.get("vf_reports",{});delete rep["w"+wk];LS.set("vf_reports",rep);
   Object.keys(localStorage).filter(k=>k.startsWith("vf_ready_")).forEach(k=>localStorage.removeItem(k));
   CUR={};LS.set("vf_cur",{});S.wManual=1;S.w=Math.max(1,S.w||0);saveS();roArm=false;hap([30,40,30]);toast("Неделя открыта — все 3 тренировки впереди");setTimeout(()=>location.reload(),600)};
