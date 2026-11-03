@@ -708,6 +708,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted" id="bodyHint"></p>
   </section>
   <section class="card" style="display:grid;gap:10px"><div class="sub-h"><h3>Восстановление мышц</h3><span class="small muted">по твоему журналу</span></div><div class="rec" id="recMap"></div></section>
+  <section style="display:grid;gap:8px"><h3>История тренировок</h3><div class="grp" id="histDays"></div></section>
   <section style="display:grid;gap:8px"><h3>Отчёт по неделям</h3><div class="grp" id="report"></div></section>
   <section style="display:grid;gap:8px"><h3>Сила по упражнениям</h3><p class="small muted">Расчётный максимум на 1 повтор. Растёт — значит мышцы на месте и прибавляют.</p><div class="grp" id="lifts"></div></section>
 </div></main>
@@ -867,7 +868,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v65 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v66 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -896,7 +897,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="65";
+const APP_V="66";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -1463,6 +1464,9 @@ function renderProg(){
   Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{const k=wkOf(x.date);if(k<0)return;const r=rep[k]=rep[k]||{d:new Set(),sets:0,ton:0,ex:new Set()};
     r.d.add(x.date);r.sets+=x.w.length;r.ex.add(id);x.w.forEach((w,j)=>r.ton+=w*(x.r[j]||0))}));
   const fd=LS.get("vf_feed",[]),keys=Object.keys(rep).map(Number).sort((a,b)=>b-a);
+  {const byDay={};Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{(byDay[x.date]=byDay[x.date]||{day:x.day,items:[]}).items.push({id,x})}));
+    const days=Object.keys(byDay).sort().reverse();
+    $("histDays").innerHTML=days.length?days.map(d=>{const b=byDay[d],D=DAYS[b.day];return`<details class="meal"><summary class="h" style="cursor:pointer;list-style:none"><h3>${dShort(d)} · ${D?D.t:"День "+(b.day+1)}</h3><span class="mono muted small">${b.items.length} упр.</span></summary><div class="grp" style="margin-top:8px">${b.items.map(({id,x})=>`<div class="fi" style="grid-template-columns:1fr auto"><span style="min-width:0"><b>${EX[id]?EX[id].n:id}</b><small>${x.w.map((w,k)=>(w?w+"×":"")+x.r[k]).join(" · ")}</small></span><span class="mono muted small">${x.f.map(f=>({1:"легко",2:"норм",3:"тяж",4:"отказ"})[f]||"").filter((v,i,a)=>a.indexOf(v)===i).join("/")}</span></div>`).join("")}</div></details>`}).join(""):`<div class="empty">Пока нет завершённых тренировок.</div>`}
   $("report").innerHTML=keys.length?keys.map(k=>{const r=rep[k],ws=new Date(S.start);ws.setDate(ws.getDate()+k*7);const we=new Date(ws);we.setDate(we.getDate()+6);
     const f=fd.filter(x=>wkOf(x.date)===k),up=f.filter(x=>x.dir==="up").length,dn=f.filter(x=>x.dir==="dn").length;
     const bw=BODY.filter(b=>wkOf(b.d)===k).at(-1);
