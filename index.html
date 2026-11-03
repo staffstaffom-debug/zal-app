@@ -661,7 +661,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 .sugg button{flex:0 0 auto;padding:9px 12px;border-radius:999px;background:var(--card2);font:600 13px var(--body);color:var(--fg);min-height:40px}
 .goalline{display:grid;gap:6px}.goalline .t{display:flex;justify-content:space-between;font:600 14px var(--body)}.goalline .t b{font-size:16px}
 #v-train .wrap.rest #startCard{order:6}#v-train .wrap.rest #startCard .hero-start{min-height:88px}#v-train .wrap.rest #startCard h2{font-size:18px}
-#weeks{display:none}
+#weeks{display:flex}
 @media (prefers-reduced-motion:reduce){body.slawn *{animation:none!important}}
 </style>
 </head>
@@ -867,7 +867,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v62 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v63 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -896,7 +896,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="62";
+const APP_V="63";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -1204,7 +1204,7 @@ function renderTrain(){
   const h=new Date().getHours();$("hello").textContent=(h<12?"Доброе утро":h<18?"Добрый день":"Добрый вечер")+(NAME()?", "+NAME():"");
   const dates=LS.get("vf_dates",[]);$("streak").textContent=dates.length?`${dates.length} трен.`:"старт";
   const wk=$("weeks");wk.innerHTML="";
-  WEEKS.forEach((w,i)=>{const b=document.createElement("button");b.type="button";b.textContent=w.n;b.setAttribute("aria-pressed",i===S.w);b.onclick=()=>{S.w=i;renderTrain()};wk.appendChild(b)});
+  WEEKS.forEach((w,i)=>{const b=document.createElement("button");b.type="button";b.textContent=w.n;b.setAttribute("aria-pressed",i===S.w);b.onclick=()=>{S.w=i;S.wManual=1;saveS();applyProgram();renderTrain();toast("Веса пересчитаны под "+w.n)};wk.appendChild(b)});
   {const pd=progDay(),ws=new Date(S.start);ws.setDate(ws.getDate()+S.w*7);const we=new Date(ws);we.setDate(we.getDate()+6);
   $("wname").innerHTML=S.deload?`<span style="color:var(--accent)">Разгрузка</span> · ${WEEKS[S.w].n}`:pd<0?`Старт ${dShort(S.start)}`:`${WEEKS[S.w].n} <span class="muted small mono">${dShort(ws)}–${dShort(we)} · день ${pd+1}</span>`}$("weektxt").textContent=WEEKS[S.w].txt;
   setTimeout(renderNow,0);
@@ -2474,7 +2474,7 @@ let roArm=false;$("reopenWeek").onclick=()=>{if(!roArm){roArm=true;$("reopenWeek
   const rep=LS.get("vf_reports",{});delete rep["w"+wk];LS.set("vf_reports",rep);
   const dates=LS.get("vf_dates",[]).filter(d=>wkOfDate(d)!==wk);LS.set("vf_dates",dates);
   Object.keys(localStorage).filter(k=>k.startsWith("vf_ready_")).forEach(k=>localStorage.removeItem(k));
-  CUR={};LS.set("vf_cur",{});S.wManual=0;saveS();roArm=false;hap([30,40,30]);toast("Неделя открыта — все 3 тренировки впереди");setTimeout(()=>location.reload(),600)};
+  CUR={};LS.set("vf_cur",{});S.wManual=1;S.w=Math.max(1,S.w||0);saveS();roArm=false;hap([30,40,30]);toast("Неделя открыта — все 3 тренировки впереди");setTimeout(()=>location.reload(),600)};
 $("undoFinish").onclick=()=>{const sn=LS.get("vf_snap",null);if(!sn)return toast("Откатывать нечего");LS.set("vf_log",sn.log);LS.set("vf_rec",sn.rec);LS.set("vf_cur",sn.cur);LS.set("vf_week",sn.week);LS.set("vf_dates",sn.dates);LS.set("vf_feed",sn.feed);LS.set("vf_snap",null);toast("Откатил");setTimeout(()=>location.reload(),500)};
 let resetArm=false;$("reset").onclick=()=>{if(!resetArm){resetArm=true;$("reset").textContent="Точно? Нажми ещё раз";return}
   try{Object.keys(localStorage).filter(k=>k.startsWith("vf_")&&k!=="vf_s").forEach(k=>localStorage.removeItem(k))}catch(e){}
@@ -2589,7 +2589,7 @@ applyProgram();checkGap();
 {const a=new URLSearchParams(location.search).get("a");if(a==="eat")setTimeout(()=>{go("food");$("eatIn").focus()},300);if(a==="start")setTimeout(()=>startNext(),400)}
 document.querySelectorAll("#langSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===(S.lang||"ru")));
 if(S.lang==="en")loadI18n().then(ok=>{if(ok)startEn()});
-S.w=S.wManual?Math.max(S.w,autoWeek()):autoWeek();
+S.w=S.wManual?Math.min(2,Math.max(S.w||0,autoWeek())):autoWeek();
 if(window.visualViewport)visualViewport.addEventListener("resize",()=>{const kb=innerHeight-visualViewport.height;$("composer").style.bottom=kb>80?kb+"px":"";});
 go("train");
 if(!S.onboarded)setTimeout(openOnboard,400);
