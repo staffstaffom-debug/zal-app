@@ -869,7 +869,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v71 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v72 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -898,7 +898,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="71";
+const APP_V="72";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -1036,6 +1036,9 @@ const WEEKS=[
  {n:"Неделя 2",p:.85,txt:"Рабочая: ~85%, плюс подход, 1–2 в запасе. Где было легко — вес уже поднят."},
  {n:"Неделя 3+",p:.92,txt:"Прогрессия: веса ведёт программа по твоим записям. Каждая тренировка — чуть больше."},
 ];
+const AW=()=>(S.cyc||0)*3+(S.w||0);
+const wkName=k=>{const c=Math.floor(k/3),w=k%3;return(c?`Цикл ${c+1} · `:"")+WEEKS[w].n};
+function newCycle(){const mon=new Date();mon.setHours(0,0,0,0);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));if(!S.start0)S.start0=S.start;S.cyc=(S.cyc||0)+1;S.w=0;S.wManual=1;S.start=mon.getFullYear()+"-"+String(mon.getMonth()+1).padStart(2,"0")+"-"+String(mon.getDate()).padStart(2,"0");S.startP=0;saveS();applyProgram();hap([30,40,30]);toast("Цикл "+(S.cyc+1)+" · Неделя 1 — веса продолжают расти с прошлых");renderTrain()}
 // продукты: [название, порция, ккал, белок, жиры, углеводы]
 const FOODS=[
  ["Курица грудка","150 г",165,35,3,0],["Говядина","150 г",280,39,13,0],["Рыба белая","150 г",130,28,2,0],["Лосось","120 г",250,24,16,0],
@@ -1162,8 +1165,8 @@ const curKey=(d,code)=>d+"_"+code;
 function curSets(d,code){return CUR[curKey(d,code)]||[]}
 function doneCount(d,item){const i=info(d,item);return Math.min(i.sets,curSets(d,i.code).filter(s=>s&&s.ok).length)}
 function dayProg(d){let a=0,b=0;DAYS[d].list.forEach(it=>{a+=doneCount(d,it);b+=info(d,it).sets});return[a,b]}
-const wkOfDate=d=>Math.floor((dUTC(d)-dUTC(S.start))/864e5/7);
-function weekDone(){const wk=LS.get("vf_week",{});return wk["p"+S.w]||[]}
+const wkOfDate=d=>Math.floor((dUTC(d)-dUTC(S.start0||S.start))/864e5/7);
+function weekDone(){const wk=LS.get("vf_week",{});return wk["p"+AW()]||[]}
 
 /* ========= ДВИЖОК ПРОГРЕССИИ ========= */
 // Решает, что делать в следующий раз, по повторам и ощущениям
@@ -1191,11 +1194,11 @@ function finishDay(d){LS.set("vf_snap",{ts:Date.now(),log:LOG,rec:REC,cur:CUR,we
   const D=DAYS[d],date=today(),feed=[];let any=false;
   D.list.forEach(it=>{const i=info(d,it),sets=curSets(d,i.code);if(!sets.some(s=>s&&s.ok))return;any=true;
     const done=sets.filter(s=>s&&s.ok);
-    (LOG[i.id]=LOG[i.id]||[]).push({date,day:d,wk:S.w,code:i.code,w:done.map(s=>+s.w||0),r:done.map(s=>+s.r||0),f:done.map(s=>+s.f||2)});
-    if(readyMode()!=="light"){const dec=decide(i,done);if(dec){REC[i.id]=dec;feed.push({id:i.id,...dec,date,wk:S.w})}}
+    (LOG[i.id]=LOG[i.id]||[]).push({date,day:d,wk:AW(),code:i.code,w:done.map(s=>+s.w||0),r:done.map(s=>+s.r||0),f:done.map(s=>+s.f||2)});
+    if(readyMode()!=="light"){const dec=decide(i,done);if(dec){REC[i.id]=dec;feed.push({id:i.id,...dec,date,wk:AW()})}}
     delete CUR[curKey(d,i.code)]});
   if(!any){toast("Отметь хотя бы один подход");return false}
-  const wk=LS.get("vf_week",{}),wkk="p"+S.w;wk[wkk]=[...new Set([...(wk[wkk]||[]),d])];LS.set("vf_week",wk);
+  const wk=LS.get("vf_week",{}),wkk="p"+AW();wk[wkk]=[...new Set([...(wk[wkk]||[]),d])];LS.set("vf_week",wk);
   const all=LS.get("vf_feed",[]);LS.set("vf_feed",[...feed,...all].slice(0,30));
   const dates=LS.get("vf_dates",[]);if(!dates.includes(date))dates.push(date);LS.set("vf_dates",dates);
   if(S.swapToday){Object.keys(S.swapToday).filter(k=>k.startsWith(d+"_")).forEach(k=>delete S.swapToday[k]);saveS();applyProgram()}
@@ -1220,9 +1223,10 @@ function renderTrain(){
   const wk=$("weeks");wk.innerHTML="";
   WEEKS.forEach((w,i)=>{const b=document.createElement("button");b.type="button";b.textContent=w.n;b.setAttribute("aria-pressed",i===S.w);b.onclick=()=>{S.w=i;S.wManual=1;saveS();applyProgram();renderTrain();toast("Веса пересчитаны под "+w.n)};wk.appendChild(b)});
   {const pd=progDay(),ws=new Date(S.start);ws.setDate(ws.getDate()+S.w*7);const we=new Date(ws);we.setDate(we.getDate()+6);
-  $("wname").innerHTML=S.deload?`<span style="color:var(--accent)">Разгрузка</span> · ${WEEKS[S.w].n}`:pd<0?`Старт ${dShort(S.start)}`:S.wManual?`${WEEKS[S.w].n} <span class="muted small mono">день программы ${pd+1}</span>`:`${WEEKS[S.w].n} <span class="muted small mono">${dShort(ws)}–${dShort(we)} · день ${pd+1}</span>`}$("weektxt").textContent=WEEKS[S.w].txt;
-  {const pw={};Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{const k=x.wk!=null?x.wk:Math.max(0,wkOfDate(x.date));if(k>=S.w)return;const r=pw[k]=pw[k]||{d:new Set(),ex:new Set(),ton:0};r.d.add(x.date);r.ex.add(id);x.w.forEach((w,j)=>r.ton+=w*(x.r[j]||0))}));
-    $("pastWeeks").innerHTML=Object.keys(pw).sort().map(k=>{const r=pw[k];return`<button type="button" class="pill ok" data-v="prog" style="justify-self:start;cursor:pointer">✓ Неделя ${+k+1} · ${r.d.size} трен. · ${r.ex.size} упр. · ${(r.ton/1000).toFixed(1)} т →</button>`}).join("")}
+  $("wname").innerHTML=S.deload?`<span style="color:var(--accent)">Разгрузка</span> · ${WEEKS[S.w].n}`:pd<0?`Старт ${dShort(S.start)}`:S.wManual?`${wkName(AW())} <span class="muted small mono">день программы ${pd+1}</span>`:`${wkName(AW())} <span class="muted small mono">${dShort(ws)}–${dShort(we)} · день ${pd+1}</span>`}$("weektxt").textContent=WEEKS[S.w].txt;
+  {const pw={};Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{const k=x.wk!=null?x.wk:Math.max(0,wkOfDate(x.date));if(k>=AW())return;const r=pw[k]=pw[k]||{d:new Set(),ex:new Set(),ton:0};r.d.add(x.date);r.ex.add(id);x.w.forEach((w,j)=>r.ton+=w*(x.r[j]||0))}));
+    $("pastWeeks").innerHTML=Object.keys(pw).sort().map(k=>{const r=pw[k];return`<button type="button" class="pill ok" data-v="prog" style="justify-self:start;cursor:pointer">✓ ${wkName(+k)} · ${r.d.size} трен. · ${r.ex.size} упр. · ${(r.ton/1000).toFixed(1)} т →</button>`}).join("")+(S.w===2?`<button type="button" class="yt dark" id="newCycle" style="justify-content:center">Начать новый цикл · Неделя 1 →</button>`:"");
+    const nc=$("newCycle");if(nc){let arm=false;nc.onclick=()=>{if(!arm){arm=true;nc.textContent="Точно? Нажми ещё раз";setTimeout(()=>{arm=false;nc.textContent="Начать новый цикл · Неделя 1 →"},3000);return}newCycle()}}}
   setTimeout(renderNow,0);
   const wd=weekDone(),nextD=[0,1,2,3].slice(0,DAYS.length).find(d=>!wd.includes(d));
   $("days").innerHTML=DAYS.map((D,d)=>{const[a,b]=dayProg(d),done=wd.includes(d);
@@ -1235,7 +1239,7 @@ function renderTrain(){
   {const b=LS.get("vf_bak",""),dates=LS.get("vf_dates",[]);const old=!b||(dUTC(today())-dUTC(b))/864e5>7;$("bakNag").hidden=!(old&&dates.length>=2)}
   {const t=today(),items=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{if(x.date===t)items.push({id,x})}));
     $("todayDone").innerHTML=items.length?`<div class="card" style="display:grid;gap:8px"><div class="sub-h"><h3><img class="ii s" src="art/ic_crown.png" alt=""> Сегодня сделано</h3><span class="pill ok">✓ ${DAYS[items[0].x.day]?DAYS[items[0].x.day].t:""}</span></div>${items.map(({id,x})=>{const r=REC[id];return`<div class="fi" style="grid-template-columns:1fr auto"><span style="min-width:0"><b>${EX[id]?EX[id].n:id}</b><small>${x.w.map((w,k)=>(w?w+"×":"")+x.r[k]).join(" · ")}</small></span><span class="v" style="color:${r&&r.dir==="up"?"var(--ok)":r&&r.dir==="dn"?"var(--bad)":"var(--muted)"}">${r?(r.dir==="up"?"↑":r.dir==="dn"?"↓":"=")+(r.w!=null?" "+r.w+" кг":""):""}</span></div>`}).join("")}</div>`:""}
-  {const wk=S.w,done=weekDone(),rep=LS.get("vf_reports",{});const cutoff=(()=>{const d=new Date();d.setDate(d.getDate()-7);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")})();
+  {const wk=AW(),done=weekDone(),rep=LS.get("vf_reports",{});const cutoff=(()=>{const d=new Date();d.setDate(d.getDate()-7);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")})();
     if(!rep["w"+wk]&&done.length>=DAYS.length){const logs=[];Object.entries(LOG).forEach(([id,L])=>L.forEach(x=>{if(x.date>=cutoff)logs.push({id,x})}));
       const sets=logs.reduce((a,l)=>a+l.x.w.length,0),ton=logs.reduce((a,l)=>a+l.x.w.reduce((s,w,j)=>s+w*(l.x.r[j]||0),0),0);
       const feels=logs.flatMap(l=>l.x.f),easy=feels.filter(f=>f==1).length,hard=feels.filter(f=>f>=3).length;
@@ -1243,12 +1247,12 @@ function renderTrain(){
       const T=targets(),ups=Object.values(REC).filter(r=>r&&r.dir==="up").length,dns=Object.values(REC).filter(r=>r&&r.dir==="dn").length;
       const ins=[];if(kd&&pr/kd<T.p*.9)ins.push(`Белок ${Math.round(pr/kd)} г/день — ниже цели ${T.p}. Творог или протеин вечером.`);if(kd&&kc/kd<T.k*.8)ins.push(`Калории ${Math.round(kc/kd)} — дефицит слишком глубокий для дня зала. Добавь углеводы вокруг тренировки.`);
       if(easy>=3)ins.push(`${easy} подходов «легко» — веса подняты на неделю 2.`);if(hard>=3)ins.push(`${hard} подходов «тяжело» — где-то держим вес, не гоним.`);if(done.length<DAYS.length)ins.push(`Записано ${done.length} из ${DAYS.length} тренировок. На неделе 2 логируй каждый день.`);
-      $("weekReport").innerHTML=`<div class="card glow" style="display:grid;gap:12px"><div class="sub-h"><h3>Итоги недели ${wk+1}</h3><span class="pill acc">${done.length}/${DAYS.length} трен.</span></div>
+      $("weekReport").innerHTML=`<div class="card glow" style="display:grid;gap:12px"><div class="sub-h"><h3>Итоги · ${wkName(wk)}</h3><span class="pill acc">${done.length}/${DAYS.length} трен.</span></div>
         <div class="stats"><div class="stat"><b>${sets}</b><span>подходов</span></div><div class="stat"><b>${(ton/1000).toFixed(1)}т</b><span>поднято</span></div><div class="stat"><b>${kd?Math.round(kc/kd):"—"}</b><span>ккал/день</span></div></div>
         <div class="small"><span style="color:var(--ok)">↑ ${ups}</span> вверх · <span style="color:var(--bad)">↓ ${dns}</span> вниз · белок ${kd?Math.round(pr/kd):"—"} г/день</div>
         ${ins.map(t=>`<div class="callout">${t}</div>`).join("")}
-        <button type="button" class="finish" id="startW2">Запустить неделю ${wk+2} →</button></div>`;
-      const b=$("startW2");if(b)b.onclick=()=>{rep["w"+wk]={sets,ton,kd,kc,pr,ups,dns,ts:Date.now()};LS.set("vf_reports",rep);S.w=Math.min(2,S.w+1);S.wManual=1;saveS();hap([30,40,30]);toast("Неделя "+(wk+2)+" запущена");renderTrain()}}
+        <button type="button" class="finish" id="startW2">${S.w>=2?"Цикл закрыт — начать новый цикл →":`Запустить неделю ${S.w+2} →`}</button></div>`;
+      const b=$("startW2");if(b)b.onclick=()=>{rep["w"+wk]={sets,ton,kd,kc,pr,ups,dns,ts:Date.now()};LS.set("vf_reports",rep);if(S.w>=2){newCycle();return}S.w=S.w+1;S.wManual=1;saveS();hap([30,40,30]);toast("Неделя "+(S.w+1)+" запущена");renderTrain()}}
     else $("weekReport").innerHTML=""}
   {const cd=LS.get("vf_cur_date","");const open=Object.keys(CUR).length;$("draftCard").innerHTML=(open&&cd&&cd!==today())?`<div class="card" style="display:grid;gap:10px;border-left:3px solid var(--accent)!important"><b>Есть незавершённая тренировка от ${dShort(cd)}</b><span class="small muted">Подходы записаны, но день не закрыт. Завершить — и программа посчитает веса.</span><div class="btnrow"><button type="button" class="finish" id="draftFinish" style="padding:11px">Завершить как есть</button><button type="button" class="yt dark" id="draftDrop" style="justify-content:center">Сбросить</button></div></div>`:"";
     const df=$("draftFinish");if(df)df.onclick=()=>{const d=+Object.keys(CUR)[0].split("_")[0];const t0=today;window.today=()=>cd;try{finishDay(d)}finally{window.today=t0}renderTrain()};const dd=$("draftDrop");if(dd)dd.onclick=()=>{CUR={};LS.set("vf_cur",{});renderTrain()}}
@@ -1267,7 +1271,7 @@ let curD=0;
 function openDay(d){curD=d;renderDay();show("dayL")}
 function renderDay(){
   const D=DAYS[curD],[a,b]=dayProg(curD);
-  let h=`<div class="bar"><button class="iconbtn" type="button" data-close="dayL" aria-label="Назад">${ICON.back}</button><div class="ttl"><span class="eyebrow">${WEEKS[S.w].n} · День ${curD+1}</span><h2>${D.t}</h2></div><span class="mono muted">${a}/${b}</span></div>
+  let h=`<div class="bar"><button class="iconbtn" type="button" data-close="dayL" aria-label="Назад">${ICON.back}</button><div class="ttl"><span class="eyebrow">${wkName(AW())} · День ${curD+1}</span><h2>${D.t}</h2></div><span class="mono muted">${a}/${b}</span></div>
   <div class="progress"><i style="width:${b?a/b*100:0}%"></i></div><div class="grp">`;
   let inSS=false;
   D.list.forEach((it,idx)=>{const i=info(curD,it),dn=doneCount(curD,it);
@@ -1481,10 +1485,10 @@ function renderProg(){
   $("report").innerHTML=keys.length?keys.map(k=>{const r=rep[k],ds=[...r.d].sort(),ws=ds[0],we=ds.at(-1);
     const f=fd.filter(x=>pwk(x)===k),up=f.filter(x=>x.dir==="up").length,dn=f.filter(x=>x.dir==="dn").length;
     const bw=BODY.filter(b=>wkOf(b.d)===k).at(-1);
-    return`<div class="meal"><div class="h"><h3>Неделя ${k+1}${k<S.w?' <span class="pill ok" style="font-size:11px">закрыта</span>':k===S.w?' <span class="pill acc" style="font-size:11px">идёт</span>':""}</h3><span class="mono muted small">${ws===we?dShort(ws):dShort(ws)+"–"+dShort(we)}</span></div>
+    return`<div class="meal"><div class="h"><h3>${wkName(k)}${k<AW()?' <span class="pill ok" style="font-size:11px">закрыта</span>':k===AW()?' <span class="pill acc" style="font-size:11px">идёт</span>':""}</h3><span class="mono muted small">${ws===we?dShort(ws):dShort(ws)+"–"+dShort(we)}</span></div>
       <span class="mac">${r.d.size} трен. · ${r.sets} подходов · ${(r.ton/1000).toFixed(1)} т</span>
       <span class="small">${up?`<b style="color:var(--ok)">↑ ${up}</b> вверх `:""}${dn?`<b style="color:var(--bad)">↓ ${dn}</b> вниз `:""}${!up&&!dn?"веса держим":""}${bw?` · вес ${bw.bw||"—"} кг, талия ${bw.waist||"—"} см`:""}</span>
-      <span class="small muted">${r.d.size>=3?"План недели выполнен 🔥":k<S.w?`Записано ${r.d.size} из 3 тренировок — остальные не внесены.`:r.d.size===2?"2 из 3 — нормально, главное регулярность.":"1 тренировка — постарайся добавить ещё."}</span>
+      <span class="small muted">${r.d.size>=3?"План недели выполнен 🔥":k<AW()?`Записано ${r.d.size} из 3 тренировок — остальные не внесены.`:r.d.size===2?"2 из 3 — нормально, главное регулярность.":"1 тренировка — постарайся добавить ещё."}</span>
       <span class="small">${[...r.ex].slice(0,4).map(id=>{const L=LOG[id].filter(x=>pwk(x)===k),best=Math.max(...L.flatMap(x=>x.w));return`${EX[id]?EX[id].n:id} ${best?best+" кг":""}`}).join(" · ")}</span></div>`}).join(""):`<div class="empty">Отчёт появится после первой тренировки с ${dShort(S.start)}.</div>`;
   const b=BODY;$("bodyHint").textContent=b.length>=3?((+b.at(-1).waist||0)<(+b.at(-3).waist||0)?"Талия уходит — жир сгорает. Продолжай.":"Талия стоит 2+ недели — убери ~150 ккал или добавь 2–3 тыс. шагов."):"Взвешивайся утром натощак, талию меряй на уровне пупка.";
   const ids=Object.keys(EX).filter(id=>!EX[id].t);
@@ -2416,7 +2420,7 @@ function coachContext(){
   Object.entries(LOG).forEach(([id,L])=>hist[EX[id].n]=L.slice(-4).map(s=>({дата:s.date,вес:s.w,повторы:s.r,ощущения_1легко_4отказ:s.f})));
   const recs={};Object.entries(REC).forEach(([id,r])=>recs[EX[id].n]={вес:r.w,повторы:r.reps});
   return JSON.stringify({профиль:{вес_тела:S.bw,подтягивания_макс:S.pu,прошлые_рабочие:{жим:S.bench,присед:S.squat,становая:S.dead}},
-    цель:"рекомпозиция: убрать жир, нарастить мышцы; перерыв был 3 месяца; сидячая работа",неделя:WEEKS[S.w].n,старт_программы:S.start,день_программы:progDay()+1,
+    цель:"рекомпозиция: убрать жир, нарастить мышцы; перерыв был 3 месяца; сидячая работа",неделя:wkName(AW()),старт_программы:S.start,день_программы:progDay()+1,
     программа:(PROGRAMS[S.prog]||PROGRAMS.ULF3).n,дни:DAYS.map(D=>({день:D.t,упражнения:D.list.map(it=>EX[it[1]].n)})),разгрузка:!!S.deload,тренировок:LS.get("vf_dates",[]).length,
     история:hist,план_дальше:recs,замеры:BODY.slice(-8),питание_сегодня:{ккал:Math.round(t[0]),белок:Math.round(t[1])},
     цели:{ккал:T.k,белок:T.p,жиры:T.f,углеводы:T.c},вода_л:LS.get("vf_water_"+today(),0)*.25,вода_норма_л:waterTarget()*.25},null,1)}
@@ -2490,8 +2494,8 @@ $("ioApply").onclick=()=>{try{const raw=$("ioBox").value.trim();const data=JSON.
   if(!ok.length)throw 0;ok.forEach(([k])=>{try{JSON.parse(data[k])}catch(e){throw 0}});
   LS.set("vf_prev_log",LOG);ok.forEach(([k,v])=>{if(k==="vf_log"){mergeLog(JSON.parse(v));return}if(k==="vf_dates"){const ds=new Set([...LS.get("vf_dates",[]),...JSON.parse(v)]);LS.set("vf_dates",[...ds].sort());return}if(k==="vf_feed"){const fd=LS.get("vf_feed",[]);JSON.parse(v).forEach(f=>{if(!fd.some(g=>g.id===f.id&&g.date===f.date))fd.push(f)});LS.set("vf_feed",fd);return}localStorage.setItem(k,v)});toast(`Загружено ${ok.length} записей, журнал объединён`);setTimeout(()=>location.reload(),700)}catch(e){toast("Не получилось прочитать копию")}};
 let roArm=false;$("reopenWeek").onclick=()=>{if(!roArm){roArm=true;$("reopenWeek").textContent="Точно? Нажми ещё раз";setTimeout(()=>{roArm=false;$("reopenWeek").textContent="Открыть эту неделю заново"},3000);return}
-  const w=LS.get("vf_week",{});delete w["p"+S.w];LS.set("vf_week",w);
-  const rep=LS.get("vf_reports",{});delete rep["w"+wk];LS.set("vf_reports",rep);
+  const w=LS.get("vf_week",{});delete w["p"+AW()];LS.set("vf_week",w);
+  const rep=LS.get("vf_reports",{});delete rep["w"+AW()];LS.set("vf_reports",rep);
   Object.keys(localStorage).filter(k=>k.startsWith("vf_ready_")).forEach(k=>localStorage.removeItem(k));
   CUR={};LS.set("vf_cur",{});S.wManual=1;S.w=Math.max(1,S.w||0);saveS();roArm=false;hap([30,40,30]);toast("Неделя открыта — все 3 тренировки впереди");setTimeout(()=>location.reload(),600)};
 $("undoFinish").onclick=()=>{const sn=LS.get("vf_snap",null);if(!sn)return toast("Откатывать нечего");LS.set("vf_log",sn.log);LS.set("vf_rec",sn.rec);LS.set("vf_cur",sn.cur);LS.set("vf_week",sn.week);LS.set("vf_dates",sn.dates);LS.set("vf_feed",sn.feed);LS.set("vf_snap",null);toast("Откатил");setTimeout(()=>location.reload(),500)};
