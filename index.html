@@ -663,6 +663,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 #v-train .wrap.rest #startCard{order:6}#v-train .wrap.rest #startCard .hero-start{min-height:88px}#v-train .wrap.rest #startCard h2{font-size:18px}
 #weeks{display:flex}
 @media (prefers-reduced-motion:reduce){body.slawn *{animation:none!important}}
+@keyframes pulse{0%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}100%{opacity:1;transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -730,7 +731,8 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted" id="wHint"></p>
   </section>
   <section class="card" style="display:grid;gap:10px">
-    <h3>Напиши, что съел</h3>
+    <div class="sub-h"><h3>Скажи или напиши, что съел</h3></div>
+    <button type="button" class="finish" id="eatMic" style="padding:13px;display:flex;align-items:center;justify-content:center;gap:8px"><span id="eatMicDot" style="width:10px;height:10px;border-radius:50%;background:var(--bad);display:inline-block"></span><span id="eatMicT">🎤 Надиктовать еду</span></button>
     <p class="small muted">Например: «3 яйца, гречка 80 г, курица 200, банан, кофе с молоком». Граммы можно не писать — возьму обычную порцию.</p>
     <textarea id="eatIn" rows="2" class="keyin" style="font-family:var(--body);font-size:15px;resize:none" placeholder="что съел…" aria-label="Что съел"></textarea>
     <div class="sugg" id="sugg"></div>
@@ -869,7 +871,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
     <p class="small muted">«Открыть неделю» снимает отметки «сделано» за текущую неделю и возвращает недельный отчёт в ожидание. Подходы, веса и еда остаются.</p>
     <button type="button" class="small muted" id="reset" style="padding:8px">Сбросить все тренировки</button>
   </section>
-  <p class="credit">FITOKILL v72 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
+  <p class="credit">FITOKILL v73 · фото: free-exercise-db (свободная лицензия) · видео: wger.de, автор Goulart, CC BY-SA 4.0</p>
 </div></main>
 
 <!-- слои -->
@@ -898,7 +900,7 @@ button.small.muted{min-height:44px;padding:10px 12px;display:inline-flex;align-i
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_V="72";
+const APP_V="73";
 /* ========= ДАННЫЕ ========= */
 // b: от какого прошлого веса считать, k: коэффициент, db: гантель, r: отдых (с), big: крупный шаг для ног/становой
 const EX={
@@ -2307,6 +2309,16 @@ $("foodQuick").addEventListener("click",e=>{const b=e.target.closest("button");i
   if(b.dataset.yday){const y=new Date();y.setDate(y.getDate()-1);const yk=y.getFullYear()+"-"+String(y.getMonth()+1).padStart(2,"0")+"-"+String(y.getDate()).padStart(2,"0");const ye=LS.get("vf_eat_"+yk,[]);LS.set(key,L.concat(ye));toast(`Добавил вчерашнее · ${ye.reduce((a,x)=>a+x.k,0)} ккал`)}
   else{const t=b.dataset.dish||b.dataset.freq;$("eatIn").value=t;$("eatIn").dispatchEvent(new Event("input"));return}renderFood()});
 function bumpFreq(P){const f=LS.get("vf_freq",{});P.forEach(x=>{f[x.name]=(f[x.name]||0)+1});LS.set("vf_freq",f)}
+{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null,micOn=false;const dot=$("eatMicDot"),mt=$("eatMicT");
+  const setMic=on=>{micOn=on;dot.style.animation=on?"pulse 1s infinite":"";dot.style.background=on?"var(--bad)":"var(--muted)";mt.textContent=on?"Слушаю… скажи что съел, потом нажми ещё раз":"🎤 Надиктовать еду"};setMic(false);
+  const finishVoice=txt=>{$("eatIn").value=txt;$("eatIn").dispatchEvent(new Event("input"));const P=parseEat(txt);if(!P.length)return toast("Не расслышал, повтори");if(P.some(x=>x.unk)){toast("Не всё нашёл в базе — проверь и нажми «Добавить»");return}$("eatAdd").click()};
+  $("eatMic").onclick=()=>{if(!SR){$("eatIn").focus();return toast("Голос тут не поддерживается — нажми микрофон на клавиатуре")}
+    if(micOn){try{rec.stop()}catch(e){}return}
+    rec=new SR();rec.lang="ru-RU";rec.interimResults=true;rec.continuous=true;rec.maxAlternatives=1;let fin="",heard="";
+    rec.onresult=e=>{let it="";fin="";for(let i=0;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)fin+=t+" ";else it+=t}heard=(fin+it).trim();$("eatIn").value=heard;$("eatIn").dispatchEvent(new Event("input"))};
+    rec.onerror=e=>{setMic(false);toast(e.error==="not-allowed"?"Разреши микрофон в настройках Safari для этого сайта":"Голос не сработал: "+e.error)};
+    rec.onend=()=>{if(!micOn)return;setMic(false);const t=(fin||heard).trim();if(t)finishVoice(t);else toast("Ничего не услышал")};
+    try{rec.start();setMic(true);hap(20);$("eatPrev").innerHTML=""}catch(e){setMic(false);toast("Не удалось включить микрофон")}}}
 $("eatAdd").onclick=()=>{const P=parseEat($("eatIn").value).filter(x=>!x.unk);if(!P.length)return toast("Не понял, что добавить");bumpFreq(P);
   const k="vf_eat_"+today(),L=LS.get(k,[]);LS.set(k,L.concat(P));$("eatIn").value="";$("eatPrev").innerHTML="";toast(`Добавлено ${P.reduce((a,x)=>a+x.k,0)} ккал`);renderFood()};
 $("eatList").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(!b)return;const k="vf_eat_"+today(),L=LS.get(k,[]);L.splice(+b.dataset.del,1);LS.set(k,L);renderFood()});
